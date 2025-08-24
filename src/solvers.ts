@@ -14,11 +14,7 @@ function setup() {
   const document = {};
 }
 
-// helper functions
-export function getSolvers(data: string): {
-  nsig: ((val: string) => string) | null;
-  sig: ((val: string) => string) | null;
-} {
+export function preprocessPlayer(data: string): string {
   const ast = parse(data, {
     attachComment: false,
   });
@@ -58,7 +54,7 @@ export function getSolvers(data: string): {
         return node.expression.type === "StringLiteral";
       }
       return true;
-    },
+    }
   );
   func.expression.callee.body.body = plainExpressions;
 
@@ -95,8 +91,13 @@ export function getSolvers(data: string): {
     compact: false,
     concise: false,
   });
+  return code;
+}
 
-  // evil eval!!?!
+export function getFromPrepared(code: string): {
+  nsig: ((val: string) => string) | null;
+  sig: ((val: string) => string) | null;
+} {
   const resultObj = { nsig: null, sig: null };
   Function("_result", code)(resultObj);
   return resultObj;
