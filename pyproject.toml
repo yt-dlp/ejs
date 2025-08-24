@@ -1,0 +1,43 @@
+[build-system]
+requires = ["hatchling", "hatch-build-scripts"]
+build-backend = "hatchling.build"
+
+[project]
+name = "yt-dlp-jsc-deno"
+version = "0.0.1"
+description = "JavaScript Challenge Provider for yt-dlp using Deno"
+readme = "README.md"
+requires-python = ">=3.8"
+license = "Unlicense"
+keywords = []
+authors = [
+  { name = "Simon Sawicki", email = "contact@grub4k.dev" },
+]
+classifiers = [
+  "Development Status :: 4 - Beta",
+  "Programming Language :: Python",
+  "Programming Language :: Python :: 3.8",
+  "Programming Language :: Python :: 3.9",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
+  "Programming Language :: Python :: 3.14",
+  "Programming Language :: Python :: Implementation :: CPython",
+  "Programming Language :: Python :: Implementation :: PyPy",
+]
+dependencies = []
+
+[project.urls]
+Documentation = "https://github.com/yt-dlp/yt-dlp-jsc-deno#readme"
+Issues = "https://github.com/yt-dlp/yt-dlp-jsc-deno/issues"
+Source = "https://github.com/yt-dlp/yt-dlp-jsc-deno"
+
+[[tool.hatch.build.hooks.build-scripts.scripts]]
+out_dir = "yt_dlp_jsc_deno"
+commands = [
+  "deno task bundle",
+]
+artifacts = [
+  "dist/jsc-deno.js",
+]

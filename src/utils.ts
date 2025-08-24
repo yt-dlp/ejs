@@ -1,0 +1,49 @@
+import { parse } from "npm:@babel/parser@7.28.3";
+import { type Node, type Statement } from "npm:@babel/types@7.28.2";
+import { type DeepPartial } from "./types.ts";
+
+export function matchesStructure<T extends Node>(
+  obj: Node | Node[],
+  structure: DeepPartial<T> | readonly DeepPartial<T>[],
+): obj is T {
+  if (Array.isArray(structure)) {
+    if (!Array.isArray(obj)) {
+      return false;
+    }
+    return (
+      structure.length === obj.length &&
+      structure.every((value, index) => matchesStructure(obj[index], value))
+    );
+  }
+  if (typeof structure === "object") {
+    if (!obj) {
+      return !structure;
+    }
+    if ("or" in structure) {
+      // Allow `{ or: [a, b] }` so we can handle some special cases
+      return (structure.or! as DeepPartial<Node>[]).some((node) =>
+        matchesStructure(obj, node)
+      );
+    }
+    for (const [key, value] of Object.entries(structure)) {
+      if (!matchesStructure(obj[key as keyof typeof obj], value)) {
+        return false;
+      }
+    }
+    return true;
+  }
+  return structure === obj;
+}
+
+export function getFunctionNodes(f: (...a: unknown[]) => void): Statement[] {
+  const func = parse(f.toString()).program.body[0];
+  if (func.type === "FunctionDeclaration") {
+    return func.body.body;
+  }
+  console.error("failed to parse function into nodes");
+  return [];
+}
+
+export function isOneOf<T>(value: unknown, ...of: readonly T[]): value is T {
+  return of.includes(value as T);
+}

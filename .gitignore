@@ -1,0 +1,4 @@
+/dist
+*.py[cd]
+/yt_dlp_jsc_deno/dist
+/yt_dlp_jsc_deno/__about__.py

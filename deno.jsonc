@@ -1,0 +1,10 @@
+{
+  "test": {
+    "exclude": ["./dist"]
+  },
+  "tasks": {
+    "download": "deno run --allow-read --allow-write --allow-net=www.youtube.com tests/download.ts",
+    "test": "deno test --allow-read --allow-env=BABEL_TYPES_8_BREAKING --location 'https://www.youtube.com/watch?v=yt-dlp-wins'",
+    "bundle": "deno run --allow-env --allow-read --allow-run --allow-write bundle.ts"
+  }
+}
