@@ -11,7 +11,6 @@ export const tests: {
 }[] = [
   {
     player: "3d3ba064",
-    variants: ["tce"],
     nsig: [
       { input: "ZdZIqFPQK-Ty8wId", expected: "qmtUsIz04xxiNW" },
       { input: "4GMrWHyKI5cEvhDO", expected: "N9gmEX7YhKTSmw" },
@@ -27,7 +26,6 @@ export const tests: {
   },
   {
     player: "5ec65609",
-    variants: ["tce"],
     nsig: [{ input: "0eRGgQWJGfT5rFHFj", expected: "4SvMpDQH-vBJCw" }],
     sig: [
       {
@@ -40,7 +38,6 @@ export const tests: {
   },
   {
     player: "6742b2b9",
-    variants: ["tce"],
     nsig: [
       { input: "_HPB-7GFg1VTkn9u", expected: "qUAsPryAO_ByYg" },
       { input: "K1t_fcB6phzuq2SF", expected: "Y7PcOt3VE62mog" },
@@ -51,6 +48,22 @@ export const tests: {
           "MMGZJMUucirzS_SnrSPYsc85CJNnTUi6GgR5NKn-znQEICACojE8MHS6S7uYq4TGjQX_D4aPk99hNU6wbTvorvVVMgIARwsSdQfJAA",
         expected:
           "AJfQdSswRAIgMVVvrovTbw6UNh99kPa4D_XQjGT4qYu7S6SHM8EjoCACIEQnz-nKN5RgG6iUTnNJC58csYPSrnS_SzricuUMJZGM",
+      },
+    ],
+  },
+  {
+    player: "23ccdd25",
+    nsig: [
+      // Synthetic test
+      { input: "0eRGgQWJGfT5rFHFj", expected: "orSsTqUaUO-j" },
+    ],
+    sig: [
+      // Synthetic test
+      {
+        input:
+          "MMGZJMUucirzS_SnrSPYsc85CJNnTUi6GgR5NKn-znQEICACojE8MHS6S7uYq4TGjQX_D4aPk99hNU6wbTvorvVVMgIARwsSdQfJAA",
+        expected:
+          "ZJMUucirzS_SnrSPYsc85CJNnTUi6GgR5NKn-znQEICACojE8MHS6S7uYq4TGjQX_D4aPk99hAU6wbTvorvVVMgIARwsSdQfJAN",
       },
     ],
   },

@@ -19,48 +19,71 @@ export function preprocessPlayer(data: string): string {
     attachComment: false,
   });
   const body = ast.program.body;
-  if (body.length !== 2 || body[1].type !== "ExpressionStatement") {
+
+  const block = (() => {
+    switch (body.length) {
+      case 1: {
+        const func = body[0];
+        if (
+          func?.type === "ExpressionStatement" &&
+          func.expression.type === "CallExpression" &&
+          func.expression.callee.type === "MemberExpression" &&
+          func.expression.callee.object.type === "FunctionExpression"
+        ) {
+          return func.expression.callee.object.body;
+        }
+        break;
+      }
+      case 2: {
+        const func = body[1];
+        if (
+          func?.type === "ExpressionStatement" &&
+          func.expression.type === "CallExpression" &&
+          func.expression.callee.type === "FunctionExpression"
+        ) {
+          const block = func.expression.callee.body;
+          // Skip `var window = this;`
+          block.body.splice(0, 1);
+          return block;
+        }
+        break;
+      }
+    }
     throw "unexpected structure";
-  }
-  const func = body[1];
-  if (
-    func.expression.type !== "CallExpression" ||
-    func.expression.callee.type !== "FunctionExpression"
-  ) {
-    throw "unexpected structure";
-  }
+  })();
+
   const found = {
     nsig: [] as ArrowFunctionExpression[],
     sig: [] as ArrowFunctionExpression[],
   };
-  const plainExpressions = func.expression.callee.body.body.filter(
-    (node, idx) => {
-      if (idx === 0) {
-        // Ignore `var window = this;`
-        return false;
-      }
-      if (node.type === "ExpressionStatement") {
-        if (node.expression.type === "AssignmentExpression") {
-          const nsig = extractNsig(node.expression);
-          if (nsig) {
-            found.nsig.push(nsig);
-          }
-          const sig = extractSig(node.expression);
-          if (sig) {
-            found.sig.push(sig);
-          }
-          return true;
-        }
-        return node.expression.type === "StringLiteral";
-      }
-      return true;
+  const plainExpressions = block.body.filter((node) => {
+    const nsig = extractNsig(node);
+    if (nsig) {
+      found.nsig.push(nsig);
     }
-  );
-  func.expression.callee.body.body = plainExpressions;
+    const sig = extractSig(node);
+    if (sig) {
+      found.sig.push(sig);
+    }
+    if (node.type === "ExpressionStatement") {
+      if (node.expression.type === "AssignmentExpression") {
+        return true;
+      }
+      return node.expression.type === "StringLiteral";
+    }
+    return true;
+  });
+  block.body = plainExpressions;
 
   for (const [name, options] of Object.entries(found)) {
-    if (options.length !== 1) {
-      continue;
+    // TODO: this is cringe fix plz
+    const unique = new Set(options.map((x) => JSON.stringify(x)));
+    if (unique.size !== 1) {
+      const message = `found ${unique.size} ${name} function possibilities`;
+      throw message +
+        (unique.size
+          ? `: ${options.map((x) => generate(x)["code"]).join(", ")}`
+          : "");
     }
     plainExpressions.push({
       type: "ExpressionStatement",

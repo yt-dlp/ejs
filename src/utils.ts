@@ -5,7 +5,7 @@ import { type DeepPartial } from "./types.ts";
 export function matchesStructure<T extends Node>(
   obj: Node | Node[],
   structure: DeepPartial<T> | readonly DeepPartial<T>[],
-): obj is T {
+): boolean {
   if (Array.isArray(structure)) {
     if (!Array.isArray(obj)) {
       return false;
@@ -20,10 +20,8 @@ export function matchesStructure<T extends Node>(
       return !structure;
     }
     if ("or" in structure) {
-      // Allow `{ or: [a, b] }` so we can handle some special cases
-      return (structure.or! as DeepPartial<Node>[]).some((node) =>
-        matchesStructure(obj, node)
-      );
+      // Handle `{ or: [a, b] }`
+      return structure.or.some((node) => matchesStructure(obj, node));
     }
     for (const [key, value] of Object.entries(structure)) {
       if (!matchesStructure(obj[key as keyof typeof obj], value)) {

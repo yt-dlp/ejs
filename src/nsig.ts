@@ -1,97 +1,119 @@
 import {
   type ArrowFunctionExpression,
   type Node,
+  type BlockStatement,
 } from "npm:@babel/types@7.28.2";
 import { matchesStructure } from "./utils.ts";
 import { type DeepPartial } from "./types.ts";
 
 const identifier: DeepPartial<Node> = {
-  type: "AssignmentExpression",
-  operator: "=",
-  left: {
-    type: "Identifier",
-  },
-  right: {
-    type: "FunctionExpression",
-    params: [{}],
-    body: {
-      type: "BlockStatement",
-      body: [
-        {
-          type: "ReturnStatement",
-          // {
-          argument:
-            // or: [
-            {
-              type: "CallExpression",
-              callee: {
-                type: "MemberExpression",
-                object: {
-                  type: "Identifier",
-                  // XXX: get switch function identifier, use here
-                  // name: "Lb",
-                },
-                property: {
-                  type: "MemberExpression",
-                  object: {
-                    type: "Identifier",
-                    // XXX: get global string store identifier, use here
-                    // name: "Y",
-                  },
-                  property: {
-                    type: "NumericLiteral",
-                  },
-                },
-              },
-              arguments: [
-                { type: "ThisExpression" },
-                { type: "NumericLiteral" },
-                {
-                  type: "Identifier",
-                  // XXX: get parameter name, use here
-                  // name: "Y",
-                },
-              ],
-            },
-          // XXX: possible to be a direct call, ignore that for now
-          // {
-          //   type: "CallExpression",
-          //   callee: {
-          //     type: "Identifier",
-          //     // XXX: get global string store identifier, use here
-          //     // name: "Y",
-          //   },
-          //   arguments: [
-          //     { type: "NumericLiteral" },
-          //     {
-          //       type: "Identifier",
-          //       // XXX: get parameter name, use here
-          //       // name: "Y",
-          //     },
-          //   ],
-          // },
-          // ],
-          // },
+  type: "VariableDeclaration",
+  declarations: [
+    {
+      type: "VariableDeclarator",
+      id: {
+        type: "Identifier",
+      },
+      init: {
+        type: "ArrayExpression",
+        elements: [
+          {
+            type: "Identifier",
+          },
+        ],
+      },
+    },
+  ],
+  kind: "var",
+};
+const catchBlockBody = [
+  {
+    "type": "ReturnStatement",
+    "argument": {
+      "type": "BinaryExpression",
+      "operator": "+",
+      "left": {
+        "type": "MemberExpression",
+        "object": {
+          "type": "Identifier",
         },
-      ],
+        "property": {
+          "type": "NumericLiteral",
+        },
+      },
+      "right": {
+        "type": "Identifier",
+      },
     },
   },
-};
+] as const;
 
 export function extract(node: Node): ArrowFunctionExpression | null {
   if (!matchesStructure(node, identifier)) {
+    // Fallback search for try { } catch { return X[12] + Y }
+    let name: string | undefined | null = null;
+    let block: BlockStatement | null = null;
+    switch (node.type) {
+      case "ExpressionStatement": {
+        if (node.expression.type === "AssignmentExpression" &&
+          node.expression.left.type === "Identifier" &&
+          node.expression.right.type === "FunctionExpression" &&
+          node.expression.right.params.length === 1) {
+            name = node.expression.left.name;
+            block = node.expression.right.body;
+          }
+          break;
+      }
+      case "FunctionDeclaration": {
+        if (node.params.length === 1) {
+            name = node.id?.name;
+            block = node.body;
+        }
+        break;
+      }
+    }
+    if (!block || !name) {
+      return null;
+    }
+    const tryNode = block.body.at(-2);
+    if (
+      tryNode?.type !== "TryStatement" ||
+      tryNode.handler?.type !== "CatchClause"
+    ) {
+      return null;
+    }
+    const catchBody = tryNode.handler!.body.body;
+    if (matchesStructure(catchBody, catchBlockBody)) {
+      return makeSolverFuncFromName(name);
+    }
     return null;
   }
-  if (node.type !== "AssignmentExpression" || node.left.type !== "Identifier") {
+
+  if (node.type !== "VariableDeclaration") {
     return null;
   }
-  // TODO: verify identifiers here
+  const declaration = node.declarations[0];
+  if (
+    declaration.type !== "VariableDeclarator" || !declaration.init ||
+    declaration.init.type !== "ArrayExpression" ||
+    declaration.init.elements.length !== 1
+  ) {
+    return null;
+  }
+  const [firstElement] = declaration.init.elements;
+  if (!firstElement || firstElement.type !== "Identifier") {
+    return null;
+  }
+  return makeSolverFuncFromName(firstElement.name);
+}
+
+function makeSolverFuncFromName(name: string): ArrowFunctionExpression {
   return {
     type: "ArrowFunctionExpression",
     params: [
       {
         type: "Identifier",
-        name: "nsig",
+        name: "x",
       },
     ],
     async: false,
@@ -100,12 +122,12 @@ export function extract(node: Node): ArrowFunctionExpression | null {
       type: "CallExpression",
       callee: {
         type: "Identifier",
-        name: node.left.name,
+        name: name,
       },
       arguments: [
         {
           type: "Identifier",
-          name: "nsig",
+          name: "x",
         },
       ],
     },
