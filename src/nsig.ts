@@ -2,7 +2,7 @@ import {
   type ArrowFunctionExpression,
   type Node,
   type BlockStatement,
-} from "npm:@babel/types@7.28.2";
+} from "@babel/types";
 import { matchesStructure } from "./utils.ts";
 import { type DeepPartial } from "./types.ts";
 

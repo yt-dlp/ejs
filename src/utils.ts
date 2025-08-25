@@ -1,5 +1,5 @@
-import { parse } from "npm:@babel/parser@7.28.3";
-import { type Node, type Statement } from "npm:@babel/types@7.28.2";
+import { parse } from "@babel/parser";
+import { type Node, type Statement } from "@babel/types";
 import { type DeepPartial } from "./types.ts";
 
 export function matchesStructure<T extends Node>(

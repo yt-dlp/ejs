@@ -1,5 +1,4 @@
-import { exists } from "jsr:@std/fs/exists";
-
+import { exists } from "@std/fs/exists";
 import { tests, players } from "./tests.ts";
 import { getCachePath } from "./utils.ts";
 

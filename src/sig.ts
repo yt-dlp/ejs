@@ -3,8 +3,8 @@ import {
   type FunctionExpression,
   type Expression,
   type Node,
-  ExpressionStatement,
-} from "npm:@babel/types@7.28.2";
+  type ExpressionStatement,
+} from "@babel/types";
 import { matchesStructure } from "./utils.ts";
 import { type DeepPartial } from "./types.ts";
 

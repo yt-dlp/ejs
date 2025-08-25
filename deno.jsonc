@@ -1,10 +1,18 @@
 {
+  "imports":{
+    "@babel/generator": "npm:@babel/generator@7.28.3",
+    "@babel/parser": "npm:@babel/parser@7.28.3",
+    "@babel/types": "npm:@babel/types@7.28.2",
+    "@std/assert": "jsr:@std/assert@1",
+    "@std/io": "jsr:@std/io",
+    "@std/fs/exists": "jsr:@std/fs/exists"
+  },
   "test": {
     "exclude": ["./dist"]
   },
   "tasks": {
     "download": "deno run --allow-read --allow-write --allow-net=www.youtube.com tests/download.ts",
     "test": "deno test --allow-read --allow-env=BABEL_TYPES_8_BREAKING --location 'https://www.youtube.com/watch?v=yt-dlp-wins'",
-    "bundle": "deno run --allow-env --allow-read --allow-run --allow-write bundle.ts"
+    "bundle": "deno bundle --output dist/jsc-deno.js src/main.ts"
   }
 }

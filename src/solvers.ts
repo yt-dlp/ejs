@@ -1,6 +1,6 @@
-import { parse } from "npm:@babel/parser@7.28.3";
-import { generate } from "npm:@babel/generator@7.28.3";
-import { type ArrowFunctionExpression } from "npm:@babel/types@7.28.2";
+import { parse } from "@babel/parser";
+import { generate } from "@babel/generator";
+import { type ArrowFunctionExpression } from "@babel/types";
 import { getFunctionNodes } from "./utils.ts";
 import { extract as extractSig } from "./sig.ts";
 import { extract as extractNsig } from "./nsig.ts";
@@ -80,10 +80,12 @@ export function preprocessPlayer(data: string): string {
     const unique = new Set(options.map((x) => JSON.stringify(x)));
     if (unique.size !== 1) {
       const message = `found ${unique.size} ${name} function possibilities`;
-      throw message +
+      throw (
+        message +
         (unique.size
           ? `: ${options.map((x) => generate(x)["code"]).join(", ")}`
-          : "");
+          : "")
+      );
     }
     plainExpressions.push({
       type: "ExpressionStatement",

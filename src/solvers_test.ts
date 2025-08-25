@@ -1,4 +1,4 @@
-import { assertStrictEquals } from "jsr:@std/assert@1";
+import { assertStrictEquals } from "@std/assert";
 import { preprocessPlayer, getFromPrepared } from "./solvers.ts";
 import { players, tests } from "../tests/tests.ts";
 import { getCachePath } from "../tests/utils.ts";

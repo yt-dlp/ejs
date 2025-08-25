@@ -1,4 +1,4 @@
-import { writeAll } from "jsr:@std/io";
+import { writeAll } from "@std/io";
 import { preprocessPlayer, getFromPrepared } from "./solvers.ts";
 import { isOneOf } from "./utils.ts";
 
