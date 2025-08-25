@@ -1,5 +1,5 @@
 {
-  "imports":{
+  "imports": {
     "@babel/generator": "npm:@babel/generator@7.28.3",
     "@babel/parser": "npm:@babel/parser@7.28.3",
     "@babel/types": "npm:@babel/types@7.28.2",

@@ -1,7 +1,7 @@
 import {
   type ArrowFunctionExpression,
-  type Node,
   type BlockStatement,
+  type Node,
 } from "@babel/types";
 import { matchesStructure } from "./utils.ts";
 import { type DeepPartial } from "./types.ts";
@@ -55,19 +55,21 @@ export function extract(node: Node): ArrowFunctionExpression | null {
     let block: BlockStatement | null = null;
     switch (node.type) {
       case "ExpressionStatement": {
-        if (node.expression.type === "AssignmentExpression" &&
+        if (
+          node.expression.type === "AssignmentExpression" &&
           node.expression.left.type === "Identifier" &&
           node.expression.right.type === "FunctionExpression" &&
-          node.expression.right.params.length === 1) {
-            name = node.expression.left.name;
-            block = node.expression.right.body;
-          }
-          break;
+          node.expression.right.params.length === 1
+        ) {
+          name = node.expression.left.name;
+          block = node.expression.right.body;
+        }
+        break;
       }
       case "FunctionDeclaration": {
         if (node.params.length === 1) {
-            name = node.id?.name;
-            block = node.body;
+          name = node.id?.name;
+          block = node.body;
         }
         break;
       }

@@ -1,5 +1,5 @@
 import { writeAll } from "@std/io";
-import { preprocessPlayer, getFromPrepared } from "./solvers.ts";
+import { getFromPrepared, preprocessPlayer } from "./solvers.ts";
 import { isOneOf } from "./utils.ts";
 
 async function main(): Promise<Output> {
@@ -7,10 +7,9 @@ async function main(): Promise<Output> {
     throw "Expected input on stdin";
   }
   const input: Input = await new Response(Deno.stdin.readable).json();
-  const preprocessedPlayer =
-    input.type === "player"
-      ? preprocessPlayer(input.player)
-      : input.preprocessed_player;
+  const preprocessedPlayer = input.type === "player"
+    ? preprocessPlayer(input.player)
+    : input.preprocessed_player;
   const solvers = getFromPrepared(preprocessedPlayer);
 
   const responses = input.requests.map(
@@ -43,7 +42,7 @@ async function main(): Promise<Output> {
           error: `${error}`,
         };
       }
-    }
+    },
   );
 
   const output: Output = {
@@ -73,16 +72,16 @@ await writeAll(Deno.stdout, bytes);
 
 type Input =
   | {
-      type: "player";
-      player: string;
-      requests: JsChallengeRequest[];
-      output_preprocessed: boolean;
-    }
+    type: "player";
+    player: string;
+    requests: JsChallengeRequest[];
+    output_preprocessed: boolean;
+  }
   | {
-      type: "preprocessed";
-      preprocessed_player: string;
-      requests: JsChallengeRequest[];
-    };
+    type: "preprocessed";
+    preprocessed_player: string;
+    requests: JsChallengeRequest[];
+  };
 
 type JsChallengeRequest = {
   type: string;
@@ -93,23 +92,23 @@ type JsChallengeRequest = {
 
 type JsChallengeProviderResponse =
   | {
-      type: "result";
-      request: JsChallengeRequest;
-      response: string;
-    }
+    type: "result";
+    request: JsChallengeRequest;
+    response: string;
+  }
   | {
-      type: "error";
-      request: JsChallengeRequest;
-      error: string;
-    };
+    type: "error";
+    request: JsChallengeRequest;
+    error: string;
+  };
 
 type Output =
   | {
-      type: "result";
-      preprocessed_player?: string;
-      responses: JsChallengeProviderResponse[];
-    }
+    type: "result";
+    preprocessed_player?: string;
+    responses: JsChallengeProviderResponse[];
+  }
   | {
-      type: "error";
-      error: string;
-    };
+    type: "error";
+    error: string;
+  };

@@ -1,72 +1,72 @@
 import {
   type ArrowFunctionExpression,
-  type FunctionExpression,
   type Expression,
-  type Node,
   type ExpressionStatement,
+  type FunctionExpression,
+  type Node,
 } from "@babel/types";
 import { matchesStructure } from "./utils.ts";
 import { type DeepPartial } from "./types.ts";
 
 const logicalExpression: DeepPartial<ExpressionStatement> = {
-        type: "ExpressionStatement",
-        expression: {
-          type: "LogicalExpression",
+  type: "ExpressionStatement",
+  expression: {
+    type: "LogicalExpression",
+    left: {
+      type: "Identifier",
+    },
+    operator: "&&",
+    right: {
+      type: "SequenceExpression",
+      expressions: [
+        {
+          type: "AssignmentExpression",
+          operator: "=",
           left: {
             type: "Identifier",
           },
-          operator: "&&",
           right: {
-            type: "SequenceExpression",
-            expressions: [
-              {
-                type: "AssignmentExpression",
-                operator: "=",
-                left: {
-                  type: "Identifier",
-                },
-                right: {
-                  type: "CallExpression",
-                  callee: {
-                    type: "Identifier",
+            type: "CallExpression",
+            callee: {
+              type: "Identifier",
+            },
+            arguments: {
+              or: [
+                [
+                  { type: "NumericLiteral" },
+                  {
+                    type: "CallExpression",
+                    callee: {
+                      type: "Identifier",
+                      name: "decodeURIComponent",
+                    },
+                    arguments: [{ type: "Identifier" }],
                   },
-                  arguments: {
-                    or: [
-                      [
-                        { type: "NumericLiteral" },
-                        {
-                          type: "CallExpression",
-                          callee: {
-                            type: "Identifier",
-                            name: "decodeURIComponent",
-                          },
-                          arguments: [{ type: "Identifier" }],
-                        },
-                      ],
-                      [
-                        {
-                          type: "CallExpression",
-                          callee: {
-                            type: "Identifier",
-                            name: "decodeURIComponent",
-                          },
-                          arguments: [{ type: "Identifier" }],
-                        },
-                      ],
-                    ],
+                ],
+                [
+                  {
+                    type: "CallExpression",
+                    callee: {
+                      type: "Identifier",
+                      name: "decodeURIComponent",
+                    },
+                    arguments: [{ type: "Identifier" }],
                   },
-                },
-              },
-              {
-                type: "CallExpression",
-              },
-            ],
-            extra: {
-              parenthesized: true,
+                ],
+              ],
             },
           },
         },
-      }
+        {
+          type: "CallExpression",
+        },
+      ],
+      extra: {
+        parenthesized: true,
+      },
+    },
+  },
+};
 
 const identifier = {
   or: [{
@@ -79,7 +79,7 @@ const identifier = {
       },
       right: {
         type: "FunctionExpression",
-  params: [{}, {}, {}],
+        params: [{}, {}, {}],
       },
     },
   }, {
@@ -89,7 +89,6 @@ const identifier = {
 } as const;
 
 export function extract(node: Node): ArrowFunctionExpression | null {
-
   if (!matchesStructure(node, identifier as unknown as DeepPartial<Node>)) {
     return null;
   }

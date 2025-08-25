@@ -1,5 +1,5 @@
 import { exists } from "@std/fs/exists";
-import { tests, players } from "./tests.ts";
+import { players, tests } from "./tests.ts";
 import { getCachePath } from "./utils.ts";
 
 for (const test of tests) {
