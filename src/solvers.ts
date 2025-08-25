@@ -4,15 +4,7 @@ import { type ArrowFunctionExpression } from "@babel/types";
 import { getFunctionNodes } from "./utils.ts";
 import { extract as extractSig } from "./sig.ts";
 import { extract as extractNsig } from "./nsig.ts";
-
-function setup() {
-  // @ts-ignore: This is used in the babel generated js
-  globalThis.XMLHttpRequest = { prototype: {} };
-  // deno-lint-ignore no-unused-vars
-  const window = Object.assign(Object.create(null), globalThis);
-  // deno-lint-ignore no-unused-vars
-  const document = {};
-}
+import { setupNodes } from "./setup.ts";
 
 export function preprocessPlayer(data: string): string {
   const ast = parse(data, {
@@ -109,7 +101,7 @@ export function preprocessPlayer(data: string): string {
     });
   }
 
-  ast.program.body.splice(0, 0, ...getFunctionNodes(setup));
+  ast.program.body.splice(0, 0, ...setupNodes);
 
   const { code } = generate(ast, {
     comments: false,
