@@ -67,6 +67,22 @@ export const tests: {
       },
     ],
   },
+  {
+    player: "3597727b",
+    nsig: [
+      // Synthetic test
+      { input: "0eRGgQWJGfT5rFHFj", expected: "PRwo5dDfisg0ejA2" },
+    ],
+    sig: [
+      // Synthetic test
+      {
+        input:
+          "MMGZJMUucirzS_SnrSPYsc85CJNnTUi6GgR5NKn-znQEICACojE8MHS6S7uYq4TGjQX_D4aPk99hNU6wbTvorvVVMgIARwsSdQfJAA",
+        expected:
+          "AAJfQdSswRAIgMVVvrovTbw6UNh99kPa4D_XQjGT4qYuMS6SHM8Ej7CACIEQnz-nKN5RgG6iUTnNJC58csYPSroS_SzricuUMJZG",
+      },
+    ],
+  },
 ];
 
 export const players = new Map(
@@ -83,5 +99,4 @@ export const players = new Map(
   ] as const,
 );
 
-export type Variant = (typeof players) extends Map<infer T, unknown> ? T
-  : never;
+export type Variant = typeof players extends Map<infer T, unknown> ? T : never;
