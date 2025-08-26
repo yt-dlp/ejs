@@ -11,7 +11,7 @@
   },
   "tasks": {
     "download": "deno run --allow-read --allow-write --allow-net=www.youtube.com tests/download.ts",
-    "test": "deno test --allow-read --allow-env=BABEL_TYPES_8_BREAKING --location 'https://www.youtube.com/watch?v=yt-dlp-wins'",
+    "test": "deno test --allow-read --location 'https://www.youtube.com/watch?v=yt-dlp-wins'",
     "ptest": "deno task --quiet test --quiet --reporter dot --hide-stacktraces --filter \"/^[a-f\\d]{8} main$/\" & deno task --quiet test --quiet --reporter dot --hide-stacktraces --filter \"/^[a-f\\d]{8} tcc$/\" & deno task --quiet test --quiet --reporter dot --hide-stacktraces --filter \"/^[a-f\\d]{8} tce$/\" & deno task --quiet test --quiet --reporter dot --hide-stacktraces --filter \"/^[a-f\\d]{8} es5$/\" & deno task --quiet test --quiet --reporter dot --hide-stacktraces --filter \"/^[a-f\\d]{8} es6$/\" & deno task --quiet test --quiet --reporter dot --hide-stacktraces --filter \"/^[a-f\\d]{8} tv$/\" & deno task --quiet test --quiet --reporter dot --hide-stacktraces --filter \"/^[a-f\\d]{8} tv_es6$/\" & deno task --quiet test --quiet --reporter dot --hide-stacktraces --filter \"/^[a-f\\d]{8} phone$/\" & deno task --quiet test --quiet --reporter dot --hide-stacktraces --filter \"/^[a-f\\d]{8} tablet$/\"",
     "bundle": "deno bundle --output dist/jsc-deno.js src/main.ts"
   }
