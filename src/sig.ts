@@ -1,30 +1,23 @@
-import {
-  type ArrowFunctionExpression,
-  type Expression,
-  type ExpressionStatement,
-  type FunctionExpression,
-  type Node,
-} from "@babel/types";
+import { type ESTree } from "meriyah";
 import { matchesStructure } from "./utils.ts";
 import { type DeepPartial } from "./types.ts";
 
-const logicalExpression: DeepPartial<ExpressionStatement> = {
+const logicalExpression: DeepPartial<ESTree.ExpressionStatement> = {
   type: "ExpressionStatement",
   expression: {
     type: "LogicalExpression",
     left: {
       type: "Identifier",
     },
-    operator: "&&",
     right: {
       type: "SequenceExpression",
       expressions: [
         {
           type: "AssignmentExpression",
-          operator: "=",
           left: {
             type: "Identifier",
           },
+          operator: "=",
           right: {
             type: "CallExpression",
             callee: {
@@ -33,7 +26,7 @@ const logicalExpression: DeepPartial<ExpressionStatement> = {
             arguments: {
               or: [
                 [
-                  { type: "NumericLiteral" },
+                  { type: "Literal" },
                   {
                     type: "CallExpression",
                     callee: {
@@ -41,6 +34,7 @@ const logicalExpression: DeepPartial<ExpressionStatement> = {
                       name: "decodeURIComponent",
                     },
                     arguments: [{ type: "Identifier" }],
+                    optional: false,
                   },
                 ],
                 [
@@ -51,20 +45,20 @@ const logicalExpression: DeepPartial<ExpressionStatement> = {
                       name: "decodeURIComponent",
                     },
                     arguments: [{ type: "Identifier" }],
+                    optional: false,
                   },
                 ],
               ],
             },
+            optional: false,
           },
         },
         {
           type: "CallExpression",
         },
       ],
-      extra: {
-        parenthesized: true,
-      },
     },
+    operator: "&&",
   },
 };
 
@@ -88,8 +82,12 @@ const identifier = {
   }],
 } as const;
 
-export function extract(node: Node): ArrowFunctionExpression | null {
-  if (!matchesStructure(node, identifier as unknown as DeepPartial<Node>)) {
+export function extract(
+  node: ESTree.Node,
+): ESTree.ArrowFunctionExpression | null {
+  if (
+    !matchesStructure(node, identifier as unknown as DeepPartial<ESTree.Node>)
+  ) {
     return null;
   }
   const block = (node.type === "ExpressionStatement" &&
@@ -127,8 +125,6 @@ export function extract(node: Node): ArrowFunctionExpression | null {
         name: "sig",
       },
     ],
-    async: false,
-    expression: true,
     body: {
       type: "CallExpression",
       callee: {
@@ -149,6 +145,10 @@ export function extract(node: Node): ArrowFunctionExpression | null {
             name: "sig",
           },
         ],
+      optional: false,
     },
+    async: false,
+    expression: false,
+    generator: false,
   };
 }

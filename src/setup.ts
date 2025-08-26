@@ -1,11 +1,14 @@
-import { type Node } from "@babel/types";
+import { parse } from "meriyah";
 
-export const setupNodes: Node[] = [
+export const setupNodes = parse(`
+globalThis.XMLHttpRequest = { prototype: {} };
+const window = Object.assign(Object.create(null), globalThis);
+const document = {};
+`).body || [
   {
     type: "ExpressionStatement",
     expression: {
       type: "AssignmentExpression",
-      operator: "=",
       left: {
         type: "MemberExpression",
         object: {
@@ -17,23 +20,26 @@ export const setupNodes: Node[] = [
           type: "Identifier",
           name: "XMLHttpRequest",
         },
+        optional: false,
       },
+      operator: "=",
       right: {
         type: "ObjectExpression",
         properties: [
           {
-            type: "ObjectProperty",
-            method: false,
+            type: "Property",
             key: {
               type: "Identifier",
               name: "prototype",
             },
-            computed: false,
-            shorthand: false,
             value: {
               type: "ObjectExpression",
               properties: [],
             },
+            kind: "init",
+            computed: false,
+            method: false,
+            shorthand: false,
           },
         ],
       },
@@ -41,6 +47,7 @@ export const setupNodes: Node[] = [
   },
   {
     type: "VariableDeclaration",
+    kind: "const",
     declarations: [
       {
         type: "VariableDeclarator",
@@ -61,6 +68,7 @@ export const setupNodes: Node[] = [
               type: "Identifier",
               name: "assign",
             },
+            optional: false,
           },
           arguments: [
             {
@@ -76,25 +84,29 @@ export const setupNodes: Node[] = [
                   type: "Identifier",
                   name: "create",
                 },
+                optional: false,
               },
               arguments: [
                 {
-                  type: "NullLiteral",
+                  type: "Literal",
+                  value: null,
                 },
               ],
+              optional: false,
             },
             {
               type: "Identifier",
               name: "globalThis",
             },
           ],
+          optional: false,
         },
       },
     ],
-    kind: "const",
   },
   {
     type: "VariableDeclaration",
+    kind: "const",
     declarations: [
       {
         type: "VariableDeclarator",
@@ -108,6 +120,5 @@ export const setupNodes: Node[] = [
         },
       },
     ],
-    kind: "const",
   },
 ];

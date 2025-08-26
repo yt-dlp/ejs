@@ -1,13 +1,10 @@
-import {
-  type ArrowFunctionExpression,
-  type BlockStatement,
-  type Node,
-} from "@babel/types";
+import { type ESTree } from "meriyah";
 import { matchesStructure } from "./utils.ts";
 import { type DeepPartial } from "./types.ts";
 
-const identifier: DeepPartial<Node> = {
+const identifier: DeepPartial<ESTree.VariableDeclaration> = {
   type: "VariableDeclaration",
+  kind: "var",
   declarations: [
     {
       type: "VariableDeclarator",
@@ -24,35 +21,39 @@ const identifier: DeepPartial<Node> = {
       },
     },
   ],
-  kind: "var",
 };
+
 const catchBlockBody = [
   {
-    "type": "ReturnStatement",
-    "argument": {
-      "type": "BinaryExpression",
-      "operator": "+",
-      "left": {
-        "type": "MemberExpression",
-        "object": {
-          "type": "Identifier",
+    type: "ReturnStatement",
+    argument: {
+      type: "BinaryExpression",
+      left: {
+        type: "MemberExpression",
+        object: {
+          type: "Identifier",
         },
-        "property": {
-          "type": "NumericLiteral",
+        computed: true,
+        property: {
+          type: "Literal",
         },
+        optional: false,
       },
-      "right": {
-        "type": "Identifier",
+      right: {
+        type: "Identifier",
       },
+      operator: "+",
     },
   },
 ] as const;
 
-export function extract(node: Node): ArrowFunctionExpression | null {
+export function extract(
+  node: ESTree.Node,
+): ESTree.ArrowFunctionExpression | null {
   if (!matchesStructure(node, identifier)) {
     // Fallback search for try { } catch { return X[12] + Y }
     let name: string | undefined | null = null;
-    let block: BlockStatement | null = null;
+    let block: ESTree.BlockStatement | null | undefined = null;
     switch (node.type) {
       case "ExpressionStatement": {
         if (
@@ -109,17 +110,15 @@ export function extract(node: Node): ArrowFunctionExpression | null {
   return makeSolverFuncFromName(firstElement.name);
 }
 
-function makeSolverFuncFromName(name: string): ArrowFunctionExpression {
+function makeSolverFuncFromName(name: string): ESTree.ArrowFunctionExpression {
   return {
     type: "ArrowFunctionExpression",
     params: [
       {
         type: "Identifier",
-        name: "x",
+        name: "nsig",
       },
     ],
-    async: false,
-    expression: true,
     body: {
       type: "CallExpression",
       callee: {
@@ -129,9 +128,13 @@ function makeSolverFuncFromName(name: string): ArrowFunctionExpression {
       arguments: [
         {
           type: "Identifier",
-          name: "x",
+          name: "nsig",
         },
       ],
+      optional: false,
     },
+    async: false,
+    expression: false,
+    generator: false,
   };
 }

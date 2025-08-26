@@ -1,16 +1,12 @@
-import { parse } from "@babel/parser";
-import { generate } from "@babel/generator";
-import { type ArrowFunctionExpression } from "@babel/types";
-import { getFunctionNodes } from "./utils.ts";
+import { type ESTree, parse } from "meriyah";
+import { generate } from "astring";
 import { extract as extractSig } from "./sig.ts";
 import { extract as extractNsig } from "./nsig.ts";
 import { setupNodes } from "./setup.ts";
 
 export function preprocessPlayer(data: string): string {
-  const ast = parse(data, {
-    attachComment: false,
-  });
-  const body = ast.program.body;
+  const ast = parse(data);
+  const body = ast.body;
 
   const block = (() => {
     switch (body.length) {
@@ -45,10 +41,10 @@ export function preprocessPlayer(data: string): string {
   })();
 
   const found = {
-    nsig: [] as ArrowFunctionExpression[],
-    sig: [] as ArrowFunctionExpression[],
+    nsig: [] as ESTree.ArrowFunctionExpression[],
+    sig: [] as ESTree.ArrowFunctionExpression[],
   };
-  const plainExpressions = block.body.filter((node) => {
+  const plainExpressions = block.body.filter((node: ESTree.Node) => {
     const nsig = extractNsig(node);
     if (nsig) {
       found.nsig.push(nsig);
@@ -61,7 +57,7 @@ export function preprocessPlayer(data: string): string {
       if (node.expression.type === "AssignmentExpression") {
         return true;
       }
-      return node.expression.type === "StringLiteral";
+      return node.expression.type === "Literal";
     }
     return true;
   });
@@ -74,9 +70,7 @@ export function preprocessPlayer(data: string): string {
       const message = `found ${unique.size} ${name} function possibilities`;
       throw (
         message +
-        (unique.size
-          ? `: ${options.map((x) => generate(x)["code"]).join(", ")}`
-          : "")
+        (unique.size ? `: ${options.map((x) => generate(x)).join(", ")}` : "")
       );
     }
     plainExpressions.push({
@@ -101,13 +95,9 @@ export function preprocessPlayer(data: string): string {
     });
   }
 
-  ast.program.body.splice(0, 0, ...setupNodes);
+  ast.body.splice(0, 0, ...setupNodes);
 
-  const { code } = generate(ast, {
-    comments: false,
-    compact: false,
-    concise: false,
-  });
+  const code = generate(ast);
   return code;
 }
 

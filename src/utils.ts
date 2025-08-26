@@ -1,9 +1,8 @@
-import { parse } from "@babel/parser";
-import { type Node, type Statement } from "@babel/types";
+import { type ESTree } from "meriyah";
 import { type DeepPartial } from "./types.ts";
 
-export function matchesStructure<T extends Node>(
-  obj: Node | Node[],
+export function matchesStructure<T extends ESTree.Node>(
+  obj: ESTree.Node | ESTree.Node[],
   structure: DeepPartial<T> | readonly DeepPartial<T>[],
 ): boolean {
   if (Array.isArray(structure)) {
@@ -31,15 +30,6 @@ export function matchesStructure<T extends Node>(
     return true;
   }
   return structure === obj;
-}
-
-export function getFunctionNodes(f: (...a: unknown[]) => void): Statement[] {
-  const func = parse(f.toString()).program.body[0];
-  if (func.type === "FunctionDeclaration") {
-    return func.body.body;
-  }
-  console.error("failed to parse function into nodes");
-  return [];
 }
 
 export function isOneOf<T>(value: unknown, ...of: readonly T[]): value is T {
