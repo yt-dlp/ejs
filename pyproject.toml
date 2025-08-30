@@ -7,7 +7,7 @@ name = "yt-dlp-jsc-deno"
 version = "0.0.1"
 description = "JavaScript Challenge Provider for yt-dlp using Deno"
 readme = "README.md"
-requires-python = ">=3.8"
+requires-python = ">=3.9"
 license = "Unlicense"
 keywords = []
 authors = [
@@ -34,10 +34,11 @@ Issues = "https://github.com/yt-dlp/yt-dlp-jsc-deno/issues"
 Source = "https://github.com/yt-dlp/yt-dlp-jsc-deno"
 
 [[tool.hatch.build.hooks.build-scripts.scripts]]
+work_dir = "dist"
 out_dir = "yt_dlp_jsc_deno"
 commands = [
   "deno task bundle",
 ]
 artifacts = [
-  "dist/jsc-deno.js",
+  "jsc-deno.js",
 ]

@@ -3,7 +3,7 @@ import importlib.metadata
 
 import yt_dlp_jsc_deno
 
-_name = "dist/jsc-deno.js"
+_name = "jsc-deno.js"
 
 version = importlib.metadata.version(yt_dlp_jsc_deno.__name__)
 
