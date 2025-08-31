@@ -1,15 +1,13 @@
-import { writeAll } from "@std/io";
+import { read, write } from "./io.ts";
+
 import { getFromPrepared, preprocessPlayer } from "./solvers.ts";
 import { isOneOf } from "./utils.ts";
 
-async function main(): Promise<Output> {
-  if (Deno.stdin.isTerminal()) {
-    throw "Expected input on stdin";
-  }
-  const input: Input = await new Response(Deno.stdin.readable).json();
-  const preprocessedPlayer = input.type === "player"
-    ? preprocessPlayer(input.player)
-    : input.preprocessed_player;
+function main(input: Input): Output {
+  const preprocessedPlayer =
+    input.type === "player"
+      ? preprocessPlayer(input.player)
+      : input.preprocessed_player;
   const solvers = getFromPrepared(preprocessedPlayer);
 
   const responses = input.requests.map(
@@ -18,7 +16,7 @@ async function main(): Promise<Output> {
         return {
           type: "error",
           request,
-          error: `Failed to extract ${request.type} function`,
+          error: `Unknown request type: ${request.type}`,
         };
       }
       const solver = solvers[request.type];
@@ -39,10 +37,13 @@ async function main(): Promise<Output> {
         return {
           type: "error",
           request,
-          error: `${error}`,
+          error:
+            error instanceof Error
+              ? `${error.message}\n${error.stack}`
+              : `${error}`,
         };
       }
-    },
+    }
   );
 
   const output: Output = {
@@ -55,33 +56,33 @@ async function main(): Promise<Output> {
   return output;
 }
 
-async function safeMain(): Promise<Output> {
+async function safeMain(): Promise<void> {
   try {
-    return await main();
+    const input = await read();
+    const output = main(input);
+    await write(output);
   } catch (error) {
-    return {
+    await write({
       type: "error",
       error: `${error}`,
-    };
+    });
   }
 }
 
-const output = await safeMain();
-const bytes = new TextEncoder().encode(JSON.stringify(output));
-await writeAll(Deno.stdout, bytes);
+safeMain();
 
-type Input =
+export type Input =
   | {
-    type: "player";
-    player: string;
-    requests: JsChallengeRequest[];
-    output_preprocessed: boolean;
-  }
+      type: "player";
+      player: string;
+      requests: JsChallengeRequest[];
+      output_preprocessed: boolean;
+    }
   | {
-    type: "preprocessed";
-    preprocessed_player: string;
-    requests: JsChallengeRequest[];
-  };
+      type: "preprocessed";
+      preprocessed_player: string;
+      requests: JsChallengeRequest[];
+    };
 
 type JsChallengeRequest = {
   type: string;
@@ -92,23 +93,23 @@ type JsChallengeRequest = {
 
 type JsChallengeProviderResponse =
   | {
-    type: "result";
-    request: JsChallengeRequest;
-    response: string;
-  }
+      type: "result";
+      request: JsChallengeRequest;
+      response: string;
+    }
   | {
-    type: "error";
-    request: JsChallengeRequest;
-    error: string;
-  };
+      type: "error";
+      request: JsChallengeRequest;
+      error: string;
+    };
 
-type Output =
+export type Output =
   | {
-    type: "result";
-    preprocessed_player?: string;
-    responses: JsChallengeProviderResponse[];
-  }
+      type: "result";
+      preprocessed_player?: string;
+      responses: JsChallengeProviderResponse[];
+    }
   | {
-    type: "error";
-    error: string;
-  };
+      type: "error";
+      error: string;
+    };
