@@ -1,10 +1,19 @@
 {
     "type": "module",
+    "scripts": {
+        "bundle": "rollup -c"
+    },
     "dependencies": {
         "astring": "1.9.0",
         "meriyah": "6.1.4"
     },
     "devDependencies": {
-        "rollup": "4.49.0"
+        "@rollup/plugin-node-resolve": "^16.0.1",
+        "@rollup/plugin-sucrase": "5.0.2",
+        "@rollup/plugin-terser": "0.4.4",
+        "@types/bun": "1.2.21",
+        "@types/deno": "2.3.0",
+        "@types/node": "24.3.0",
+        "rollup": "4.50.0"
     }
 }

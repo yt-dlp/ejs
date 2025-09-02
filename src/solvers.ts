@@ -97,8 +97,7 @@ export function preprocessPlayer(data: string): string {
 
   ast.body.splice(0, 0, ...setupNodes);
 
-  const code = generate(ast);
-  return code;
+  return generate(ast);
 }
 
 export function getFromPrepared(code: string): {

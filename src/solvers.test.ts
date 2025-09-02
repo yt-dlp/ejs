@@ -16,9 +16,9 @@ for (const test of tests) {
           await subtest(`${step.input} (${mode})`, () => {
             const got = solvers[mode]?.(step.input);
             assert.equal(got, step.expected);
-          })
+          });
         }
       }
-    })
+    });
   }
 }
