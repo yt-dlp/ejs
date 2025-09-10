@@ -83,6 +83,126 @@ export const tests: {
       },
     ],
   },
+  {
+    // tce causes exception even in browser
+    player: "3752a005",
+    variants: ["main", "tcc", "es5", "es6", "tv", "tv_es6", "phone", "tablet"],
+    nsig: [
+      // Synthetic test
+      { input: "0eRGgQWJGfT5rFHFj", expected: "j22ZtsqVsR0Dn" },
+    ],
+    sig: [
+      // Synthetic test
+      {
+        input:
+          "MMGZJMUucirzS_SnrSPYsc85CJNnTUi6GgR5NKn-znQEICACojE8MHS6S7uYq4TGjQX_D4aPk99hNU6wbTvorvVVMgIARwsSdQfJAA",
+        expected:
+          "ZJM_ucirzS_SnrSPYsc85CJNnTUi6GgR5NKn-znQEICACojE8MHG6S7uYq4TGjQXSD4aPk99hNU6wbTvorvVVMgIARwsSdQfJAA",
+      },
+    ],
+  },
+  {
+    // tce causes exception even in browser
+    player: "afc7785b",
+    variants: ["main", "tcc", "es5", "es6", "tv", "tv_es6", "phone", "tablet"],
+    nsig: [
+      // Synthetic test
+      { input: "0eRGgQWJGfT5rFHFj", expected: "j22ZtsqVsR0Dn" },
+    ],
+    sig: [
+      // Synthetic test
+      {
+        input:
+          "MMGZJMUucirzS_SnrSPYsc85CJNnTUi6GgR5NKn-znQEICACojE8MHS6S7uYq4TGjQX_D4aPk99hNU6wbTvorvVVMgIARwsSdQfJAA",
+        expected:
+          "ZJM_ucirzS_SnrSPYsc85CJNnTUi6GgR5NKn-znQEICACojE8MHG6S7uYq4TGjQXSD4aPk99hNU6wbTvorvVVMgIARwsSdQfJAA",
+      },
+    ],
+  },
+  {
+    // tce causes exception even in browser
+    player: "b9645327",
+    variants: ["main", "tcc", "es5", "es6", "tv", "tv_es6", "phone", "tablet"],
+    nsig: [
+      // Synthetic test
+      { input: "0eRGgQWJGfT5rFHFj", expected: "j22ZtsqVsR0Dn" },
+    ],
+    sig: [
+      // Synthetic test
+      {
+        input:
+          "MMGZJMUucirzS_SnrSPYsc85CJNnTUi6GgR5NKn-znQEICACojE8MHS6S7uYq4TGjQX_D4aPk99hNU6wbTvorvVVMgIARwsSdQfJAA",
+        expected:
+          "ZJM_ucirzS_SnrSPYsc85CJNnTUi6GgR5NKn-znQEICACojE8MHG6S7uYq4TGjQXSD4aPk99hNU6wbTvorvVVMgIARwsSdQfJAA",
+      },
+    ],
+  },
+  {
+    // tce causes exception even in browser
+    player: "035b9195",
+    variants: ["main", "tcc", "es5", "es6", "tv", "tv_es6", "phone", "tablet"],
+    nsig: [
+      // Synthetic test
+      { input: "0eRGgQWJGfT5rFHFj", expected: "j22ZtsqVsR0Dn" },
+    ],
+    sig: [
+      // Synthetic test
+      {
+        input:
+          "MMGZJMUucirzS_SnrSPYsc85CJNnTUi6GgR5NKn-znQEICACojE8MHS6S7uYq4TGjQX_D4aPk99hNU6wbTvorvVVMgIARwsSdQfJAA",
+        expected:
+          "ZJM_ucirzS_SnrSPYsc85CJNnTUi6GgR5NKn-znQEICACojE8MHG6S7uYq4TGjQXSD4aPk99hNU6wbTvorvVVMgIARwsSdQfJAA",
+      },
+    ],
+  },
+  {
+    player: "6740c111",
+    nsig: [
+      // Synthetic test
+      { input: "0eRGgQWJGfT5rFHFj", expected: "AVsXYE0uE1k8e" },
+    ],
+    sig: [
+      // Synthetic test
+      {
+        input:
+          "MMGZJMUucirzS_SnrSPYsc85CJNnTUi6GgR5NKn-znQEICACojE8MHS6S7uYq4TGjQX_D4aPk99hNU6wbTvorvVVMgIARwsSdQfJAA",
+        expected:
+          "JfQdSswRAIgMVVvrovTbw6UNh99kPa4D_XQjGT4qYu7S6SHM8EjoCACIEQnz-MKN5RgG6iUTnNJC58csYPSrnS_SzricuUMJZGn",
+      },
+    ],
+  },
+  {
+    player: "f6a4f3bc",
+    nsig: [
+      // Synthetic test
+      { input: "0eRGgQWJGfT5rFHFj", expected: "H1NKYFbhlqZ" },
+    ],
+    sig: [
+      // Synthetic test
+      {
+        input:
+          "MMGZJMUucirzS_SnrSPYsc85CJNnTUi6GgR5NKn-znQEICACojE8MHS6S7uYq4TGjQX_D4aPk99hNU6wbTvorvVVMgIARwsSdQfJAA",
+        expected:
+          "JfQdSswRAIgMVVvrovTbw6UNh99kPa4D_XQjGT4qYM7S6SHM8EjoCACIEQnz-nKM5RgG6iUTnNJC58cNYPSrnS_SzricuUMJZGu",
+      },
+    ],
+  },
+  {
+    player: "b66835e2",
+    nsig: [
+      // Synthetic test
+      { input: "0eRGgQWJGfT5rFHFj", expected: "H1NKYFbhlqZ" },
+    ],
+    sig: [
+      // Synthetic test
+      {
+        input:
+          "MMGZJMUucirzS_SnrSPYsc85CJNnTUi6GgR5NKn-znQEICACojE8MHS6S7uYq4TGjQX_D4aPk99hNU6wbTvorvVVMgIARwsSdQfJAA",
+        expected:
+          "JfQdSswRAIgMVVvrovTbw6UNh99kPa4D_XQjGT4qYM7S6SHM8EjoCACIEQnz-nKM5RgG6iUTnNJC58cNYPSrnS_SzricuUMJZGu",
+      },
+    ],
+  },
 ];
 
 export const players = new Map(

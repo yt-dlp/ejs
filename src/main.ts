@@ -8,32 +8,30 @@ export default function main(input: Input): Output {
   const solvers = getFromPrepared(preprocessedPlayer);
 
   const responses = input.requests.map(
-    (request): JsChallengeProviderResponse => {
-      if (!isOneOf(request.type, "nsig", "sig")) {
+    (input): Response => {
+      if (!isOneOf(input.type, "nsig", "sig")) {
         return {
           type: "error",
-          request,
-          error: `Unknown request type: ${request.type}`,
+          error: `Unknown request type: ${input.type}`,
         };
       }
-      const solver = solvers[request.type];
+      const solver = solvers[input.type];
       if (!solver) {
         return {
           type: "error",
-          request,
-          error: `Failed to extract ${request.type} function`,
+          error: `Failed to extract ${input.type} function`,
         };
       }
       try {
         return {
           type: "result",
-          request,
-          response: solver(request.challenge),
+          data: Object.fromEntries(
+            input.challenges.map((challenge) => [challenge, solver(challenge)]),
+          ),
         };
       } catch (error) {
         return {
           type: "error",
-          request,
           error: error instanceof Error
             ? `${error.message}\n${error.stack}`
             : `${error}`,
@@ -56,31 +54,27 @@ export type Input =
   | {
     type: "player";
     player: string;
-    requests: JsChallengeRequest[];
+    requests: Request[];
     output_preprocessed: boolean;
   }
   | {
     type: "preprocessed";
     preprocessed_player: string;
-    requests: JsChallengeRequest[];
+    requests: Request[];
   };
 
-type JsChallengeRequest = {
-  type: string;
-  challenge: string;
-  player_url: string;
-  video_id: string | null;
+type Request = {
+  type: "nsig" | "sig";
+  challenges: string[];
 };
 
-type JsChallengeProviderResponse =
+type Response =
   | {
     type: "result";
-    request: JsChallengeRequest;
-    response: string;
+    data: Record<string, string>;
   }
   | {
     type: "error";
-    request: JsChallengeRequest;
     error: string;
   };
 
@@ -88,7 +82,7 @@ export type Output =
   | {
     type: "result";
     preprocessed_player?: string;
-    responses: JsChallengeProviderResponse[];
+    responses: Response[];
   }
   | {
     type: "error";

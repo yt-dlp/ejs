@@ -3,9 +3,9 @@ requires = ["hatchling", "hatch-build-scripts"]
 build-backend = "hatchling.build"
 
 [project]
-name = "yt-dlp-jsc-deno"
+name = "yt-dlp-jsc"
 version = "0.0.1"
-description = "JavaScript Challenge Provider for yt-dlp using Deno"
+description = "JavaScript Challenge Provider for yt-dlp supporting many runtimes"
 readme = "README.md"
 requires-python = ">=3.9"
 license = "Unlicense"
@@ -16,7 +16,6 @@ authors = [
 classifiers = [
   "Development Status :: 4 - Beta",
   "Programming Language :: Python",
-  "Programming Language :: Python :: 3.8",
   "Programming Language :: Python :: 3.9",
   "Programming Language :: Python :: 3.10",
   "Programming Language :: Python :: 3.11",
@@ -29,16 +28,18 @@ classifiers = [
 dependencies = []
 
 [project.urls]
-Documentation = "https://github.com/yt-dlp/yt-dlp-jsc-deno#readme"
-Issues = "https://github.com/yt-dlp/yt-dlp-jsc-deno/issues"
-Source = "https://github.com/yt-dlp/yt-dlp-jsc-deno"
+Documentation = "https://github.com/yt-dlp/yt-dlp-jsc#readme"
+Issues = "https://github.com/yt-dlp/yt-dlp-jsc/issues"
+Source = "https://github.com/yt-dlp/yt-dlp-jsc"
 
 [[tool.hatch.build.hooks.build-scripts.scripts]]
 work_dir = "dist"
-out_dir = "yt_dlp_jsc_deno"
+out_dir = "yt_dlp_jsc"
 commands = [
+  "deno install",
   "deno task bundle",
 ]
 artifacts = [
-  "jsc-deno.js",
+  "jsc.min.js",
+  "lib.min.js",
 ]

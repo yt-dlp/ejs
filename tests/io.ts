@@ -25,14 +25,19 @@ export async function getIO(): Promise<IO> {
 async function _getIO(): Promise<IO> {
   if (globalThis.process?.release?.name === "node") {
     // Assume node compatibility
-    const { readFile, writeFile, access } = await import("node:fs/promises");
+    const { access, readFile } = await import("node:fs/promises");
     const { deepStrictEqual } = await import("node:assert");
     const assert: Assert = {
       equal: deepStrictEqual,
     };
     let test: Test;
+    let writeFile: (
+      file: string,
+      data: ReadableStream<Uint8Array>,
+    ) => Promise<void>;
     if (typeof globalThis.Deno !== "undefined") {
-      // deno does not like `node:test` for some reason
+      // Except for Deno, which does its own thing
+      writeFile = Deno.writeFile;
       test = (name, func) => {
         Deno.test(name, (t) => {
           return func(assert, async (name, func): Promise<void> => {
@@ -44,6 +49,7 @@ async function _getIO(): Promise<IO> {
         return Promise.resolve();
       };
     } else {
+      writeFile = (await import("node:fs/promises"))["writeFile"];
       const { suite, test: subtest } = await import("node:test");
       test = (name, func) => {
         suite(name, () => {
