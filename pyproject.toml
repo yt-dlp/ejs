@@ -1,11 +1,11 @@
 [build-system]
-requires = ["hatchling", "hatch-build-scripts"]
+requires = ["hatchling", "hatch-build-scripts", "hatch-vcs"]
 build-backend = "hatchling.build"
 
 [project]
-name = "yt-dlp-jsc"
-version = "0.0.1"
-description = "JavaScript Challenge Provider for yt-dlp supporting many runtimes"
+name = "yt-dlp-ejs"
+description = "External JavaScript for yt-dlp supporting many runtimes"
+dynamic = ["version"]
 readme = "README.md"
 requires-python = ">=3.9"
 license = "Unlicense"
@@ -14,7 +14,7 @@ authors = [
   { name = "Simon Sawicki", email = "contact@grub4k.dev" },
 ]
 classifiers = [
-  "Development Status :: 4 - Beta",
+  "Development Status :: 5 - Production/Stable",
   "Programming Language :: Python",
   "Programming Language :: Python :: 3.9",
   "Programming Language :: Python :: 3.10",
@@ -28,18 +28,24 @@ classifiers = [
 dependencies = []
 
 [project.urls]
-Documentation = "https://github.com/yt-dlp/yt-dlp-jsc#readme"
-Issues = "https://github.com/yt-dlp/yt-dlp-jsc/issues"
-Source = "https://github.com/yt-dlp/yt-dlp-jsc"
+Documentation = "https://github.com/yt-dlp/ejs#readme"
+Issues = "https://github.com/yt-dlp/ejs/issues"
+Source = "https://github.com/yt-dlp/ejs"
+
+[tool.hatch.version]
+source = "vcs"
+
+[tool.hatch.build.hooks.vcs]
+version-file = "yt_dlp_ejs/_version.py"
 
 [[tool.hatch.build.hooks.build-scripts.scripts]]
 work_dir = "dist"
-out_dir = "yt_dlp_jsc"
+out_dir = "yt_dlp_ejs/"
 commands = [
   "deno install",
   "deno task bundle",
 ]
 artifacts = [
-  "jsc.min.js",
-  "lib.min.js",
+  "yt.solver.core.min.js",
+  "yt.solver.lib.min.js",
 ]

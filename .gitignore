@@ -1,6 +1,7 @@
 /dist
 *.py[cd]
-/yt_dlp_jsc_deno/*.js
+/yt_dlp_ejs/**.js
+/yt_dlp_ejs/_version.py
 /node_modules
 /bun.lock
 /deno.lock

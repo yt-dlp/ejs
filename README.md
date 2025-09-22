@@ -1,13 +1,11 @@
-# yt-dlp-jsc-deno
+# yt-dlp-ejs
 
-Deno backend of builtin JavaScript Challenge Provider for yt-dlp
+External JavaScript for yt-dlp supporting many runtimes
 
 ## Installation
 
-In the yt-dlp repository, install the """python""" package, either by doing
+In the yt-dlp repository, install the python package, either directly or from url:
 
 ```console
-pip install ../yt-dlp-jsp-deno
+pip install git+https://github.com/yt-dlp/ejs@main
 ```
-
-or from the url.

@@ -1,0 +1,29 @@
+on:
+  push:
+    tags:
+      - "*"
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: denoland/setup-deno@v2
+        with:
+          deno-version: v2.x
+      - uses: astral-sh/setup-uv@v6
+        with:
+          python-version: "3.13"
+      - name: Bundle
+        run:
+          # XXX: uv build fails for some reason
+          uv tool run hatch build --target wheel
+      - env:
+          TAG: ${{ github.ref_name }}
+        run: |
+          gh release create v${TAG} \
+            --title "yt-dlp-ejs v${TAG}" \
+            --notes-from-tag \
+            --verify-tag \
+            dist/yt.solver.* \
+            dist/yt_dlp_ejs*.whl
