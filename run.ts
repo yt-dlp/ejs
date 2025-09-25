@@ -1,14 +1,14 @@
-import { exit } from "node:process";
+import { argv, exit } from "node:process";
 import { readFileSync } from "node:fs";
 
 import { isOneOf } from "./src/utils.ts";
 import main from "./src/main.ts";
 
-const args = process.argv.slice(2);
+const args = argv.slice(2);
 if (args.length < 2) {
   console.error(
     `ERROR: Missing argument\nusage: ${
-      process.argv[1]
+      argv[1]
     } <player> [<type>:<request> ...]`,
   );
   exit(1);
