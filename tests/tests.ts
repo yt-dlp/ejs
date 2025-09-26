@@ -6,12 +6,12 @@ type Step = {
 export const tests: {
   player: string;
   variants?: Variant[];
-  nsig?: Step[];
+  n?: Step[];
   sig?: Step[];
 }[] = [
   {
     player: "3d3ba064",
-    nsig: [
+    n: [
       { input: "ZdZIqFPQK-Ty8wId", expected: "qmtUsIz04xxiNW" },
       { input: "4GMrWHyKI5cEvhDO", expected: "N9gmEX7YhKTSmw" },
     ],
@@ -26,7 +26,7 @@ export const tests: {
   },
   {
     player: "5ec65609",
-    nsig: [{ input: "0eRGgQWJGfT5rFHFj", expected: "4SvMpDQH-vBJCw" }],
+    n: [{ input: "0eRGgQWJGfT5rFHFj", expected: "4SvMpDQH-vBJCw" }],
     sig: [
       {
         input:
@@ -38,7 +38,7 @@ export const tests: {
   },
   {
     player: "6742b2b9",
-    nsig: [
+    n: [
       { input: "_HPB-7GFg1VTkn9u", expected: "qUAsPryAO_ByYg" },
       { input: "K1t_fcB6phzuq2SF", expected: "Y7PcOt3VE62mog" },
     ],
@@ -53,7 +53,7 @@ export const tests: {
   },
   {
     player: "23ccdd25",
-    nsig: [
+    n: [
       // Synthetic test
       { input: "0eRGgQWJGfT5rFHFj", expected: "orSsTqUaUO-j" },
     ],
@@ -69,7 +69,7 @@ export const tests: {
   },
   {
     player: "3597727b",
-    nsig: [
+    n: [
       // Synthetic test
       { input: "0eRGgQWJGfT5rFHFj", expected: "PRwo5dDfisg0ejA2" },
     ],
@@ -87,7 +87,7 @@ export const tests: {
     // tce causes exception even in browser
     player: "3752a005",
     variants: ["main", "tcc", "es5", "es6", "tv", "tv_es6", "phone", "tablet"],
-    nsig: [
+    n: [
       // Synthetic test
       { input: "0eRGgQWJGfT5rFHFj", expected: "j22ZtsqVsR0Dn" },
     ],
@@ -105,7 +105,7 @@ export const tests: {
     // tce causes exception even in browser
     player: "afc7785b",
     variants: ["main", "tcc", "es5", "es6", "tv", "tv_es6", "phone", "tablet"],
-    nsig: [
+    n: [
       // Synthetic test
       { input: "0eRGgQWJGfT5rFHFj", expected: "j22ZtsqVsR0Dn" },
     ],
@@ -123,7 +123,7 @@ export const tests: {
     // tce causes exception even in browser
     player: "b9645327",
     variants: ["main", "tcc", "es5", "es6", "tv", "tv_es6", "phone", "tablet"],
-    nsig: [
+    n: [
       // Synthetic test
       { input: "0eRGgQWJGfT5rFHFj", expected: "j22ZtsqVsR0Dn" },
     ],
@@ -141,7 +141,7 @@ export const tests: {
     // tce causes exception even in browser
     player: "035b9195",
     variants: ["main", "tcc", "es5", "es6", "tv", "tv_es6", "phone", "tablet"],
-    nsig: [
+    n: [
       // Synthetic test
       { input: "0eRGgQWJGfT5rFHFj", expected: "j22ZtsqVsR0Dn" },
     ],
@@ -157,7 +157,7 @@ export const tests: {
   },
   {
     player: "6740c111",
-    nsig: [
+    n: [
       // Synthetic test
       { input: "0eRGgQWJGfT5rFHFj", expected: "AVsXYE0uE1k8e" },
     ],
@@ -173,7 +173,7 @@ export const tests: {
   },
   {
     player: "f6a4f3bc",
-    nsig: [
+    n: [
       // Synthetic test
       { input: "0eRGgQWJGfT5rFHFj", expected: "H1NKYFbhlqZ" },
     ],
@@ -189,7 +189,7 @@ export const tests: {
   },
   {
     player: "b66835e2",
-    nsig: [
+    n: [
       // Synthetic test
       { input: "0eRGgQWJGfT5rFHFj", expected: "H1NKYFbhlqZ" },
     ],
@@ -205,7 +205,7 @@ export const tests: {
   },
   {
     player: "4f8fa943",
-    nsig: [
+    n: [
       // Synthetic test
       { input: "0eRGgQWJGfT5rFHFj", expected: "JWWr7hDSRpMq5" },
     ],
@@ -221,7 +221,7 @@ export const tests: {
   },
   {
     player: "0004de42",
-    nsig: [
+    n: [
       // Synthetic test
       { input: "0eRGgQWJGfT5rFHFj", expected: "OPd7UEsCDmCw4qD0" },
     ],
@@ -237,7 +237,7 @@ export const tests: {
   },
   {
     player: "2b83d2e0",
-    nsig: [
+    n: [
       // Synthetic test
       { input: "0eRGgQWJGfT5rFHFj", expected: "euHbygrCMLksxd" },
     ],

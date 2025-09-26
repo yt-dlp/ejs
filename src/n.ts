@@ -116,7 +116,7 @@ function makeSolverFuncFromName(name: string): ESTree.ArrowFunctionExpression {
     params: [
       {
         type: "Identifier",
-        name: "nsig",
+        name: "n",
       },
     ],
     body: {
@@ -128,7 +128,7 @@ function makeSolverFuncFromName(name: string): ESTree.ArrowFunctionExpression {
       arguments: [
         {
           type: "Identifier",
-          name: "nsig",
+          name: "n",
         },
       ],
       optional: false,

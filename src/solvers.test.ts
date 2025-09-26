@@ -11,7 +11,7 @@ for (const test of tests) {
     await io.test(`${test.player} ${variant}`, async (assert, subtest) => {
       const content = await io.read(path);
       const solvers = getFromPrepared(preprocessPlayer(content));
-      for (const mode of ["nsig", "sig"] as const) {
+      for (const mode of ["n", "sig"] as const) {
         for (const step of test[mode] || []) {
           await subtest(`${step.input} (${mode})`, () => {
             const got = solvers[mode]?.(step.input);

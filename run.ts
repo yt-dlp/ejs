@@ -16,12 +16,12 @@ if (args.length < 2) {
 
 const player = readFileSync(args[0], "utf-8");
 const requests = {
-  nsig: [] as string[],
+  n: [] as string[],
   sig: [] as string[],
 };
 for (const request of args.slice(1)) {
   const [type, challenge] = request.split(":", 2);
-  if (!isOneOf(type, "sig", "nsig")) {
+  if (!isOneOf(type, "sig", "n")) {
     console.error(`ERROR: Unsupported request type: ${type}`);
     exit(1);
   }
@@ -32,7 +32,7 @@ console.log(JSON.stringify(main({
   player,
   output_preprocessed: false,
   requests: [
-    { type: "nsig", challenges: requests.nsig },
+    { type: "n", challenges: requests.n },
     { type: "sig", challenges: requests.sig },
   ],
 })));

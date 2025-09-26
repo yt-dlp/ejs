@@ -1,7 +1,7 @@
 import { type ESTree, parse } from "meriyah";
 import { generate } from "astring";
 import { extract as extractSig } from "./sig.ts";
-import { extract as extractNsig } from "./nsig.ts";
+import { extract as extractN } from "./n.ts";
 import { setupNodes } from "./setup.ts";
 
 export function preprocessPlayer(data: string): string {
@@ -41,13 +41,13 @@ export function preprocessPlayer(data: string): string {
   })();
 
   const found = {
-    nsig: [] as ESTree.ArrowFunctionExpression[],
+    n: [] as ESTree.ArrowFunctionExpression[],
     sig: [] as ESTree.ArrowFunctionExpression[],
   };
   const plainExpressions = block.body.filter((node: ESTree.Node) => {
-    const nsig = extractNsig(node);
-    if (nsig) {
-      found.nsig.push(nsig);
+    const n = extractN(node);
+    if (n) {
+      found.n.push(n);
     }
     const sig = extractSig(node);
     if (sig) {
@@ -101,10 +101,10 @@ export function preprocessPlayer(data: string): string {
 }
 
 export function getFromPrepared(code: string): {
-  nsig: ((val: string) => string) | null;
+  n: ((val: string) => string) | null;
   sig: ((val: string) => string) | null;
 } {
-  const resultObj = { nsig: null, sig: null };
+  const resultObj = { n: null, sig: null };
   Function("_result", code)(resultObj);
   return resultObj;
 }
