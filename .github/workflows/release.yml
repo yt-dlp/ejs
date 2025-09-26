@@ -20,6 +20,7 @@ jobs:
           uv tool run hatch build --target wheel
       - env:
           TAG: ${{ github.ref_name }}
+          GH_TOKEN: ${{ github.token }}
         run: |
           gh release create v${TAG} \
             --title "yt-dlp-ejs v${TAG}" \
