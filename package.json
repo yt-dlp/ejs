@@ -1,4 +1,5 @@
 {
+    "name": "ejs",
     "type": "module",
     "scripts": {
         "bundle": "rollup -c"
@@ -15,6 +16,7 @@
         "@types/bun": "1.2.21",
         "@types/deno": "2.3.0",
         "@types/node": "24.3.0",
-        "rollup": "4.50.0"
+        "rollup": "4.50.0",
+        "prettier": "^3.6.2"
     }
 }
