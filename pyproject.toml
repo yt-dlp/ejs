@@ -39,12 +39,12 @@ source = "vcs"
 version-file = "yt_dlp_ejs/_version.py"
 
 [[tool.hatch.build.hooks.build-scripts.scripts]]
-out_dir = "yt_dlp_ejs/"
 commands = [
   "deno install",
   "deno task bundle",
 ]
-artifacts = [
-  "dist/yt.solver.core.min.js",
-  "dist/yt.solver.lib.min.js",
-]
+
+[tool.hatch.build.targets.wheel.force-include]
+"dist/yt.solver.core.min.js" = "yt_dlp_ejs/yt.solver.core.min.js"
+"dist/yt.solver.lib.min.js" = "yt_dlp_ejs/yt.solver.lib.min.js"
+
