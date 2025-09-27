@@ -1,7 +1,7 @@
 import { getFromPrepared, preprocessPlayer } from "./solvers.ts";
-import { players, tests } from "../tests/tests.ts";
-import { getCachePath } from "../tests/utils.ts";
-import { getIO } from "../tests/io.ts";
+import { players, tests } from "./test/tests.ts";
+import { getCachePath } from "./test/utils.ts";
+import { getIO } from "./test/io.ts";
 
 const io = await getIO();
 

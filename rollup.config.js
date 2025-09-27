@@ -83,7 +83,7 @@ function prettifyOutput() {
 
 export default defineConfig([
   {
-    input: "src/main.ts",
+    input: "src/yt/solver/main.ts",
     output: {
       name: "jsc",
       globals: {
@@ -119,7 +119,7 @@ export default defineConfig([
     ],
   },
   {
-    input: "src/main.ts",
+    input: "src/yt/solver/main.ts",
     output: {
       name: "jsc",
       globals: {
@@ -153,7 +153,7 @@ export default defineConfig([
     ],
   },
   {
-    input: "src/lib.ts",
+    input: "src/yt/solver/lib.ts",
     output: {
       name: "lib",
       file: "dist/yt.solver.lib.js",
@@ -184,7 +184,7 @@ export default defineConfig([
     ],
   },
   {
-    input: "src/lib.ts",
+    input: "src/yt/solver/lib.ts",
     output: {
       name: "lib",
       file: "dist/yt.solver.lib.min.js",
@@ -212,14 +212,14 @@ export default defineConfig([
     ],
   },
   {
-    input: "src/dynamic.lib.ts",
+    input: "src/yt/solver/dynamic.lib.ts",
     output: {
       name: "lib",
       file: "dist/yt.solver.deno.lib.js",
       format: "es",
     },
     plugins: [
-      dynamicImportRewrite({ format: "deno" }),
+      dynamicImportRewrite(),
       license({
         banner: {
           content: LICENSE_BANNER,
@@ -238,7 +238,7 @@ export default defineConfig([
     ],
   },
   {
-    input: "src/dynamic.lib.ts",
+    input: "src/yt/solver/dynamic.lib.ts",
     output: {
       name: "lib",
       file: "dist/yt.solver.bun.lib.js",

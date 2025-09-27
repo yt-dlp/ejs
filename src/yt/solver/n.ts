@@ -1,6 +1,6 @@
 import { type ESTree } from "meriyah";
-import { matchesStructure } from "./utils.ts";
-import { type DeepPartial } from "./types.ts";
+import { matchesStructure } from "../../utils.ts";
+import { type DeepPartial } from "../../types.ts";
 
 const identifier: DeepPartial<ESTree.VariableDeclaration> = {
   type: "VariableDeclaration",

@@ -45,6 +45,5 @@ commands = [
 ]
 
 [tool.hatch.build.targets.wheel.force-include]
-"dist/yt.solver.core.min.js" = "yt_dlp_ejs/yt.solver.core.min.js"
-"dist/yt.solver.lib.min.js" = "yt_dlp_ejs/yt.solver.lib.min.js"
-
+"dist/yt.solver.core.min.js" = "yt_dlp_ejs/yt/solver/core.min.js"
+"dist/yt.solver.lib.min.js" = "yt_dlp_ejs/yt/solver/lib.min.js"
