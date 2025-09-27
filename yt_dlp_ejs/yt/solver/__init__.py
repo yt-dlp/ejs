@@ -1,7 +1,6 @@
-import importlib
+import importlib.resources
 
 import yt_dlp_ejs.yt.solver
-
 
 def core() -> str:
     """
