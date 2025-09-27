@@ -63,23 +63,26 @@ const logicalExpression: DeepPartial<ESTree.ExpressionStatement> = {
 };
 
 const identifier = {
-  or: [{
-    type: "ExpressionStatement",
-    expression: {
-      type: "AssignmentExpression",
-      operator: "=",
-      left: {
-        type: "Identifier",
-      },
-      right: {
-        type: "FunctionExpression",
-        params: [{}, {}, {}],
+  or: [
+    {
+      type: "ExpressionStatement",
+      expression: {
+        type: "AssignmentExpression",
+        operator: "=",
+        left: {
+          type: "Identifier",
+        },
+        right: {
+          type: "FunctionExpression",
+          params: [{}, {}, {}],
+        },
       },
     },
-  }, {
-    type: "FunctionDeclaration",
-    params: [{}, {}, {}],
-  }],
+    {
+      type: "FunctionDeclaration",
+      params: [{}, {}, {}],
+    },
+  ],
 } as const;
 
 export function extract(
@@ -90,23 +93,22 @@ export function extract(
   ) {
     return null;
   }
-  const block = (node.type === "ExpressionStatement" &&
-      node.expression.type === "AssignmentExpression" &&
-      node.expression.right.type === "FunctionExpression")
-    ? node.expression.right.body
-    : node.type === "FunctionDeclaration"
-    ? node.body
-    : null;
+  const block =
+    node.type === "ExpressionStatement" &&
+    node.expression.type === "AssignmentExpression" &&
+    node.expression.right.type === "FunctionExpression"
+      ? node.expression.right.body
+      : node.type === "FunctionDeclaration"
+        ? node.body
+        : null;
   const relevantExpression = block?.body.at(-2);
   if (!matchesStructure(relevantExpression!, logicalExpression)) {
     return null;
   }
   if (
     relevantExpression?.type !== "ExpressionStatement" ||
-    relevantExpression.expression.type !==
-      "LogicalExpression" ||
-    relevantExpression.expression.right.type !==
-      "SequenceExpression" ||
+    relevantExpression.expression.type !== "LogicalExpression" ||
+    relevantExpression.expression.right.type !== "SequenceExpression" ||
     relevantExpression.expression.right.expressions[0].type !==
       "AssignmentExpression"
   ) {
@@ -131,20 +133,21 @@ export function extract(
         type: "Identifier",
         name: call.callee.name,
       },
-      arguments: call.arguments.length === 1
-        ? [
-          {
-            type: "Identifier",
-            name: "sig",
-          },
-        ]
-        : [
-          call.arguments[0],
-          {
-            type: "Identifier",
-            name: "sig",
-          },
-        ],
+      arguments:
+        call.arguments.length === 1
+          ? [
+              {
+                type: "Identifier",
+                name: "sig",
+              },
+            ]
+          : [
+              call.arguments[0],
+              {
+                type: "Identifier",
+                name: "sig",
+              },
+            ],
       optional: false,
     },
     async: false,

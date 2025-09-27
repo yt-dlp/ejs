@@ -27,12 +27,16 @@ for (const request of args.slice(1)) {
   }
   requests[type].push(challenge);
 }
-console.log(JSON.stringify(main({
-  type: "player",
-  player,
-  output_preprocessed: false,
-  requests: [
-    { type: "n", challenges: requests.n },
-    { type: "sig", challenges: requests.sig },
-  ],
-})));
+console.log(
+  JSON.stringify(
+    main({
+      type: "player",
+      player,
+      output_preprocessed: false,
+      requests: [
+        { type: "n", challenges: requests.n },
+        { type: "sig", challenges: requests.sig },
+      ],
+    }),
+  ),
+);

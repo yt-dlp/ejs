@@ -253,18 +253,16 @@ export const tests: {
   },
 ];
 
-export const players = new Map(
-  [
-    ["main", "player_ias.vflset/en_US/base.js"],
-    ["tcc", "player_ias_tcc.vflset/en_US/base.js"],
-    ["tce", "player_ias_tce.vflset/en_US/base.js"],
-    ["es5", "player_es5.vflset/en_US/base.js"],
-    ["es6", "player_es6.vflset/en_US/base.js"],
-    ["tv", "tv-player-ias.vflset/tv-player-ias.js"],
-    ["tv_es6", "tv-player-es6.vflset/tv-player-es6.js"],
-    ["phone", "player-plasma-ias-phone-en_US.vflset/base.js"],
-    ["tablet", "player-plasma-ias-tablet-en_US.vflset/base.js"],
-  ] as const,
-);
+export const players = new Map([
+  ["main", "player_ias.vflset/en_US/base.js"],
+  ["tcc", "player_ias_tcc.vflset/en_US/base.js"],
+  ["tce", "player_ias_tce.vflset/en_US/base.js"],
+  ["es5", "player_es5.vflset/en_US/base.js"],
+  ["es6", "player_es6.vflset/en_US/base.js"],
+  ["tv", "tv-player-ias.vflset/tv-player-ias.js"],
+  ["tv_es6", "tv-player-es6.vflset/tv-player-es6.js"],
+  ["phone", "player-plasma-ias-phone-en_US.vflset/base.js"],
+  ["tablet", "player-plasma-ias-tablet-en_US.vflset/base.js"],
+] as const);
 
 export type Variant = typeof players extends Map<infer T, unknown> ? T : never;
