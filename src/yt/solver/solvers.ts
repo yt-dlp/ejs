@@ -4,6 +4,14 @@ import { extract as extractSig } from "./sig.ts";
 import { extract as extractN } from "./n.ts";
 import { setupNodes } from "./setup.ts";
 
+const solversCache = new Map<
+  string,
+  {
+    n: ((val: string) => string) | null;
+    sig: ((val: string) => string) | null;
+  }
+>();
+
 export function preprocessPlayer(data: string): string {
   const ast = parse(data);
   const body = ast.body;
@@ -104,7 +112,12 @@ export function getFromPrepared(code: string): {
   n: ((val: string) => string) | null;
   sig: ((val: string) => string) | null;
 } {
+  const existing = solversCache.get(code);
+  if (existing) {
+    return existing;
+  }
   const resultObj = { n: null, sig: null };
   Function("_result", code)(resultObj);
+  solversCache.set(code, resultObj);
   return resultObj;
 }
