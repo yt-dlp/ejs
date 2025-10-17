@@ -4,11 +4,11 @@ export const setupNodes = parse(`
 if (typeof globalThis.XMLHttpRequest === "undefined") {
     globalThis.XMLHttpRequest = { prototype: {} };
 }
-if (typeof window === "undefined") {
-    var window = Object.create(null);
+if (typeof globalThis.window === "undefined") {
+    globalThis.window = Object.create(null);
 }
 if (typeof URL === "undefined") {
-    window.location = {
+    globalThis.window.location = {
         hash: "",
         host: "www.youtube.com",
         hostname: "www.youtube.com",
@@ -22,7 +22,7 @@ if (typeof URL === "undefined") {
         username: "",
     };
 } else {
-    window.location = new URL("https://www.youtube.com/watch?v=yt-dlp-wins");
+    globalThis.window.location = new URL("https://www.youtube.com/watch?v=yt-dlp-wins");
 }
 if (typeof globalThis.document === "undefined") {
     globalThis.document = Object.create(null);
@@ -30,7 +30,7 @@ if (typeof globalThis.document === "undefined") {
 if (typeof globalThis.navigator === "undefined") {
     globalThis.navigator = Object.create(null);
 }
-if (typeof self === "undefined") {
-    var self = globalThis;
+if (typeof globalThis.self === "undefined") {
+    globalThis.self = globalThis;
 }
 `).body;
