@@ -3,7 +3,7 @@
   "type": "module",
   "scripts": {
     "bundle": "rollup -c",
-    "fmt": "prettier --write \"src/**.ts\" \"tests/**.ts\" \"package.json\" \"rollup.config.js\" \"run.ts\""
+    "fmt": "prettier --write \"src/**.ts\" \"package.json\" \"rollup.config.js\" \"run.ts\""
   },
   "dependencies": {
     "astring": "1.9.0",
