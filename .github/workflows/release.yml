@@ -8,19 +8,20 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.14"
       - uses: denoland/setup-deno@v2
         with:
           deno-version: v2.x
-      - uses: astral-sh/setup-uv@v6
-        with:
-          python-version: "3.14"
       - name: Build JavaScript artifacts
         run: |
           deno install
-          deno run bundle
+          deno task bundle
       - name: Build Python artifacts
         run: |
-          uv build
+          python -m pip install -U build
+          python -m build
       - name: Create GitHub Release
         env:
           TAG: ${{ github.ref_name }}
