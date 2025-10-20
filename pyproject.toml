@@ -9,6 +9,7 @@ dynamic = ["version"]
 readme = "README.md"
 requires-python = ">=3.10"
 license = "Unlicense"
+license-files = ["LICENSE"]
 keywords = ["yt-dlp"]
 authors = [
   { name = "Simon Sawicki", email = "contact@grub4k.dev" },
