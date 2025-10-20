@@ -13,11 +13,14 @@ jobs:
           deno-version: v2.x
       - uses: astral-sh/setup-uv@v6
         with:
-          python-version: "3.13"
-      - name: Bundle
-        run:
-          # XXX: uv build fails for some reason
-          uv tool run hatch build --target wheel
+          python-version: "3.14"
+      - name: Build JavaScript artifacts
+        run: |
+          deno install
+          deno run bundle
+      - name: Build Python artifacts
+        run: |
+          uv build
       - name: Create GitHub Release
         env:
           TAG: ${{ github.ref_name }}
@@ -27,5 +30,6 @@ jobs:
             --title "yt-dlp-ejs ${TAG}" \
             --notes-from-tag \
             --verify-tag \
-            dist/yt.solver.* \
-            dist/yt_dlp_ejs*.whl
+            dist/yt.solver.*.js \
+            dist/yt_dlp_ejs-*.whl \
+            dist/yt_dlp_ejs-*.tar.gz
