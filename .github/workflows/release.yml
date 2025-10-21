@@ -17,7 +17,7 @@ jobs:
           fetch-depth: 0
       - uses: denoland/setup-deno@v2
         with:
-          deno-version: "2.0.0"
+          deno-version: v2.x
       - uses: actions/setup-python@v6
         with:
           python-version: "3.10"
