@@ -82,6 +82,18 @@ const identifier = {
       type: "FunctionDeclaration",
       params: [{}, {}, {}],
     },
+    {
+      type: "VariableDeclaration",
+      declarations: {
+        1: {
+          type: "VariableDeclarator",
+          init: {
+            type: "FunctionExpression",
+            params: [{}, {}, {}],
+          },
+        },
+      },
+    },
   ],
 } as const;
 
@@ -93,14 +105,18 @@ export function extract(
   ) {
     return null;
   }
-  const block =
-    node.type === "ExpressionStatement" &&
+  let block: ESTree.BlockStatement | undefined | null;
+  if (node.type === "ExpressionStatement" &&
     node.expression.type === "AssignmentExpression" &&
-    node.expression.right.type === "FunctionExpression"
-      ? node.expression.right.body
-      : node.type === "FunctionDeclaration"
-        ? node.body
-        : null;
+    node.expression.right.type === "FunctionExpression") {
+    block = node.expression.right.body;
+  } else if (node.type === "VariableDeclaration" && node.declarations[1].init?.type === "FunctionExpression") {
+    block = node.declarations[1].init.body;
+  } else if (node.type === "FunctionDeclaration") {
+    block = node.body;
+  } else {
+    return null;
+  }
   const relevantExpression = block?.body.at(-2);
   if (!matchesStructure(relevantExpression!, logicalExpression)) {
     return null;
