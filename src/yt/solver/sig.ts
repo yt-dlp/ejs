@@ -93,7 +93,7 @@ const identifier = {
               params: [{}, {}, {}],
             },
           },
-        ]
+        ],
       },
     },
   ],
