@@ -3,21 +3,21 @@
   "type": "module",
   "scripts": {
     "bundle": "rollup -c",
-    "fmt": "prettier --write \"src/**.ts\" \"tests/**.ts\" \"package.json\" \"rollup.config.js\" \"run.ts\""
+    "fmt": "prettier --write \"src/**.ts\" \"package.json\" \"rollup.config.js\" \"run.ts\""
   },
   "dependencies": {
     "astring": "1.9.0",
     "meriyah": "6.1.4"
   },
   "devDependencies": {
-    "@rollup/plugin-node-resolve": "^16.0.1",
+    "@rollup/plugin-node-resolve": "16.0.3",
     "@rollup/plugin-sucrase": "5.0.2",
     "@rollup/plugin-terser": "0.4.4",
-    "rollup-plugin-license": "^3.6.0",
-    "@types/bun": "1.2.21",
-    "@types/deno": "2.3.0",
-    "@types/node": "24.3.0",
-    "rollup": "4.50.0",
-    "prettier": "^3.6.2"
+    "rollup-plugin-license": "3.6.0",
+    "@types/bun": "1.3.0",
+    "@types/deno": "2.5.0",
+    "@types/node": "24.8.1",
+    "rollup": "4.52.5",
+    "prettier": "3.6.2"
   }
 }
