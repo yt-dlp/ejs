@@ -1,5 +1,8 @@
 [build-system]
-requires = ["hatchling", "hatch-vcs"]
+requires = [
+  "hatchling>=1.27.0",
+  "hatch-vcs",
+]
 build-backend = "hatchling.build"
 
 [project]
@@ -37,6 +40,7 @@ source = "vcs"
 
 [tool.hatch.build.targets.sdist]
 exclude = [
+  "/.github/**",
   "/src/yt/solver/test/players/*",
 ]
 
