@@ -85,7 +85,7 @@ const identifier = {
     {
       type: "VariableDeclaration",
       declarations: {
-        1: {
+        some: {
           type: "VariableDeclarator",
           init: {
             type: "FunctionExpression",
@@ -110,8 +110,17 @@ export function extract(
     node.expression.type === "AssignmentExpression" &&
     node.expression.right.type === "FunctionExpression") {
     block = node.expression.right.body;
-  } else if (node.type === "VariableDeclaration" && node.declarations[1].init?.type === "FunctionExpression") {
-    block = node.declarations[1].init.body;
+  } else if (node.type === "VariableDeclaration") {
+    for (const decl of node.declarations) {
+      if (
+        decl.type === "VariableDeclarator" &&
+        decl.init?.type === "FunctionExpression" &&
+        decl.init?.params.length === 3
+      ) {
+        block = decl.init.body;
+        break;
+      }
+    }
   } else if (node.type === "FunctionDeclaration") {
     block = node.body;
   } else {

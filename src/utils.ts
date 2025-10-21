@@ -22,6 +22,13 @@ export function matchesStructure<T extends ESTree.Node>(
       // Handle `{ or: [a, b] }`
       return structure.or.some((node) => matchesStructure(obj, node));
     }
+    if (Array.isArray(obj)) {
+      // Handle `{ some: pattern }`
+      if ("some" in structure) {
+        const pattern = structure.some as unknown as DeepPartial<T>;
+        return obj.some((el) => matchesStructure(el, pattern));
+      }
+    }
     for (const [key, value] of Object.entries(structure)) {
       if (!matchesStructure(obj[key as keyof typeof obj], value)) {
         return false;
