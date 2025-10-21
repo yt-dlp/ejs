@@ -1,6 +1,7 @@
-import subprocess
-import shutil
 import os
+import shutil
+import subprocess
+
 
 from hatchling.builders.hooks.plugin.interface import BuildHookInterface
 
@@ -9,6 +10,7 @@ class CustomBuildHook(BuildHookInterface):
     def initialize(self, version, build_data):
         if shutil.which("deno"):
             print("Building with deno...", flush=True)
+            os.environ["DENO_NO_UPDATE_CHECK"] = "1"
             subprocess.run(["deno", "install"], check=True)
             subprocess.run(["deno", "task", "bundle"], check=True)
 
@@ -23,17 +25,12 @@ class CustomBuildHook(BuildHookInterface):
             requires_shell = os.name == "nt"
             subprocess.run(["npm", "ci"], check=True, shell=requires_shell)
             subprocess.run(["npm", "run", "bundle"], check=True, shell=requires_shell)
+
         else:
-            raise RuntimeError("Neither 'deno', 'bun', or 'npm' is installed. Please install one of them to proceed with the build.")
-        
-        build_data["artifacts"].extend([
-            "dist/yt.solver.core.js",
-            "dist/yt.solver.core.min.js",
-            "dist/yt.solver.lib.js",
-            "dist/yt.solver.lib.min.js",
-            "dist/yt.solver.deno.lib.js",
-            "dist/yt.solver.bun.lib.js",
-        ])
+            raise RuntimeError(
+                "One of 'deno', 'bun', or 'npm' could not be found. "
+                "Please install one of them to proceed with the build.")
+
         build_data["force_include"]["dist/yt.solver.core.min.js"] = "yt_dlp_ejs/yt/solver/core.min.js"
         build_data["force_include"]["dist/yt.solver.lib.min.js"] = "yt_dlp_ejs/yt/solver/lib.min.js"
 
