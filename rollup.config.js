@@ -2,7 +2,7 @@ import { defineConfig } from "rollup";
 import nodeResolve from "@rollup/plugin-node-resolve";
 import sucrase from "@rollup/plugin-sucrase";
 import terser from "@rollup/plugin-terser";
-import { hash } from "node:crypto";
+import { createHash } from "node:crypto";
 import license from "rollup-plugin-license";
 import { readFileSync } from "node:fs";
 import prettier from "prettier";
@@ -31,8 +31,8 @@ function printHash() {
       for (const [fileName, assetInfo] of Object.entries(bundle)) {
         if (assetInfo.code) {
           try {
-            const h = hash("sha3-512", assetInfo.code);
-            console.log(`SHA3-512 for ${assetInfo.fileName}: ${h}`);
+            const digest = createHash("sha3-512").update(assetInfo.code).digest("hex");
+            console.log(`SHA3-512 for ${assetInfo.fileName}: ${digest}`);
           } catch (err) {
             console.error(`Error hashing ${fileName}:`, err.message);
           }
