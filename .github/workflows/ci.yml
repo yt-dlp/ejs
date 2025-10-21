@@ -1,0 +1,158 @@
+name: Run Tests
+on:
+  push:
+    paths:
+      - ".github/workflows/ci.yml"
+      - ".github/workflows/release.yml"
+      - "hatch_build.py"
+      - "package.json"
+      - "pyproject.toml"
+      - "rollup.config.js"
+      - "run.ts"
+      - "src/**"
+      - "yt_dlp_ejs/**"
+  pull_request:
+    paths:
+      - ".github/workflows/ci.yml"
+      - ".github/workflows/release.yml"
+      - "hatch_build.py"
+      - "package.json"
+      - "pyproject.toml"
+      - "rollup.config.js"
+      - "run.ts"
+      - "src/**"
+      - "yt_dlp_ejs/**"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+jobs:
+  get_player_js:
+    name: Get player JS
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - name: Install Deno
+        uses: denoland/setup-deno@v2
+        with:
+          deno-version: v2.x
+      - name: Download player JS
+        run: |
+          deno run \
+            --no-prompt \
+            --allow-read=src/yt/solver/test/players/ \
+            --allow-write=src/yt/solver/test/players/ \
+            --allow-net=www.youtube.com \
+            src/yt/solver/test/download.ts
+      - name: Upload player JS artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: player-js
+          path: |
+            src/yt/solver/test/players/*
+          compression-level: 0
+
+  deno:
+    name: Deno Tests
+    needs: [get_player_js]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+      - name: Install Deno
+        uses: denoland/setup-deno@v2
+        with:
+          deno-version: "2.0.0"  # minimum supported version
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.10"  # minimum supported version
+      - name: Install Python requirements
+        run: |
+          python -m pip install -U build
+      - name: Test Deno build
+        run: |
+          python -m build
+      - name: Install requirements
+        run: |
+          deno install
+      - name: Download player JS artifact
+        uses: actions/download-artifact@v5
+        with:
+          path: src/yt/solver/test/players
+          name: player-js
+      - name: Run Deno tests
+        run: |
+          deno test \
+            --no-prompt \
+            --allow-read=src/yt/solver/test/players/
+
+  bun:
+    name: Bun Tests
+    needs: [get_player_js]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+      - name: Install Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: "1.0.31"  # minimum supported version
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.10"  # minimum supported version
+      - name: Install Python requirements
+        run: |
+          python -m pip install -U build
+      - name: Test Bun build
+        run: |
+          python -m build
+      - name: Install requirements
+        run: |
+          bun install --frozen-lockfile
+      - name: Download player JS artifact
+        uses: actions/download-artifact@v5
+        with:
+          path: src/yt/solver/test/players
+          name: player-js
+      - name: Run Bun tests
+        run: |
+          bun test
+
+  node:
+    name: Node Tests
+    needs: [get_player_js]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+      - name: Install Node
+        uses: actions/setup-node@v6
+        with:
+          node-version: "22.0"  # minimum supported version
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.10"  # minimum supported version
+      - name: Install Python requirements
+        run: |
+          python -m pip install -U build
+      - name: Test Node build
+        run: |
+          python -m build
+      - name: Install requirements
+        run: |
+          npm ci
+      - name: Download player JS artifact
+        uses: actions/download-artifact@v5
+        with:
+          path: src/yt/solver/test/players
+          name: player-js
+      - name: Run Node tests
+        run: |
+          node --test
