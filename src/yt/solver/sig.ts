@@ -85,13 +85,15 @@ const identifier = {
     {
       type: "VariableDeclaration",
       declarations: {
-        some: {
-          type: "VariableDeclarator",
-          init: {
-            type: "FunctionExpression",
-            params: [{}, {}, {}],
+        anykey: [
+          {
+            type: "VariableDeclarator",
+            init: {
+              type: "FunctionExpression",
+              params: [{}, {}, {}],
+            },
           },
-        },
+        ]
       },
     },
   ],
