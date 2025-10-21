@@ -4,31 +4,89 @@ on:
     tags:
       - "*"
 
+permissions:
+  contents: read
+
 jobs:
-  release:
+  build:
+    name: Build artifacts
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v5
-      - uses: actions/setup-python@v6
         with:
-          python-version: "3.14"
+          fetch-depth: 0
       - uses: denoland/setup-deno@v2
         with:
           deno-version: v2.x
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.10"
+      - name: Install Python requirements
+        run: |
+          python -m pip install -U build
+      - name: Build Python artifacts
+        run: |
+          python -m build
+      - name: Upload Python artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: artifacts-py
+          path: |
+            dist/yt_dlp_ejs-*.whl
+            dist/yt_dlp_ejs-*.tar.gz
+          compression-level: 0
       - name: Build JavaScript artifacts
         run: |
           deno install
           deno task bundle
-      - name: Build Python artifacts
-        run: |
-          python -m pip install -U build
-          python -m build
+      - name: Upload JavaScript artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: artifacts-js
+          path: |
+            dist/yt.solver.*.js
+          compression-level: 0
+
+  publish_pypi:
+    name: Publish to PyPI
+    needs: [build]
+    if: github.repository == 'yt-dlp/ejs'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write  # required for PyPI trusted publishing
+    steps:
+      - uses: actions/download-artifact@v5
+        with:
+          path: dist
+          name: artifacts-py
+      - name: Publish to PyPI
+        uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          verbose: true
+
+  release:
+    name: Create GitHub release
+    needs: [build, publish_pypi]
+    if: always() && !failure() && !cancelled()
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+      - uses: actions/download-artifact@v5
+        with:
+          path: dist
+          pattern: artifacts-*
+          merge-multiple: true
       - name: Create GitHub Release
         env:
           TAG: ${{ github.ref_name }}
           GH_TOKEN: ${{ github.token }}
         run: |
-          gh release create ${TAG} \
+          gh release create "${TAG}" \
             --title "yt-dlp-ejs ${TAG}" \
             --notes-from-tag \
             --verify-tag \
