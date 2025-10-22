@@ -7,7 +7,7 @@ External JavaScript for yt-dlp supporting many runtimes
 
 ## Manual Installation
 
-In the yt-dlp repository, install the python package, either directly or from url:
+In the yt-dlp repository, install the python package, either directly or from URL:
 
 ```console
 pip install git+https://github.com/yt-dlp/ejs@main
@@ -18,7 +18,7 @@ pip install git+https://github.com/yt-dlp/ejs@main
 While this project does pin its dependencies,
 it does not use lockfiles or enforce a particular package manager.
 You may install dependencies using any compatible package manager.
-If you notice differences between different runtimes builds
+If you notice differences between different runtimes' builds
 please open an issue [here](<https://github.com/yt-dlp/ejs/issues/new>).
 
 ### Build
@@ -26,13 +26,52 @@ please open an issue [here](<https://github.com/yt-dlp/ejs/issues/new>).
 To build the Python package you need a PEP518 compatible builder.
 The build hook will automatically invoke `deno`, `bun` or `node` as required.
 
-Alternatively, to only build the JavaScript files you can run the `bundle` script manually.
+Alternatively, to only build the JavaScript files you can run the `bundle` script manually:
+
+```bash
+# Deno:
+deno install
+deno task bundle
+
+# Bun:
+bun install
+bun run bundle
+
+# Node:
+npm install
+npm run bundle
+```
 
 ### Tests
 
-First, to download the player files, run `src/yt/solver/test/download.ts`.
+First, make sure the project's dependencies are installed and download the player JS files:
 
-After running that once, use any of `deno test`, `bun test` or `node --test`.
+```bash
+# Deno:
+deno install
+deno run src/yt/solver/test/download.ts
+
+# Bun:
+bun install
+bun run src/yt/solver/test/download.ts
+
+# Node:
+npm install
+npm run src/yt/solver/test/download.ts
+```
+
+Then the tests can be run:
+
+```bash
+# Deno
+deno test
+
+# Bun
+bun test
+
+# Node
+node --test
+```
 
 ## Licensing
 
