@@ -16,14 +16,14 @@ class CustomBuildHook(BuildHookInterface):
 
         elif shutil.which("bun"):
             print("Building with bun...", flush=True)
-            subprocess.run(["bun", "install", "--frozen-lockfile"], check=True)
+            subprocess.run(["bun", "install"], check=True)
             subprocess.run(["bun", "run", "bundle"], check=True)
 
         elif shutil.which("npm"):
             print("Building with npm...", flush=True)
             # npm is a batch file (`npm.cmd`) on windows, which requires `shell=True`
             requires_shell = os.name == "nt"
-            subprocess.run(["npm", "ci"], check=True, shell=requires_shell)
+            subprocess.run(["npm", "install"], check=True, shell=requires_shell)
             subprocess.run(["npm", "run", "bundle"], check=True, shell=requires_shell)
 
         else:

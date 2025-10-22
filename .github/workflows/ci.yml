@@ -114,7 +114,7 @@ jobs:
           python -m build
       - name: Install requirements
         run: |
-          bun install --frozen-lockfile
+          bun install
       - name: Download player JS artifact
         uses: actions/download-artifact@v5
         with:
@@ -147,7 +147,7 @@ jobs:
           python -m build
       - name: Install requirements
         run: |
-          npm ci
+          npm install
       - name: Download player JS artifact
         uses: actions/download-artifact@v5
         with:
