@@ -1,4 +1,4 @@
-name: Run Tests
+name: CI
 on:
   push:
     paths:
@@ -31,16 +31,34 @@ concurrency:
   cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 jobs:
-  get_player_js:
-    name: Get player JS
+  prepare:
+    name: Prepare
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v5
-      - name: Install Deno
+      - name: Install Deno v2.x (latest)
         uses: denoland/setup-deno@v2
         with:
           deno-version: v2.x
-      - name: Download player JS
+      - name: Install Deno requirements
+        run: |
+          deno install
+      - name: Build control bundle
+        run: |
+          deno task bundle
+      - name: Generate bundle hashes
+        run: |
+          pushd dist
+          sha256sum -- yt.solver.*.js | tee SHA2-256SUMS
+          popd
+      - name: Upload bundle hashes
+        uses: actions/upload-artifact@v4
+        with:
+          name: bundle-hashes
+          path: |
+            dist/SHA2-256SUMS
+          compression-level: 0
+      - name: Download player JS files
         run: |
           deno run \
             --no-prompt \
@@ -56,9 +74,9 @@ jobs:
             src/yt/solver/test/players/*
           compression-level: 0
 
-  deno:
-    name: Deno Tests
-    needs: [get_player_js]
+  deno_build:
+    name: Test Deno build
+    needs: [prepare]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v5
@@ -77,7 +95,33 @@ jobs:
       - name: Test Deno build
         run: |
           python -m build
-      - name: Install requirements
+      - name: Install Deno requirements
+        run: |
+          deno install
+      - name: Bundle with Deno
+        run: |
+          deno task bundle
+      - name: Download bundle hashes
+        uses: actions/download-artifact@v5
+        with:
+          path: dist
+          name: bundle-hashes
+      - name: Verify bundle hashes
+        run: |
+          cd dist
+          sha256sum -c SHA2-256SUMS
+
+  deno_tests:
+    name: Run Deno tests
+    needs: [prepare]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - name: Install Deno
+        uses: denoland/setup-deno@v2
+        with:
+          deno-version: "2.0.0"  # minimum supported version
+      - name: Install Deno requirements
         run: |
           deno install
       - name: Download player JS artifact
@@ -91,9 +135,9 @@ jobs:
             --no-prompt \
             --allow-read=src/yt/solver/test/players/
 
-  bun:
-    name: Bun Tests
-    needs: [get_player_js]
+  bun_build:
+    name: Test Bun build
+    needs: [prepare]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v5
@@ -102,8 +146,7 @@ jobs:
       - name: Install Bun
         uses: oven-sh/setup-bun@v2
         with:
-          # 1.0.31 is minimum supported version for building/running, but test suite requires 1.2.11+
-          bun-version: "1.2.11"  
+          bun-version: "1.0.31"  # minimum supported version
       - uses: actions/setup-python@v6
         with:
           python-version: "3.10"  # minimum supported version
@@ -113,7 +156,33 @@ jobs:
       - name: Test Bun build
         run: |
           python -m build
-      - name: Install requirements
+      - name: Install Bun requirements
+        run: |
+          bun install
+      - name: Bundle with Bun
+        run: |
+          bun run bundle
+      - name: Download bundle hashes
+        uses: actions/download-artifact@v5
+        with:
+          path: dist
+          name: bundle-hashes
+      - name: Verify bundle hashes
+        run: |
+          cd dist
+          sha256sum -c SHA2-256SUMS
+
+  bun_tests:
+    name: Run Bun tests
+    needs: [prepare]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - name: Install Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: "1.2.11"  # XXX: We support 1.0.31, but test suite requires 1.2.11+
+      - name: Install Bun requirements
         run: |
           bun install
       - name: Download player JS artifact
@@ -125,9 +194,9 @@ jobs:
         run: |
           bun test
 
-  node:
-    name: Node Tests
-    needs: [get_player_js]
+  node_build:
+    name: Test Node build
+    needs: [prepare]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v5
@@ -136,8 +205,7 @@ jobs:
       - name: Install Node
         uses: actions/setup-node@v6
         with:
-          # 20.0 is minimum supported version for building/running, but test suite requires 22.18+
-          node-version: "22.18"
+          node-version: "20.0"  # minimum supported version
       - uses: actions/setup-python@v6
         with:
           python-version: "3.10"  # minimum supported version
@@ -147,7 +215,33 @@ jobs:
       - name: Test Node build
         run: |
           python -m build
-      - name: Install requirements
+      - name: Install Node requirements
+        run: |
+          npm install
+      - name: Bundle with Node
+        run: |
+          npm run bundle
+      - name: Download bundle hashes
+        uses: actions/download-artifact@v5
+        with:
+          path: dist
+          name: bundle-hashes
+      - name: Verify bundle hashes
+        run: |
+          cd dist
+          sha256sum -c SHA2-256SUMS
+
+  node_tests:
+    name: Run Node tests
+    needs: [prepare]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - name: Install Node
+        uses: actions/setup-node@v6
+        with:
+          node-version: "22.18"  # XXX: We support 20.0, but test suite requires 22.18+
+      - name: Install Node requirements
         run: |
           npm install
       - name: Download player JS artifact
@@ -158,3 +252,11 @@ jobs:
       - name: Run Node tests
         run: |
           node --test
+
+  all_passed:
+    needs: [deno_build, deno_tests, bun_build, bun_tests, node_build, node_tests]
+    runs-on: ubuntu-latest
+    steps:
+      - name: All checks passed
+        run: |
+          echo "All checks passed!"
