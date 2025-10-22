@@ -53,7 +53,7 @@ deno run src/yt/solver/test/download.ts
 
 # Bun:
 bun install
-bun run src/yt/solver/test/download.ts
+bun --bun run src/yt/solver/test/download.ts
 
 # Node 22.6+:
 npm install
