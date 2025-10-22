@@ -31,8 +31,28 @@ concurrency:
   cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 jobs:
+  python_tests:
+    name: Python Tests
+    runs-on: ${{ matrix.runner }}
+    strategy:
+      fail-fast: false
+      matrix:
+        runner: [ubuntu-latest, windows-latest]
+        python-version: ['3.10', '3.11', '3.12', '3.13', '3.14', pypy-3.11]
+    steps:
+    - uses: actions/checkout@v5
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v6
+      with:
+        python-version: ${{ matrix.python-version }}
+    - name: Run tests
+      timeout-minutes: 5
+      run: |
+        python -m test.test_modules
+
   prepare:
     name: Prepare
+    needs: [python_tests]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v5
