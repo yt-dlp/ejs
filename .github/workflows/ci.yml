@@ -102,7 +102,8 @@ jobs:
       - name: Install Bun
         uses: oven-sh/setup-bun@v2
         with:
-          bun-version: "1.0.31"  # minimum supported version
+          # 1.0.31 is minimum supported version for building/running, but test suite requires 1.2.11+
+          bun-version: "1.2.11"  
       - uses: actions/setup-python@v6
         with:
           python-version: "3.10"  # minimum supported version
