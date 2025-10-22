@@ -7,10 +7,10 @@ External JavaScript for yt-dlp supporting many runtimes
 
 ## Manual Installation
 
-In the yt-dlp repository, install the python package, either directly or from URL:
+Install ejs into the same environment as yt-dlp:
 
 ```console
-pip install git+https://github.com/yt-dlp/ejs@main
+pip install -U yt-dlp-ejs
 ```
 
 ## Development
