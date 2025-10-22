@@ -23,7 +23,8 @@ export async function getIO(): Promise<IO> {
 }
 
 async function _getIO(): Promise<IO> {
-  if (globalThis.process?.release?.name === "node") {
+  // Old Deno requires casting to any as globalThis lacks an index signature
+  if ((globalThis as any).process?.release?.name === "node") {
     // Assume node compatibility
     const { access, readFile } = await import("node:fs/promises");
     const { deepStrictEqual } = await import("node:assert");
