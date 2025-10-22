@@ -253,6 +253,24 @@ export const tests: {
       },
     ],
   },
+  {
+    // TODO: es6/tv_es6 variants currently fail
+    player: "638ec5c6",
+    variants: ["main", "tcc", "tce", "es5", "tv", "phone", "tablet"],
+    n: [
+      // Synthetic test
+      { input: "ZdZIqFPQK-Ty8wId", expected: "1qov8-KM-yH" },
+    ],
+    sig: [
+      // Synthetic test
+      {
+        input:
+          "gN7a-hudCuAuPH6fByOk1_GNXN0yNMHShjZXS2VOgsEItAJz0tipeavEOmNdYN-wUtcEqD3bCXjc0iyKfAyZxCBGgIARwsSdQfJ2CJtt",
+        expected:
+          "MhudCuAuP-6fByOk1_GNXN7gNHHShjyXS2VOgsEItAJz0tipeav0OmNdYN-wUtcEqD3bCXjc0iyKfAyZxCBGgIARwsSdQfJ2CJtt",
+      },
+    ],
+  },
 ];
 
 export const players = new Map([
