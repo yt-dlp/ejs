@@ -161,7 +161,7 @@ jobs:
           bun install
       - name: Bundle with Bun
         run: |
-          bun run bundle
+          bun --bun run bundle
       - name: Download bundle hashes
         uses: actions/download-artifact@v5
         with:

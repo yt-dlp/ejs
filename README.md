@@ -35,7 +35,7 @@ deno task bundle
 
 # Bun:
 bun install
-bun run bundle
+bun --bun run bundle
 
 # Node:
 npm install

@@ -17,7 +17,7 @@ class CustomBuildHook(BuildHookInterface):
         elif shutil.which("bun"):
             print("Building with bun...", flush=True)
             subprocess.run(["bun", "install"], check=True)
-            subprocess.run(["bun", "run", "bundle"], check=True)
+            subprocess.run(["bun", "--bun", "run", "bundle"], check=True)
 
         elif shutil.which("npm"):
             print("Building with npm...", flush=True)
