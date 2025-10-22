@@ -55,9 +55,9 @@ deno run src/yt/solver/test/download.ts
 bun install
 bun run src/yt/solver/test/download.ts
 
-# Node:
+# Node 22.6+:
 npm install
-npm run src/yt/solver/test/download.ts
+node --experimental-strip-types src/yt/solver/test/download.ts
 ```
 
 Then the tests can be run:
