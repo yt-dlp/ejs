@@ -3,6 +3,7 @@ import { generate } from "astring";
 import { extract as extractSig } from "./sig.ts";
 import { extract as extractN } from "./n.ts";
 import { setupNodes } from "./setup.ts";
+import VM from "node:vm";
 
 export function preprocessPlayer(data: string): string {
   const ast = parse(data);
@@ -104,7 +105,13 @@ export function getFromPrepared(code: string): {
   n: ((val: string) => string) | null;
   sig: ((val: string) => string) | null;
 } {
-  const resultObj = { n: null, sig: null };
-  Function("_result", code)(resultObj);
+  const codeToRun = `
+    Function("_result", _$code)(_$resultObj);
+  `;
+  const resultObj = { n: null, sig: null }
+  VM.runInNewContext(codeToRun, {
+    _$code: code,
+    _$resultObj: resultObj,
+  });
   return resultObj;
 }
