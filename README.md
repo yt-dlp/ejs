@@ -7,10 +7,10 @@ External JavaScript for yt-dlp supporting many runtimes
 
 ## Manual Installation
 
-In the yt-dlp repository, install the python package, either directly or from URL:
+Install ejs into the same environment as yt-dlp:
 
 ```console
-pip install git+https://github.com/yt-dlp/ejs@main
+pip install -U yt-dlp-ejs
 ```
 
 ## Development
@@ -35,7 +35,7 @@ deno task bundle
 
 # Bun:
 bun install
-bun run bundle
+bun --bun run bundle
 
 # Node:
 npm install
@@ -53,11 +53,11 @@ deno run src/yt/solver/test/download.ts
 
 # Bun:
 bun install
-bun run src/yt/solver/test/download.ts
+bun --bun run src/yt/solver/test/download.ts
 
-# Node:
+# Node 22.6+:
 npm install
-npm run src/yt/solver/test/download.ts
+node --experimental-strip-types src/yt/solver/test/download.ts
 ```
 
 Then the tests can be run:
