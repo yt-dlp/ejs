@@ -55,8 +55,10 @@ jobs:
           python -m venv ./.venv
           source ./.venv/bin/activate
           python -m pip install -U pip build hatchling hatch-vcs
-          # editable pip installations omit the JS artifacts, so build in place instead
+          # editable pip installations omit the force-included JS, so build in place instead
           python -m build --no-isolation
+          tree dist
+          tree yt_dlp_ejs
       - name: Run Python tests
         timeout-minutes: 5
         run: |
