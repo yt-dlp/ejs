@@ -129,6 +129,10 @@ jobs:
       - name: Test Deno build
         run: |
           python -m build
+      - name: Print artifact contents
+        run: |
+          unzip -l dist/yt_dlp_ejs-*.whl
+          tar -tvzf dist/yt_dlp_ejs-*.tar.gz
       - name: Install Deno requirements
         run: |
           deno install
@@ -190,6 +194,10 @@ jobs:
       - name: Test Bun build
         run: |
           python -m build
+      - name: Print artifact contents
+        run: |
+          unzip -l dist/yt_dlp_ejs-*.whl
+          tar -tvzf dist/yt_dlp_ejs-*.tar.gz
       - name: Install Bun requirements
         run: |
           bun install
@@ -249,6 +257,10 @@ jobs:
       - name: Test Node build
         run: |
           python -m build
+      - name: Print artifact contents
+        run: |
+          unzip -l dist/yt_dlp_ejs-*.whl
+          tar -tvzf dist/yt_dlp_ejs-*.tar.gz
       - name: Install Node requirements
         run: |
           npm install
