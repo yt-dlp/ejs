@@ -30,6 +30,11 @@ classifiers = [
 ]
 dependencies = []
 
+[dependency-groups]
+dev = [
+    "ruff>=0.14.1",
+]
+
 [project.urls]
 Documentation = "https://github.com/yt-dlp/ejs#readme"
 Issues = "https://github.com/yt-dlp/ejs/issues"
@@ -51,3 +56,33 @@ packages = ["yt_dlp_ejs"]
 version-file = "yt_dlp_ejs/_version.py"
 
 [tool.hatch.build.targets.wheel.hooks.custom]
+
+[tool.ruff.lint]
+select = [
+  "C4",
+  "E",
+  "F",
+  "I",
+  "PLC",
+  "PLE",
+  "PLW",
+  "PYI",
+  "RET",
+  "RUF",
+  "SIM",
+  "TD",
+  "TID",
+  "W",
+]
+ignore = [
+  "TD003",
+  "E402",
+  "E501",
+  "PLR09",
+]
+
+[tool.ruff.lint.isort]
+force-single-line = true
+
+[tool.ruff.lint.flake8-tidy-imports]
+ban-relative-imports = "all"

@@ -25,7 +25,9 @@ export function matchesStructure<T extends ESTree.Node>(
     if ("anykey" in structure && Array.isArray(structure.anykey)) {
       // Handle `{ anykey: [a, b] }`
       const haystack = Array.isArray(obj) ? obj : Object.values(obj);
-      return structure.anykey.every(value => haystack.some((el) => matchesStructure(el, value)));
+      return structure.anykey.every((value) =>
+        haystack.some((el) => matchesStructure(el, value)),
+      );
     }
     for (const [key, value] of Object.entries(structure)) {
       if (!matchesStructure(obj[key as keyof typeof obj], value)) {
