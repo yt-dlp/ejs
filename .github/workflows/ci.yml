@@ -130,10 +130,12 @@ jobs:
       - name: Test Deno build
         run: |
           python -m build
-      - name: Print artifact contents
+      - name: Verify artifact contents
         run: |
-          unzip -l dist/yt_dlp_ejs-*.whl
           tar -tvzf dist/yt_dlp_ejs-*.tar.gz
+          unzip -l dist/yt_dlp_ejs-*.whl | tee .wheel_contents
+          grep -q 'yt_dlp_ejs/yt/solver/core\.min\.js' .wheel_contents
+          grep -q 'yt_dlp_ejs/yt/solver/lib\.min\.js' .wheel_contents
       - name: Install Deno requirements
         run: |
           deno install
@@ -195,10 +197,12 @@ jobs:
       - name: Test Bun build
         run: |
           python -m build
-      - name: Print artifact contents
+      - name: Verify artifact contents
         run: |
-          unzip -l dist/yt_dlp_ejs-*.whl
           tar -tvzf dist/yt_dlp_ejs-*.tar.gz
+          unzip -l dist/yt_dlp_ejs-*.whl | tee .wheel_contents
+          grep -q 'yt_dlp_ejs/yt/solver/core\.min\.js' .wheel_contents
+          grep -q 'yt_dlp_ejs/yt/solver/lib\.min\.js' .wheel_contents
       - name: Install Bun requirements
         run: |
           bun install
@@ -258,10 +262,12 @@ jobs:
       - name: Test Node build
         run: |
           python -m build
-      - name: Print artifact contents
+      - name: Verify artifact contents
         run: |
-          unzip -l dist/yt_dlp_ejs-*.whl
           tar -tvzf dist/yt_dlp_ejs-*.tar.gz
+          unzip -l dist/yt_dlp_ejs-*.whl | tee .wheel_contents
+          grep -q 'yt_dlp_ejs/yt/solver/core\.min\.js' .wheel_contents
+          grep -q 'yt_dlp_ejs/yt/solver/lib\.min\.js' .wheel_contents
       - name: Install Node requirements
         run: |
           npm install
