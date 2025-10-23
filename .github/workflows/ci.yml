@@ -136,7 +136,7 @@ jobs:
               ].join(":")).join(";")
             );
           EOF
-      - name: Cache requirements
+      - name: Cache player JS test data
         uses: actions/cache@v4
         env:
           SEGMENT_DOWNLOAD_TIMEOUT_MINS: 1
