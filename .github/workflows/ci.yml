@@ -17,6 +17,56 @@ concurrency:
   cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 jobs:
+  ruff-format:
+    name: Ruff format check
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v5
+    - uses: astral-sh/ruff-action@v3
+      with:
+        args: "check --output-format github"
+
+  ruff-lint:
+    name: Ruff linting check
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v5
+    - uses: astral-sh/ruff-action@v3
+      with:
+        args: "format --check --diff"
+
+  prettier:
+    name: Prettier check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - name: Install Deno v2.x (latest)
+        uses: denoland/setup-deno@v2
+        with:
+          deno-version: v2.x
+      - name: Install Deno requirements
+        run: |
+          deno install
+      - name: Run Prettier check
+        run: |
+          deno task fmt:check
+
+  eslint:
+    name: ESLint check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - name: Install Deno v2.x (latest)
+        uses: denoland/setup-deno@v2
+        with:
+          deno-version: v2.x
+      - name: Install Deno requirements
+        run: |
+          deno install
+      - name: Run ESLint check
+        run: |
+          deno task lint
+
   python_tests:
     name: Python tests
     runs-on: ubuntu-latest
@@ -289,68 +339,18 @@ jobs:
         run: |
           node --test
 
-  ruff-format:
-    name: Ruff format check
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v5
-    - uses: astral-sh/ruff-action@v3
-      with:
-        args: "check --output-format github"
-
-  ruff-lint:
-    name: Ruff linting check
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v5
-    - uses: astral-sh/ruff-action@v3
-      with:
-        args: "format --check --diff"
-
-  prettier:
-    name: Prettier check
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v5
-      - name: Install Deno v2.x (latest)
-        uses: denoland/setup-deno@v2
-        with:
-          deno-version: v2.x
-      - name: Install Deno requirements
-        run: |
-          deno install
-      - name: Run Prettier check
-        run: |
-          deno task fmt:check
-
-  eslint:
-    name: ESLint check
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v5
-      - name: Install Deno v2.x (latest)
-        uses: denoland/setup-deno@v2
-        with:
-          deno-version: v2.x
-      - name: Install Deno requirements
-        run: |
-          deno install
-      - name: Run ESLint check
-        run: |
-          deno task lint
-
   all_passed:
     needs:
+      - ruff-format
+      - ruff-lint
+      - prettier
+      - eslint
       - deno_build
       - deno_tests
       - bun_build
       - bun_tests
       - node_build
       - node_tests
-      - ruff-format
-      - ruff-lint
-      - prettier
-      - eslint
     runs-on: ubuntu-latest
     steps:
       - name: All checks passed
