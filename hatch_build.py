@@ -2,7 +2,6 @@ import os
 import shutil
 import subprocess
 
-
 from hatchling.builders.hooks.plugin.interface import BuildHookInterface
 
 
@@ -17,7 +16,7 @@ class CustomBuildHook(BuildHookInterface):
         elif shutil.which("bun"):
             print("Building with bun...", flush=True)
             subprocess.run(["bun", "install"], check=True)
-            subprocess.run(["bun", "run", "bundle"], check=True)
+            subprocess.run(["bun", "--bun", "run", "bundle"], check=True)
 
         elif shutil.which("npm"):
             print("Building with npm...", flush=True)
@@ -31,8 +30,10 @@ class CustomBuildHook(BuildHookInterface):
                 "One of 'deno', 'bun', or 'npm' could not be found. "
                 "Please install one of them to proceed with the build.")
 
-        build_data["force_include"]["dist/yt.solver.core.min.js"] = "yt_dlp_ejs/yt/solver/core.min.js"
-        build_data["force_include"]["dist/yt.solver.lib.min.js"] = "yt_dlp_ejs/yt/solver/lib.min.js"
+        build_data["force_include"].update({
+            "dist/yt.solver.core.min.js": "yt_dlp_ejs/yt/solver/core.min.js",
+            "dist/yt.solver.lib.min.js": "yt_dlp_ejs/yt/solver/lib.min.js",
+        })
 
     def clean(self, versions):
-        shutil.rmtree('node_modules', ignore_errors=True)
+        shutil.rmtree("node_modules", ignore_errors=True)
