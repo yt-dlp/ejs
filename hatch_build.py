@@ -37,6 +37,7 @@ class CustomBuildHook(BuildHookInterface):
 
         build_data["force_include"] = FORCE_INCLUDES
         if version == "editable":
+            build_data["artifacts"] = list(FORCE_INCLUDES)
             build_data["force_include_editable"] = FORCE_INCLUDES
 
     def clean(self, versions):
