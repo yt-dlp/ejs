@@ -59,7 +59,7 @@ jobs:
         timeout-minutes: 5
         run: |
           source ./.venv/bin/activate
-          python -m test.test_modules
+          python -Werror -m test.test_modules
 
   prepare:
     name: Prepare JS runtime tests
