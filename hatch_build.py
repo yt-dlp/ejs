@@ -12,8 +12,6 @@ FORCE_INCLUDES = {
 
 class CustomBuildHook(BuildHookInterface):
     def initialize(self, version, build_data):
-        raise RuntimeError('is this thing on')
-
         if shutil.which("deno"):
             print("Building with deno...", flush=True)
             os.environ["DENO_NO_UPDATE_CHECK"] = "1"
@@ -37,10 +35,9 @@ class CustomBuildHook(BuildHookInterface):
                 "One of 'deno', 'bun', or 'npm' could not be found. "
                 "Please install one of them to proceed with the build.")
 
+        build_data["force_include"] = FORCE_INCLUDES
         if version == "editable":
             build_data["force_include_editable"] = FORCE_INCLUDES
-        else:
-            build_data["force_include"] = FORCE_INCLUDES
 
     def clean(self, versions):
         shutil.rmtree("node_modules", ignore_errors=True)
