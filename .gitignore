@@ -6,3 +6,4 @@
 /deno.lock
 /package-lock.json
 /.idea
+/.venv

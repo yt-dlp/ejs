@@ -49,6 +49,9 @@ exclude = [
   "/src/yt/solver/test/players/*",
 ]
 
+[tool.hatch.build.targets.wheel]
+packages = ["yt_dlp_ejs"]
+
 [tool.hatch.build.hooks.vcs]
 version-file = "yt_dlp_ejs/_version.py"
 
