@@ -148,9 +148,10 @@ jobs:
         run: |
           deno run \
             --no-prompt \
-            --allow-read="src/yt/solver/test/players/*" \
+            --allow-read=src/yt/solver/test/players/ \
             --allow-write=src/yt/solver/test/players/ \
             --allow-net=www.youtube.com \
+            --allow-sys=uid \
             src/yt/solver/test/download.ts
       - name: Upload player JS artifact
         uses: actions/upload-artifact@v4
