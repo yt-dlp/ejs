@@ -83,3 +83,6 @@ ignore = [
 
 [tool.ruff.lint.isort]
 force-single-line = true
+
+[tool.ruff.lint.flake8-tidy-imports]
+ban-relative-imports = "all"
