@@ -95,8 +95,7 @@ jobs:
       - name: Run Python tests
         timeout-minutes: 5
         run: |
-          python -m unittest
-          # python -Werror -m unittest
+          python -Werror -m unittest
 
   prepare:
     name: Prepare JS runtime tests
