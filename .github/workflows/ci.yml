@@ -1,27 +1,15 @@
 name: CI
 on:
   push:
-    paths:
-      - ".github/workflows/ci.yml"
-      - ".github/workflows/release.yml"
-      - "hatch_build.py"
-      - "package.json"
-      - "pyproject.toml"
-      - "rollup.config.js"
-      - "run.ts"
-      - "src/**"
-      - "yt_dlp_ejs/**"
+    paths-ignore:
+      - 'README.md'
+      - 'LICENSE'
+      - '.gitignore'
   pull_request:
-    paths:
-      - ".github/workflows/ci.yml"
-      - ".github/workflows/release.yml"
-      - "hatch_build.py"
-      - "package.json"
-      - "pyproject.toml"
-      - "rollup.config.js"
-      - "run.ts"
-      - "src/**"
-      - "yt_dlp_ejs/**"
+    paths-ignore:
+      - 'README.md'
+      - 'LICENSE'
+      - '.gitignore'
 
 permissions:
   contents: read
