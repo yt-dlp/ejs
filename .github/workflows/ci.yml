@@ -31,8 +31,40 @@ concurrency:
   cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 jobs:
+  python_tests:
+    name: Python tests
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ['3.10', '3.11', '3.12', '3.13', '3.14', pypy-3.11]
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+      - name: Install Deno v2.x (latest)
+        uses: denoland/setup-deno@v2
+        with:
+          deno-version: v2.x
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v6
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Build project
+        run: |
+          # `pip install -e` omits the force-included JS, so use `build` instead
+          python -m pip install -U build
+          python -m build
+          unzip -u dist/yt_dlp_ejs-*.whl "yt_dlp_ejs/*"
+      - name: Run Python tests
+        timeout-minutes: 5
+        run: |
+          python -m unittest
+          # python -Werror -m unittest
+
   prepare:
-    name: Prepare
+    name: Prepare JS runtime tests
+    needs: [python_tests]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v5
@@ -95,6 +127,12 @@ jobs:
       - name: Test Deno build
         run: |
           python -m build
+      - name: Verify artifact contents
+        run: |
+          tar -tvzf dist/yt_dlp_ejs-*.tar.gz
+          unzip -l dist/yt_dlp_ejs-*.whl | tee .wheel_contents
+          grep -q 'yt_dlp_ejs/yt/solver/core\.min\.js' .wheel_contents
+          grep -q 'yt_dlp_ejs/yt/solver/lib\.min\.js' .wheel_contents
       - name: Install Deno requirements
         run: |
           deno install
@@ -156,6 +194,12 @@ jobs:
       - name: Test Bun build
         run: |
           python -m build
+      - name: Verify artifact contents
+        run: |
+          tar -tvzf dist/yt_dlp_ejs-*.tar.gz
+          unzip -l dist/yt_dlp_ejs-*.whl | tee .wheel_contents
+          grep -q 'yt_dlp_ejs/yt/solver/core\.min\.js' .wheel_contents
+          grep -q 'yt_dlp_ejs/yt/solver/lib\.min\.js' .wheel_contents
       - name: Install Bun requirements
         run: |
           bun install
@@ -215,6 +259,12 @@ jobs:
       - name: Test Node build
         run: |
           python -m build
+      - name: Verify artifact contents
+        run: |
+          tar -tvzf dist/yt_dlp_ejs-*.tar.gz
+          unzip -l dist/yt_dlp_ejs-*.whl | tee .wheel_contents
+          grep -q 'yt_dlp_ejs/yt/solver/core\.min\.js' .wheel_contents
+          grep -q 'yt_dlp_ejs/yt/solver/lib\.min\.js' .wheel_contents
       - name: Install Node requirements
         run: |
           npm install
