@@ -148,7 +148,7 @@ jobs:
         run: |
           deno run \
             --no-prompt \
-            --allow-read=src/yt/solver/test/players/ \
+            --allow-read="src/yt/solver/test/players/*" \
             --allow-write=src/yt/solver/test/players/ \
             --allow-net=www.youtube.com \
             src/yt/solver/test/download.ts
