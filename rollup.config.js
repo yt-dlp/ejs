@@ -31,7 +31,9 @@ function printHash() {
       for (const [fileName, assetInfo] of Object.entries(bundle)) {
         if (assetInfo.code) {
           try {
-            const digest = createHash("sha3-512").update(assetInfo.code).digest("hex");
+            const digest = createHash("sha3-512")
+              .update(assetInfo.code)
+              .digest("hex");
             console.log(`SHA3-512 for ${assetInfo.fileName}: ${digest}`);
           } catch (err) {
             console.error(`Error hashing ${fileName}:`, err.message);
