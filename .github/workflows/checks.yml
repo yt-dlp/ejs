@@ -55,6 +55,7 @@ jobs:
       - name: Install Deno requirements
         run: |
           deno install
-      - name: Run Prettier check
+      - name: Run ESLint check
+
         run: |
           deno task lint
