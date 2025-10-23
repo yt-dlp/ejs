@@ -99,7 +99,6 @@ jobs:
 
   prepare:
     name: Prepare JS runtime tests
-    needs: [python_tests]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v5
@@ -125,6 +124,14 @@ jobs:
           path: |
             dist/SHA2-256SUMS
           compression-level: 0
+      - name: Cache player JS files
+        uses: actions/cache@v4
+        env:
+          SEGMENT_DOWNLOAD_TIMEOUT_MINS: 1
+        with:
+          path: |
+            src/yt/solver/test/players
+          key: test-player-js-${{ hashFiles('src/yt/solver/test/tests.ts') }}
       - name: Download player JS files
         run: |
           deno run \
@@ -132,6 +139,7 @@ jobs:
             --allow-read=src/yt/solver/test/players/ \
             --allow-write=src/yt/solver/test/players/ \
             --allow-net=www.youtube.com \
+            --allow-sys=uid \
             src/yt/solver/test/download.ts
       - name: Upload player JS artifact
         uses: actions/upload-artifact@v4
