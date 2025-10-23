@@ -50,18 +50,15 @@ jobs:
         uses: actions/setup-python@v6
         with:
           python-version: ${{ matrix.python-version }}
-      - name: Set up virtual environment
+      - name: Build project
         run: |
-          python -m venv ./.venv
-          source ./.venv/bin/activate
-          python -m pip install -U build
           # `pip install -e` omits the force-included JS, so use `build` instead
+          python -m pip install -U build
           python -m build
-          unzip -u dist/yt_dlp_ejs-*.whl
+          unzip -u dist/yt_dlp_ejs-*.whl "yt_dlp_ejs/*"
       - name: Run Python tests
         timeout-minutes: 5
         run: |
-          source ./.venv/bin/activate
           python -m unittest
           # python -Werror -m unittest
 
