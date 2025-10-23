@@ -38,12 +38,6 @@ Source = "https://github.com/yt-dlp/ejs"
 [tool.hatch.version]
 source = "vcs"
 
-[tool.hatch.build]
-dev-mode-dirs = [
-    "yt_dlp_ejs",
-    "dist",
-]
-
 [tool.hatch.build.targets.sdist]
 exclude = [
   "/.github/**",
