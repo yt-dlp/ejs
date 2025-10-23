@@ -88,7 +88,7 @@ jobs:
         run: |
           gh release create "${TAG}" \
             --title "yt-dlp-ejs ${TAG}" \
-            --notes-from-tag \
+            --generate-notes \
             --verify-tag \
             dist/yt.solver.*.js \
             dist/yt_dlp_ejs-*.whl \
