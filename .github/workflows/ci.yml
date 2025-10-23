@@ -61,6 +61,7 @@ jobs:
           python -m venv ./.venv
           source ./.venv/bin/activate
           python -m pip install -e .
+          deno task bundle
       - name: Am I going insane
         run: |
           tree yt_dlp_ejs

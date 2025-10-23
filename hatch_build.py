@@ -4,11 +4,6 @@ import subprocess
 
 from hatchling.builders.hooks.plugin.interface import BuildHookInterface
 
-FORCE_INCLUDES = {
-    "dist/yt.solver.core.min.js": "yt_dlp_ejs/yt/solver/core.min.js",
-    "dist/yt.solver.lib.min.js": "yt_dlp_ejs/yt/solver/lib.min.js",
-}
-
 
 class CustomBuildHook(BuildHookInterface):
     def initialize(self, version, build_data):
@@ -35,10 +30,10 @@ class CustomBuildHook(BuildHookInterface):
                 "One of 'deno', 'bun', or 'npm' could not be found. "
                 "Please install one of them to proceed with the build.")
 
-        build_data["force_include"] = FORCE_INCLUDES
-        if version == "editable":
-            build_data["artifacts"] = list(FORCE_INCLUDES)
-            build_data["force_include_editable"] = FORCE_INCLUDES
+        build_data["force_include"] = {
+            "dist/yt.solver.core.min.js": "yt_dlp_ejs/yt/solver/core.min.js",
+            "dist/yt.solver.lib.min.js": "yt_dlp_ejs/yt/solver/lib.min.js",
+        }
 
     def clean(self, versions):
         shutil.rmtree("node_modules", ignore_errors=True)
