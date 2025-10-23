@@ -24,6 +24,7 @@ export async function getIO(): Promise<IO> {
 
 async function _getIO(): Promise<IO> {
   // Old Deno requires casting to any as globalThis lacks an index signature
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   if ((globalThis as any).process?.release?.name === "node") {
     // Assume node compatibility
     const { access, readFile } = await import("node:fs/promises");

@@ -28,12 +28,15 @@ class CustomBuildHook(BuildHookInterface):
         else:
             raise RuntimeError(
                 "One of 'deno', 'bun', or 'npm' could not be found. "
-                "Please install one of them to proceed with the build.")
+                "Please install one of them to proceed with the build."
+            )
 
-        build_data["force_include"].update({
-            "dist/yt.solver.core.min.js": "yt_dlp_ejs/yt/solver/core.min.js",
-            "dist/yt.solver.lib.min.js": "yt_dlp_ejs/yt/solver/lib.min.js",
-        })
+        build_data["force_include"].update(
+            {
+                "dist/yt.solver.core.min.js": "yt_dlp_ejs/yt/solver/core.min.js",
+                "dist/yt.solver.lib.min.js": "yt_dlp_ejs/yt/solver/lib.min.js",
+            }
+        )
 
     def clean(self, versions):
         shutil.rmtree("node_modules", ignore_errors=True)
