@@ -4,12 +4,10 @@ on:
     paths-ignore:
       - 'README.md'
       - 'LICENSE'
-      - '.gitignore'
   pull_request:
     paths-ignore:
       - 'README.md'
       - 'LICENSE'
-      - '.gitignore'
 
 permissions:
   contents: read
