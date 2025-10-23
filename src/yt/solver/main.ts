@@ -1,4 +1,4 @@
-import { getFromPrepared, preprocessPlayer } from "./solvers.ts";
+import { executeSolver, getFromPrepared, preprocessPlayer } from "./solvers.ts";
 import { isOneOf } from "../../utils.ts";
 
 export default function main(input: Input): Output {
@@ -15,8 +15,7 @@ export default function main(input: Input): Output {
         error: `Unknown request type: ${input.type}`,
       };
     }
-    const solver = solvers[input.type];
-    if (!solver) {
+    if (solvers[input.type] == null) {
       return {
         type: "error",
         error: `Failed to extract ${input.type} function`,
@@ -26,7 +25,7 @@ export default function main(input: Input): Output {
       return {
         type: "result",
         data: Object.fromEntries(
-          input.challenges.map((challenge) => [challenge, solver(challenge)]),
+          input.challenges.map((challenge) => [challenge, executeSolver(solvers, input.type, challenge) ?? ""]), // "" shouldn't be happened.
         ),
       };
     } catch (error) {

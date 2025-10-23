@@ -101,10 +101,12 @@ export function preprocessPlayer(data: string): string {
   return generate(ast);
 }
 
-export function getFromPrepared(code: string): {
+export interface SolveFunctions {
   n: ((val: string) => string) | null;
   sig: ((val: string) => string) | null;
-} {
+}
+
+export function getFromPrepared(code: string): SolveFunctions {
   const codeToRun = `
     Function("_result", _$code)(_$resultObj);
   `;
@@ -113,5 +115,24 @@ export function getFromPrepared(code: string): {
     _$code: code,
     _$resultObj: resultObj,
   });
+
   return resultObj;
+}
+
+export function executeSolver(
+  code: SolveFunctions,
+  type: keyof SolveFunctions,
+  input: string,
+) {
+  const solver = code[type];
+  if (solver == null) {
+    return null;
+  }
+  const result: string | undefined = VM.runInNewContext(`
+    _$solver(_$input);
+  `, {
+    _$solver: solver,
+    _$input: input,
+  });
+  return result ?? null;
 }
