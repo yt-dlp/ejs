@@ -53,6 +53,12 @@ exclude = [
 [tool.hatch.build.targets.wheel]
 packages = ["yt_dlp_ejs"]
 
+[tool.hatch.build.targets.editable]
+artifacts = [
+    "dist/yt.solver.core.min.js",
+    "dist/yt.solver.lib.min.js",
+]
+
 [tool.hatch.build.hooks.vcs]
 version-file = "yt_dlp_ejs/_version.py"
 
