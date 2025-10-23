@@ -12,6 +12,8 @@ FORCE_INCLUDES = {
 
 class CustomBuildHook(BuildHookInterface):
     def initialize(self, version, build_data):
+        raise RuntimeError('is this thing on')
+
         if shutil.which("deno"):
             print("Building with deno...", flush=True)
             os.environ["DENO_NO_UPDATE_CHECK"] = "1"
