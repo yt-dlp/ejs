@@ -54,8 +54,9 @@ jobs:
         run: |
           python -m venv ./.venv
           source ./.venv/bin/activate
-          python -m pip install -U pip build editables hatchling hatch-vcs
-          python -m pip install --no-build-isolation -e .
+          python -m pip install -U pip build hatchling hatch-vcs
+          # editable pip installations omit the JS artifacts, so build in place instead
+          python -m build --no-isolation
       - name: Run Python tests
         timeout-minutes: 5
         run: |
