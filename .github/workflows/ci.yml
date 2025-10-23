@@ -71,10 +71,11 @@ jobs:
 
   python_tests:
     name: Python tests
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.runner }}
     strategy:
       fail-fast: false
       matrix:
+        runner: [ubuntu-latest, windows-latest]
         python-version: ['3.10', '3.11', '3.12', '3.13', '3.14', pypy-3.11]
     steps:
       - uses: actions/checkout@v5
