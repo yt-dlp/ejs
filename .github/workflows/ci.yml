@@ -340,7 +340,17 @@ jobs:
           deno task lint
 
   all_passed:
-    needs: [deno_build, deno_tests, bun_build, bun_tests, node_build, node_tests, ruff-format, ruff-lint, prettier, eslint]
+    needs:
+      - deno_build
+      - deno_tests
+      - bun_build
+      - bun_tests
+      - node_build
+      - node_tests
+      - ruff-format
+      - ruff-lint
+      - prettier
+      - eslint
     runs-on: ubuntu-latest
     steps:
       - name: All checks passed
