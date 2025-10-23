@@ -124,7 +124,7 @@ jobs:
           path: |
             dist/SHA2-256SUMS
           compression-level: 0
-      - name: Cache player JS test data
+      - name: Cache player JS files
         uses: actions/cache@v4
         env:
           SEGMENT_DOWNLOAD_TIMEOUT_MINS: 1
