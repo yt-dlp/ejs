@@ -40,8 +40,8 @@ source = "vcs"
 
 [tool.hatch.build]
 dev-mode-dirs = [
-    "/yt_dlp_ejs",
-    "/dist",
+    "yt_dlp_ejs",
+    "dist",
 ]
 
 [tool.hatch.build.targets.sdist]
