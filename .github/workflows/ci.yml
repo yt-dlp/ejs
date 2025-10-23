@@ -56,7 +56,8 @@ jobs:
           source ./.venv/bin/activate
           python -m pip install -e .
           deno task bundle
-          mv -t yt_dlp_ejs/yt/solver/ dist/*.js
+          mv -f "dist/yt.solver.core.min.js" "yt_dlp_ejs/yt/solver/core.min.js",
+          mv -f "dist/yt.solver.lib.min.js" "yt_dlp_ejs/yt/solver/lib.min.js",
       - name: Run Python tests
         timeout-minutes: 5
         run: |
