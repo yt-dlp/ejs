@@ -3,8 +3,9 @@ from pathlib import Path
 
 import yt_dlp_ejs.yt.solver
 
-CORE_PATH = Path('yt_dlp_ejs/yt/solver/core.min.js')
-LIB_PATH = Path('yt_dlp_ejs/yt/solver/lib.min.js')
+BASE_PATH = Path(__file__).parent.parent
+CORE_PATH = BASE_PATH / 'yt_dlp_ejs/yt/solver/core.min.js'
+LIB_PATH = BASE_PATH / 'yt_dlp_ejs/yt/solver/lib.min.js'
 
 
 class TestModules(unittest.TestCase):
