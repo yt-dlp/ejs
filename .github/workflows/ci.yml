@@ -355,6 +355,7 @@ jobs:
       - ruff-lint
       - prettier
       - eslint
+      - python_tests
       - deno_build
       - deno_tests
       - bun_build
