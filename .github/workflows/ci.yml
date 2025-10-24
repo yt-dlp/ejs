@@ -102,7 +102,7 @@ jobs:
         if: matrix.runner == 'windows-latest'
         shell: pwsh
         run: |
-          Expand-Archive -Path dist/yt_dlp_ejs-*.whl -DestinationPath ./
+          Expand-Archive -Path dist/yt_dlp_ejs-*.whl -DestinationPath ./ -Force
       - name: Run Python tests
         timeout-minutes: 5
         run: |
