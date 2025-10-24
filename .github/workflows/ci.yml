@@ -71,10 +71,11 @@ jobs:
 
   python_tests:
     name: Python tests
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.runner }}
     strategy:
       fail-fast: false
       matrix:
+        runner: [ubuntu-latest, windows-latest]
         python-version: ['3.10', '3.11', '3.12', '3.13', '3.14', pypy-3.11]
     steps:
       - uses: actions/checkout@v5
@@ -93,7 +94,15 @@ jobs:
           # `pip install -e` omits the force-included JS, so use `build` instead
           python -m pip install -U build
           python -m build
+      - name: Unpack wheel (Linux)
+        if: matrix.runner == 'ubuntu-latest'
+        run: |
           unzip -u dist/yt_dlp_ejs-*.whl "yt_dlp_ejs/*"
+      - name: Unpack wheel (Windows)
+        if: matrix.runner == 'windows-latest'
+        shell: pwsh
+        run: |
+          Expand-Archive -Path dist/yt_dlp_ejs-*.whl -DestinationPath ./ -Force
       - name: Run Python tests
         timeout-minutes: 5
         run: |
@@ -354,6 +363,7 @@ jobs:
       - ruff-lint
       - prettier
       - eslint
+      - python_tests
       - deno_build
       - deno_tests
       - bun_build
