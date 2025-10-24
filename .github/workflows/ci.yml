@@ -90,12 +90,14 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
       - name: Build project
+        shell: bash
         run: |
           # `pip install -e` omits the force-included JS, so use `build` instead
           python -m pip install -U build
           python -m build
           unzip -u dist/yt_dlp_ejs-*.whl "yt_dlp_ejs/*"
       - name: Run Python tests
+        shell: bash
         timeout-minutes: 5
         run: |
           python -Werror -m unittest
