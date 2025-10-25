@@ -1,4 +1,4 @@
-import { getFromPrepared, preprocessPlayer } from "./solvers.ts";
+import { preprocessPlayer, solveAll, type Challenge } from "./solvers.ts";
 import { isOneOf } from "../../utils.ts";
 
 export default function main(input: Input): Output {
@@ -6,48 +6,62 @@ export default function main(input: Input): Output {
     input.type === "player"
       ? preprocessPlayer(input.player)
       : input.preprocessed_player;
-  const solvers = getFromPrepared(preprocessedPlayer);
 
-  const responses = input.requests.map((input): Response => {
-    if (!isOneOf(input.type, "n", "sig")) {
-      return {
-        type: "error",
-        error: `Unknown request type: ${input.type}`,
-      };
-    }
-    const solver = solvers[input.type];
-    if (!solver) {
-      return {
-        type: "error",
-        error: `Failed to extract ${input.type} function`,
-      };
-    }
-    try {
-      return {
-        type: "result",
-        data: Object.fromEntries(
-          input.challenges.map((challenge) => [challenge, solver(challenge)]),
-        ),
-      };
-    } catch (error) {
-      return {
-        type: "error",
-        error:
-          error instanceof Error
-            ? `${error.message}\n${error.stack}`
-            : `${error}`,
-      };
-    }
+  const solveChallenges = input.requests.flatMap((req) => {
+    return req.challenges.map<Challenge>((challenge) => ({
+      type: req.type,
+      challenge,
+    }));
   });
 
-  const output: Output = {
-    type: "result",
-    responses,
-  };
-  if (input.type === "player" && input.output_preprocessed) {
-    output.preprocessed_player = preprocessedPlayer;
+  try {
+    const solved = solveAll(preprocessedPlayer, solveChallenges);
+
+    let offset = 0;
+    const responses = input.requests.map<Response>((req) => {
+      if (!isOneOf(req.type, "n", "sig")) {
+        offset += 1;
+        return {
+          type: "error",
+          error: `Unknown request type: ${req.type}`,
+        };
+      }
+
+      const solvedPair = req.challenges.map(
+        (challenge) => [challenge, solved.result[offset++]] as const,
+      );
+
+      if (solvedPair.find((v) => v[1] == null)) {
+        // for compatibility of output
+        return {
+          type: "error",
+          error: `Failed to extract ${input.type} function`,
+        };
+      }
+
+      return {
+        type: "result",
+        data: Object.fromEntries(solvedPair as Array<[string, string]>),
+      };
+    });
+
+    const output: Output = {
+      type: "result",
+      responses,
+    };
+    if (input.type === "player" && input.output_preprocessed) {
+      output.preprocessed_player = preprocessedPlayer;
+    }
+    return output;
+  } catch (error) {
+    return {
+      type: "error",
+      error:
+        error instanceof Error
+          ? `${error.message}\n${error.stack}`
+          : `${error}`,
+    } satisfies Output;
   }
-  return output;
 }
 
 export type Input =

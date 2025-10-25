@@ -2,7 +2,12 @@ import { parse } from "meriyah";
 
 export const setupNodes = parse(`
 if (typeof globalThis.XMLHttpRequest === "undefined") {
-    globalThis.XMLHttpRequest = { prototype: {} };
+    const mockXHR = Object.create(null);
+    const mockProto = Object.create(null);
+    Object.freeze(mockProto);
+    mockXHR["prototype"] = mockProto;
+    Object.freeze(mockXHR);
+    globalThis.XMLHttpRequest = mockXHR;
 }
 const window = Object.create(null);
 if (typeof URL === "undefined") {
