@@ -3,17 +3,15 @@ import { players, tests } from "./test/tests.ts";
 import { getCachePath } from "./test/utils.ts";
 
 import { readFile } from "node:fs/promises";
-import { test as subtest, suite } from "node:test";
-import Assert from "node:assert";
+import { getIO } from "./test/io.ts";
 
 const modes = ["n", "sig"] as const;
+const IO = await getIO();
 
-// Deno, Node.js, Bun all supports node:test, node:assert
-// So why not use node:test?
 for (const test of tests) {
   for (const variant of test.variants ?? players.keys()) {
     const path = getCachePath(test.player, variant);
-    await suite(`${test.player} ${variant}`, async () => {
+    await IO.test(`${test.player} ${variant}`, async (Assert, subtest) => {
       const rawCode = await readFile(path, { encoding: "utf-8" });
       // Make test set / expected
       const challenges: Challenge[] = [];

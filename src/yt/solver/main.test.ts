@@ -11,7 +11,7 @@ const modes = ["n", "sig"] as const;
 
 // @TODO more correct check instead of flat check
 test(
-  `Does function return correct value?`,
+  `Does 'main.ts' Main function return correct value?`,
   { timeout: 120 * 1000 },
   async () => {
     for (const testSet of tests) {
