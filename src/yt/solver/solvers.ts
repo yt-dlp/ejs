@@ -149,7 +149,13 @@ export function solveAll(preparedCode: string, challenges: Challenge[]) {
       _$makeSolver(_$isolver);
       Object.freeze(_$isolver);
 
-      const _$result = Array.prototype.map.call(_$values, (value) => _$isolver[value.type]?.(value.challenge) ?? null);
+      const _$result = Array.prototype.map.call(_$values, (value) => {
+        const resolved = _$isolver[value.type]?.(value.challenge);
+        if (resolved == null) {
+          return null;
+        }
+        return String(resolved);
+      });
       
       // GC management
       _$isolver = null;
