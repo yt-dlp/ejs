@@ -13,7 +13,7 @@ pip install -U yt-dlp-ejs
 ## Development
 
 While this project does pin its dependencies,
-it does not use lockfiles or enforce a particular package manager.
+it only provides a lockfile for building with `deno`.
 You may install dependencies using any compatible package manager.
 If you notice differences between different runtimes' builds
 please open an issue [here](<https://github.com/yt-dlp/ejs/issues/new>).
@@ -27,7 +27,7 @@ Alternatively, to only build the JavaScript files you can run the `bundle` scrip
 
 ```bash
 # Deno:
-deno install
+deno install --frozen
 deno task bundle
 
 # Bun:
@@ -45,7 +45,7 @@ First, make sure the project's dependencies are installed and download the playe
 
 ```bash
 # Deno:
-deno install
+deno install --frozen
 deno run src/yt/solver/test/download.ts
 
 # Bun:

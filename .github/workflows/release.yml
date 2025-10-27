@@ -37,7 +37,7 @@ jobs:
           compression-level: 0
       - name: Build JavaScript artifacts
         run: |
-          deno install
+          deno install --frozen
           deno task bundle
       - name: Upload JavaScript artifacts
         uses: actions/upload-artifact@v4

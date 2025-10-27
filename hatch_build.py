@@ -10,7 +10,7 @@ class CustomBuildHook(BuildHookInterface):
         if shutil.which("deno"):
             print("Building with deno...", flush=True)
             os.environ["DENO_NO_UPDATE_CHECK"] = "1"
-            subprocess.run(["deno", "install"], check=True)
+            subprocess.run(["deno", "install", "--frozen"], check=True)
             subprocess.run(["deno", "task", "bundle"], check=True)
 
         elif shutil.which("bun"):
