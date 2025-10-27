@@ -3,7 +3,6 @@
 /yt_dlp_ejs/_version.py
 /node_modules
 /bun.lock
-/deno.lock
 /package-lock.json
 /.idea
 /.venv
