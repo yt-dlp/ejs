@@ -3,16 +3,38 @@ import { matchesStructure } from "../../utils.ts";
 import { type DeepPartial } from "../../types.ts";
 
 const identifier: DeepPartial<ESTree.Node> = {
-  type: "VariableDeclaration",
-  kind: "var",
-  declarations: {
-    anykey: [
-      {
-        type: "VariableDeclarator",
-        id: {
+  or: [
+    {
+      type: "VariableDeclaration",
+      kind: "var",
+      declarations: {
+        anykey: [
+          {
+            type: "VariableDeclarator",
+            id: {
+              type: "Identifier",
+            },
+            init: {
+              type: "ArrayExpression",
+              elements: [
+                {
+                  type: "Identifier",
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+    {
+      type: "ExpressionStatement",
+      expression: {
+        type: "AssignmentExpression",
+        left: {
           type: "Identifier",
         },
-        init: {
+        operator: "=",
+        right: {
           type: "ArrayExpression",
           elements: [
             {
@@ -21,8 +43,8 @@ const identifier: DeepPartial<ESTree.Node> = {
           ],
         },
       },
-    ],
-  },
+    },
+  ],
 } as const;
 
 const catchBlockBody = [
@@ -50,7 +72,7 @@ const catchBlockBody = [
 ] as const;
 
 export function extract(
-  node: ESTree.Node,
+  node: ESTree.Node
 ): ESTree.ArrowFunctionExpression | null {
   if (!matchesStructure(node, identifier)) {
     // Fallback search for try { } catch { return X[12] + Y }
@@ -94,23 +116,36 @@ export function extract(
     return null;
   }
 
-  if (node.type !== "VariableDeclaration") {
-    return null;
-  }
-  for (const declaration of node.declarations) {
+  if (node.type === "VariableDeclaration") {
+    for (const declaration of node.declarations) {
+      if (
+        declaration.type !== "VariableDeclarator" ||
+        !declaration.init ||
+        declaration.init.type !== "ArrayExpression" ||
+        declaration.init.elements.length !== 1
+      ) {
+        continue;
+      }
+      const [firstElement] = declaration.init.elements;
+      if (!firstElement || firstElement.type !== "Identifier") {
+        continue;
+      }
+      return makeSolverFuncFromName(firstElement.name);
+    }
+  } else if (node.type === "ExpressionStatement") {
+    const expr = node.expression;
     if (
-      declaration.type !== "VariableDeclarator" ||
-      !declaration.init ||
-      declaration.init.type !== "ArrayExpression" ||
-      declaration.init.elements.length !== 1
+      expr.type === "AssignmentExpression" &&
+      expr.left.type === "Identifier" &&
+      expr.operator === "=" &&
+      expr.right.type === "ArrayExpression" &&
+      expr.right.elements.length === 1
     ) {
-      continue;
+      const [firstElement] = expr.right.elements;
+      if (firstElement && firstElement.type === "Identifier") {
+        return makeSolverFuncFromName(firstElement.name);
+      }
     }
-    const [firstElement] = declaration.init.elements;
-    if (!firstElement || firstElement.type !== "Identifier") {
-      continue;
-    }
-    return makeSolverFuncFromName(firstElement.name);
   }
   return null;
 }

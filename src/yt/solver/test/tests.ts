@@ -236,9 +236,7 @@ export const tests: {
     ],
   },
   {
-    // TODO: es6 variants currently fail
     player: "2b83d2e0",
-    variants: ["main", "tcc", "tce", "es5", "tv", "tv_es6", "phone", "tablet"],
     n: [
       // Synthetic test
       { input: "0eRGgQWJGfT5rFHFj", expected: "euHbygrCMLksxd" },
@@ -254,9 +252,7 @@ export const tests: {
     ],
   },
   {
-    // TODO: es6 variants currently fail
     player: "638ec5c6",
-    variants: ["main", "tcc", "tce", "es5", "tv", "tv_es6", "phone", "tablet"],
     n: [
       // Synthetic test
       { input: "ZdZIqFPQK-Ty8wId", expected: "1qov8-KM-yH" },
@@ -272,9 +268,7 @@ export const tests: {
     ],
   },
   {
-    // TODO: es6 variants currently fail
     player: "87644c66",
-    variants: ["main", "tcc", "tce", "es5", "tv", "tv_es6", "phone", "tablet"],
     n: [
       // Synthetic test
       { input: "ZdZIqFPQK-Ty8wId", expected: "iF5NxEm1BYk" },
