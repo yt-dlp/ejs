@@ -2,7 +2,7 @@ import { type ESTree } from "meriyah";
 import { matchesStructure } from "../../utils.ts";
 import { type DeepPartial } from "../../types.ts";
 
-const identifier = {
+const identifier: DeepPartial<ESTree.Node> = {
   type: "VariableDeclaration",
   kind: "var",
   declarations: {
@@ -52,7 +52,7 @@ const catchBlockBody = [
 export function extract(
   node: ESTree.Node,
 ): ESTree.ArrowFunctionExpression | null {
-  if (!matchesStructure(node, identifier as unknown as DeepPartial<ESTree.Node>)) {
+  if (!matchesStructure(node, identifier)) {
     // Fallback search for try { } catch { return X[12] + Y }
     let name: string | undefined | null = null;
     let block: ESTree.BlockStatement | null | undefined = null;
