@@ -72,7 +72,7 @@ const catchBlockBody = [
 ] as const;
 
 export function extract(
-  node: ESTree.Node
+  node: ESTree.Node,
 ): ESTree.ArrowFunctionExpression | null {
   if (!matchesStructure(node, identifier)) {
     // Fallback search for try { } catch { return X[12] + Y }
