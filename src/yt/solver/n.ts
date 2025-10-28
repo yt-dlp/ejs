@@ -127,10 +127,9 @@ export function extract(
         continue;
       }
       const [firstElement] = declaration.init.elements;
-      if (!firstElement || firstElement.type !== "Identifier") {
-        continue;
+      if (firstElement && firstElement.type === "Identifier") {
+        return makeSolverFuncFromName(firstElement.name);
       }
-      return makeSolverFuncFromName(firstElement.name);
     }
   } else if (node.type === "ExpressionStatement") {
     const expr = node.expression;
