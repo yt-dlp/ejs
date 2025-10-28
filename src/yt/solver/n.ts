@@ -2,26 +2,50 @@ import { type ESTree } from "meriyah";
 import { matchesStructure } from "../../utils.ts";
 import { type DeepPartial } from "../../types.ts";
 
-const identifier: DeepPartial<ESTree.VariableDeclaration> = {
-  type: "VariableDeclaration",
-  kind: "var",
-  declarations: [
+const identifier: DeepPartial<ESTree.Node> = {
+  or: [
     {
-      type: "VariableDeclarator",
-      id: {
-        type: "Identifier",
-      },
-      init: {
-        type: "ArrayExpression",
-        elements: [
+      type: "VariableDeclaration",
+      kind: "var",
+      declarations: {
+        anykey: [
           {
-            type: "Identifier",
+            type: "VariableDeclarator",
+            id: {
+              type: "Identifier",
+            },
+            init: {
+              type: "ArrayExpression",
+              elements: [
+                {
+                  type: "Identifier",
+                },
+              ],
+            },
           },
         ],
       },
     },
+    {
+      type: "ExpressionStatement",
+      expression: {
+        type: "AssignmentExpression",
+        left: {
+          type: "Identifier",
+        },
+        operator: "=",
+        right: {
+          type: "ArrayExpression",
+          elements: [
+            {
+              type: "Identifier",
+            },
+          ],
+        },
+      },
+    },
   ],
-};
+} as const;
 
 const catchBlockBody = [
   {
@@ -92,23 +116,37 @@ export function extract(
     return null;
   }
 
-  if (node.type !== "VariableDeclaration") {
-    return null;
+  if (node.type === "VariableDeclaration") {
+    for (const declaration of node.declarations) {
+      if (
+        declaration.type !== "VariableDeclarator" ||
+        !declaration.init ||
+        declaration.init.type !== "ArrayExpression" ||
+        declaration.init.elements.length !== 1
+      ) {
+        continue;
+      }
+      const [firstElement] = declaration.init.elements;
+      if (firstElement && firstElement.type === "Identifier") {
+        return makeSolverFuncFromName(firstElement.name);
+      }
+    }
+  } else if (node.type === "ExpressionStatement") {
+    const expr = node.expression;
+    if (
+      expr.type === "AssignmentExpression" &&
+      expr.left.type === "Identifier" &&
+      expr.operator === "=" &&
+      expr.right.type === "ArrayExpression" &&
+      expr.right.elements.length === 1
+    ) {
+      const [firstElement] = expr.right.elements;
+      if (firstElement && firstElement.type === "Identifier") {
+        return makeSolverFuncFromName(firstElement.name);
+      }
+    }
   }
-  const declaration = node.declarations[0];
-  if (
-    declaration.type !== "VariableDeclarator" ||
-    !declaration.init ||
-    declaration.init.type !== "ArrayExpression" ||
-    declaration.init.elements.length !== 1
-  ) {
-    return null;
-  }
-  const [firstElement] = declaration.init.elements;
-  if (!firstElement || firstElement.type !== "Identifier") {
-    return null;
-  }
-  return makeSolverFuncFromName(firstElement.name);
+  return null;
 }
 
 function makeSolverFuncFromName(name: string): ESTree.ArrowFunctionExpression {

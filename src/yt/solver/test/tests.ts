@@ -236,9 +236,7 @@ export const tests: {
     ],
   },
   {
-    // TODO: es6/tv_es6 variants currently fail
     player: "2b83d2e0",
-    variants: ["main", "tcc", "tce", "es5", "tv", "phone", "tablet"],
     n: [
       // Synthetic test
       { input: "0eRGgQWJGfT5rFHFj", expected: "euHbygrCMLksxd" },
@@ -254,9 +252,7 @@ export const tests: {
     ],
   },
   {
-    // TODO: es6/tv_es6 variants currently fail
     player: "638ec5c6",
-    variants: ["main", "tcc", "tce", "es5", "tv", "phone", "tablet"],
     n: [
       // Synthetic test
       { input: "ZdZIqFPQK-Ty8wId", expected: "1qov8-KM-yH" },
@@ -268,6 +264,22 @@ export const tests: {
           "gN7a-hudCuAuPH6fByOk1_GNXN0yNMHShjZXS2VOgsEItAJz0tipeavEOmNdYN-wUtcEqD3bCXjc0iyKfAyZxCBGgIARwsSdQfJ2CJtt",
         expected:
           "MhudCuAuP-6fByOk1_GNXN7gNHHShjyXS2VOgsEItAJz0tipeav0OmNdYN-wUtcEqD3bCXjc0iyKfAyZxCBGgIARwsSdQfJ2CJtt",
+      },
+    ],
+  },
+  {
+    player: "87644c66",
+    n: [
+      // Synthetic test
+      { input: "ZdZIqFPQK-Ty8wId", expected: "iF5NxEm1BYk" },
+    ],
+    sig: [
+      // Synthetic test
+      {
+        input:
+          "gN7a-hudCuAuPH6fByOk1_GNXN0yNMHShjZXS2VOgsEItAJz0tipeavEOmNdYN-wUtcEqD3bCXjc0iyKfAyZxCBGgIARwsSdQfJ2CJtt",
+        expected:
+          "atJC2JfQdSswRAtgGBCxZyAfKyi0cjXCb3DqEctUw-NYdNmOEvIepit0zJAtIEsgOV2SXZjhSHMNy0NXNG_1kOyBf6HPuAuCduh-a7Ng",
       },
     ],
   },
