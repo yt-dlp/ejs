@@ -47,6 +47,7 @@ source = "vcs"
 exclude = [
   "/.github/**",
   "/src/yt/solver/test/players/*",
+  "!/src/yt/solver/test/players/.gitignore",
 ]
 
 [tool.hatch.build.targets.wheel]
