@@ -12,9 +12,13 @@ pip install -U yt-dlp-ejs
 
 ## Development
 
-While this project does pin its dependencies,
-it only provides a lockfile for building with `deno`.
-You may install dependencies using any compatible package manager.
+The project uses [`pnpm`](<>) as a package manager with
+dependencies pinned through `pnpm-lock.yaml`.
+
+If you only have python and a JS runtime you may instead invoke `./pnpm.py`,
+which will transparently invoke the supported JS runtimes to call `pnpm`.
+
+This pure JavaScript approach should be runtime agnostic.
 If you notice differences between different runtimes' builds
 please open an issue [here](<https://github.com/yt-dlp/ejs/issues/new>).
 
@@ -26,18 +30,11 @@ The build hook will automatically invoke `deno`, `bun` or `node` as required.
 Alternatively, to only build the JavaScript files you can run the `bundle` script manually:
 
 ```bash
-# Deno:
-deno install --frozen
-deno task bundle
-
-# Bun:
-bun install
-bun --bun run bundle
-
-# Node:
-npm install
-npm run bundle
+python pnpm.py install --frozen-lockfile
+python pnpm.py run bundle
 ```
+
+This will automatically select an available runtime and invoke `pnpm` to build it.
 
 ### Tests
 
@@ -45,15 +42,15 @@ First, make sure the project's dependencies are installed and download the playe
 
 ```bash
 # Deno:
-deno install --frozen
+python pnpm.py install --frozen-lockfile
 deno run src/yt/solver/test/download.ts
 
 # Bun:
-bun install
+python pnpm.py install --frozen-lockfile
 bun --bun run src/yt/solver/test/download.ts
 
 # Node 22.6+:
-npm install
+python pnpm.py install --frozen-lockfile
 node --experimental-strip-types src/yt/solver/test/download.ts
 ```
 

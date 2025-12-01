@@ -42,9 +42,6 @@ importers:
       globals:
         specifier: 16.4.0
         version: 16.4.0
-      pnpm:
-        specifier: 10.24.0
-        version: 10.24.0
       prettier:
         specifier: 3.6.2
         version: 3.6.2
@@ -754,11 +751,6 @@ packages:
   pirates@4.0.7:
     resolution: {integrity: sha512-TfySrs/5nm8fQJDcBDuUng3VOUKsd7S+zqvbOTiGXHfxX4wK31ard+hoNuvkicM/2YFzlpDgABOevKSsB4G/FA==}
     engines: {node: '>= 6'}
-
-  pnpm@10.24.0:
-    resolution: {integrity: sha512-Af+K5xtEGZA7ZcYPstydNM+LtuBtA73hEu8496NNaQTEJLpmvqXNzxKJAjC/OflYBHMUDtnJRv7zKLblI4o0Wg==}
-    engines: {node: '>=18.12'}
-    hasBin: true
 
   prelude-ls@1.2.1:
     resolution: {integrity: sha512-vkcDPrRZo1QZLbn5RLGPpg/WmIQ65qoWWhcGKf/b5eplkkarX0m9z8ppCat4mlOqUsWpyNuYgO3VRyrYHSzX5g==}
@@ -1591,8 +1583,6 @@ snapshots:
   picomatch@4.0.3: {}
 
   pirates@4.0.7: {}
-
-  pnpm@10.24.0: {}
 
   prelude-ls@1.2.1: {}
 

@@ -40,8 +40,7 @@ def build_pnpm():
     with package_json.open("rb") as file:
         data = json.load(file)
 
-    pnpm_version = data["devDependencies"]["pnpm"]
-    package = f"pnpm@{pnpm_version}"
+    package_manager = data["packageManager"]
     env = os.environ.copy()
 
     if deno := shutil.which("deno"):
@@ -52,16 +51,16 @@ def build_pnpm():
             "run",
             "--allow-all",
             "--node-modules-dir=none",
-            f"npm:{package}",
+            f"npm:{package_manager}",
         ]
 
     elif bun := shutil.which("bun"):
         name = "bun"
-        cmd = [bun, "x", package]
+        cmd = [bun, "x", package_manager]
 
     elif npm := shutil.which("npm"):
         name = "npm (node)"
-        cmd = [npm, "exec", "--", package]
+        cmd = [npm, "exec", "--", package_manager]
 
     else:
         return None, None
