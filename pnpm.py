@@ -56,7 +56,7 @@ def build_pnpm():
 
     elif bun := shutil.which("bun"):
         name = "bun"
-        cmd = [bun, "x", package_manager]
+        cmd = [bun, "--bun", "x", package_manager]
 
     elif npm := shutil.which("npm"):
         name = "npm (node)"
@@ -76,7 +76,7 @@ if __name__ == "__main__":
 
     _, pnpm = build_pnpm()
     if pnpm is None:
-        print("ERROR: No suitable js runtime", file=sys.stderr)
+        print("ERROR: No suitable JavaScript runtime found", file=sys.stderr)
         sys.exit(128)
 
     try:

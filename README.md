@@ -12,11 +12,11 @@ pip install -U yt-dlp-ejs
 
 ## Development
 
-The project uses [`pnpm`](<>) as a package manager with
+The project uses [`pnpm`](<https://github.com/pnpm/pnpm>) as a package manager with
 dependencies pinned through `pnpm-lock.yaml`.
 
-If you only have python and a JS runtime you may instead invoke `./pnpm.py`,
-which will transparently invoke the supported JS runtimes to call `pnpm`.
+If you only have Python and a JS runtime you may instead invoke `./pnpm.py`,
+which will transparently invoke one of the supported JS runtimes to call `pnpm`.
 
 This pure JavaScript approach should be runtime agnostic.
 If you notice differences between different runtimes' builds
@@ -71,6 +71,6 @@ node --test
 
 This code is licensed under [Unlicense](<https://unlicense.org/>).
 
-An exception to this are the prebuilt wheels, which contain both
+An exception to this is the prebuilt wheels, which contain both
 [`meriyah`](<https://github.com/meriyah/meriyah>) and [`astring`](<https://github.com/davidbonnet/astring>),
 licensed under [`ISC`](<https://github.com/meriyah/meriyah?tab=ISC-1-ov-file>) and [`MIT`](<https://github.com/davidbonnet/astring?tab=MIT-1-ov-file>), respectively.
