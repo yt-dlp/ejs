@@ -25,5 +25,6 @@
     "rollup": "4.52.5",
     "rollup-plugin-license": "3.6.0",
     "typescript-eslint": "8.46.2"
-  }
+  },
+  "packageManager": "pnpm@10.24.0"
 }

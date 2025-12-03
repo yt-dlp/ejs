@@ -46,12 +46,12 @@ jobs:
         uses: denoland/setup-deno@v2
         with:
           deno-version: v2.x
-      - name: Install Deno requirements
+      - name: Install requirements
         run: |
-          deno install
+          python pnpm.py install --frozen-lockfile
       - name: Run Prettier check
         run: |
-          deno task fmt:check
+          python pnpm.py fmt:check
 
   eslint:
     name: ESLint check
@@ -62,12 +62,12 @@ jobs:
         uses: denoland/setup-deno@v2
         with:
           deno-version: v2.x
-      - name: Install Deno requirements
+      - name: Install requirements
         run: |
-          deno install
+          python pnpm.py install --frozen-lockfile
       - name: Run ESLint check
         run: |
-          deno task lint
+          python pnpm.py lint
 
   python_tests:
     name: Python tests
@@ -117,12 +117,12 @@ jobs:
         uses: denoland/setup-deno@v2
         with:
           deno-version: v2.x
-      - name: Install Deno requirements
+      - name: Install requirements
         run: |
-          deno install
+          python pnpm.py install --frozen-lockfile
       - name: Build control bundle
         run: |
-          deno task bundle
+          python pnpm.py run bundle
       - name: Generate bundle hashes
         run: |
           pushd dist
@@ -189,7 +189,7 @@ jobs:
           grep -q 'yt_dlp_ejs/yt/solver/lib\.min\.js' .wheel_contents
       - name: Install Deno requirements
         run: |
-          deno install
+          python pnpm.py install --frozen-lockfile
       - name: Bundle with Deno
         run: |
           deno task bundle
@@ -215,7 +215,7 @@ jobs:
           deno-version: "2.0.0"  # minimum supported version
       - name: Install Deno requirements
         run: |
-          deno install
+          python pnpm.py install --frozen-lockfile
       - name: Download player JS artifact
         uses: actions/download-artifact@v5
         with:
@@ -256,7 +256,7 @@ jobs:
           grep -q 'yt_dlp_ejs/yt/solver/lib\.min\.js' .wheel_contents
       - name: Install Bun requirements
         run: |
-          bun install
+          python pnpm.py install --frozen-lockfile
       - name: Bundle with Bun
         run: |
           bun --bun run bundle
@@ -282,7 +282,7 @@ jobs:
           bun-version: "1.2.11"  # XXX: We support 1.0.31, but test suite requires 1.2.11+
       - name: Install Bun requirements
         run: |
-          bun install
+          python pnpm.py install --frozen-lockfile
       - name: Download player JS artifact
         uses: actions/download-artifact@v5
         with:
@@ -321,7 +321,7 @@ jobs:
           grep -q 'yt_dlp_ejs/yt/solver/lib\.min\.js' .wheel_contents
       - name: Install Node requirements
         run: |
-          npm install
+          python pnpm.py install --frozen-lockfile
       - name: Bundle with Node
         run: |
           npm run bundle
@@ -347,7 +347,7 @@ jobs:
           node-version: "22.18"  # XXX: We support 20.0, but test suite requires 22.18+
       - name: Install Node requirements
         run: |
-          npm install
+          python pnpm.py install --frozen-lockfile
       - name: Download player JS artifact
         uses: actions/download-artifact@v5
         with:
