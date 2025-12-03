@@ -117,12 +117,12 @@ jobs:
         uses: denoland/setup-deno@v2
         with:
           deno-version: v2.x
-      - name: Install Deno requirements
+      - name: Install requirements
         run: |
           python pnpm.py install --frozen-lockfile
       - name: Build control bundle
         run: |
-          deno task bundle
+          python pnpm.py run bundle
       - name: Generate bundle hashes
         run: |
           pushd dist
