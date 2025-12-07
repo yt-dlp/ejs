@@ -113,10 +113,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v5
-      - name: Install Deno v2.x (latest)
-        uses: denoland/setup-deno@v2
+      - uses: pnpm/action-setup@v4
         with:
-          deno-version: v2.x
+          version: 10
       - name: Install requirements
         run: |
           python pnpm.py install --frozen-lockfile

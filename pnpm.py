@@ -43,7 +43,11 @@ def build_pnpm():
     package_manager = data["packageManager"]
     env = os.environ.copy()
 
-    if deno := shutil.which("deno"):
+    if pnpm := shutil.which("pnpm"):
+        name = "pnpm binary"
+        cmd = [pnpm]
+
+    elif deno := shutil.which("deno"):
         name = "deno"
         env["DENO_NO_UPDATE_CHECK"] = "1"
         cmd = [
@@ -65,10 +69,10 @@ def build_pnpm():
     else:
         return None, None
 
-    def pnpm(args: list[str]):
+    def run_pnpm(args: list[str]):
         return subprocess.check_call([*cmd, *args], env=env)
 
-    return name, pnpm
+    return name, run_pnpm
 
 
 if __name__ == "__main__":
