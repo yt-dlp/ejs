@@ -113,9 +113,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v5
-      - uses: pnpm/action-setup@v4
-        with:
-          version: 10
+      - uses: pnpm/action-setup@v4  # respects packageManager version in package.json
       - name: Install requirements
         run: |
           python pnpm.py install --frozen-lockfile
