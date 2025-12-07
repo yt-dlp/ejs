@@ -113,10 +113,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v5
-      - name: Install Deno v2.x (latest)
-        uses: denoland/setup-deno@v2
-        with:
-          deno-version: v2.x
+      - uses: pnpm/action-setup@v4  # respects packageManager version in package.json
       - name: Install requirements
         run: |
           python pnpm.py install --frozen-lockfile
@@ -143,6 +140,10 @@ jobs:
           path: |
             src/yt/solver/test/players
           key: test-player-js-${{ hashFiles('src/yt/solver/test/tests.ts') }}
+      - name: Install Deno v2.x (latest)
+        uses: denoland/setup-deno@v2
+        with:
+          deno-version: v2.x
       - name: Download player JS files
         run: |
           deno run \
