@@ -23,7 +23,7 @@ jobs:
     name: Ruff format check
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v5
+    - uses: actions/checkout@v6
     - uses: astral-sh/ruff-action@v3
       with:
         args: "check --output-format github"
@@ -32,7 +32,7 @@ jobs:
     name: Ruff linting check
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v5
+    - uses: actions/checkout@v6
     - uses: astral-sh/ruff-action@v3
       with:
         args: "format --check --diff"
@@ -41,7 +41,7 @@ jobs:
     name: Prettier check
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
       - name: Install Deno v2.x (latest)
         uses: denoland/setup-deno@v2
         with:
@@ -57,7 +57,7 @@ jobs:
     name: ESLint check
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
       - name: Install Deno v2.x (latest)
         uses: denoland/setup-deno@v2
         with:
@@ -78,7 +78,7 @@ jobs:
         runner: [ubuntu-latest, windows-latest]
         python-version: ['3.10', '3.11', '3.12', '3.13', '3.14', pypy-3.11]
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
         with:
           fetch-depth: 0
       - name: Install Deno v2.x (latest)
@@ -112,7 +112,7 @@ jobs:
     name: Prepare JS runtime tests
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
       - uses: pnpm/action-setup@v4  # respects packageManager version in package.json
       - name: Install requirements
         run: |
@@ -166,7 +166,7 @@ jobs:
     needs: [prepare]
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
         with:
           fetch-depth: 0
       - name: Install Deno
@@ -209,7 +209,7 @@ jobs:
     needs: [prepare]
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
       - name: Install Deno
         uses: denoland/setup-deno@v2
         with:
@@ -233,7 +233,7 @@ jobs:
     needs: [prepare]
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
         with:
           fetch-depth: 0
       - name: Install Bun
@@ -276,7 +276,7 @@ jobs:
     needs: [prepare]
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
       - name: Install Bun
         uses: oven-sh/setup-bun@v2
         with:
@@ -298,7 +298,7 @@ jobs:
     needs: [prepare]
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
         with:
           fetch-depth: 0
       - name: Install Node
@@ -341,7 +341,7 @@ jobs:
     needs: [prepare]
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
       - name: Install Node
         uses: actions/setup-node@v6
         with:
