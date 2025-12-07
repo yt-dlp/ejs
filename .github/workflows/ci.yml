@@ -140,6 +140,10 @@ jobs:
           path: |
             src/yt/solver/test/players
           key: test-player-js-${{ hashFiles('src/yt/solver/test/tests.ts') }}
+      - name: Install Deno v2.x (latest)
+        uses: denoland/setup-deno@v2
+        with:
+          deno-version: v2.x
       - name: Download player JS files
         run: |
           deno run \
