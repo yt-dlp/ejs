@@ -67,6 +67,24 @@ bun test
 node --test
 ```
 
+## Upgrading packages
+
+When upgrading packages in package.json, all lockfiles must be updated simultaneously.
+To do this, run the follosing commands:
+```shell
+# Upgrade packages automatically (can also manually adjust versions)
+pnpm upgrade --latest
+rm -rf node_modules
+# Generate base `package-lock.json`
+npm install
+# Migrate to other package managers
+pnpm import
+bun pm migrate --force
+deno install
+# Ensure that `deno.json` is the same as `package-lock.json`
+python check.py
+```
+
 ## Licensing
 
 This code is licensed under [Unlicense](<https://unlicense.org/>).
