@@ -5,11 +5,11 @@ import json
 import pathlib
 import sys
 
-ADDITIONAL_PACKAGES_NODE = {
-    "undici-types@7.10.0": "sha512-t5Fy/nfn+14LuOc2KNYg75vZqClpAiqscVvMygNnlsHBFpSXdJaYtXMcdNLpl/Qvc3P2cB3s6lOV51nqsFq4ag==",
-    "@types/node@24.2.0": "sha512-3xyG3pMCq3oYCNg7/ZP+E1ooTaGB4cG8JWRsqqOYQdbWNY4zbaV0Ennrd7stjiJEFZCaybcIgpTjJWHRfBSIDw==",
+ADDITIONAL_PACKAGES_NODE = {}
+ADDITIONAL_PACKAGES_DENO = {
+    "@types/node@22.5.4": "sha512-FDuKUJQm/ju9fT/SeX/6+gBzoPzlVCzfzmGkwKvRHQVxi4BntVbyIwf6a4Xn62mrvndLiml6z/UBXIdEVjQLXg==",
+    "undici-types@6.19.8": "sha512-ve2KP6f/JnbPBFyobGHuerC9g1FYGn/F8n1LWTwNxCEzd6IfqTwUQcNXgEtmmQ6DlRrC1hrSrBnCZPokRrDHjw==",
 }
-ADDITIONAL_PACKAGES_DENO = {}
 BASE_PATH = pathlib.Path(__file__).parent
 
 
@@ -19,8 +19,8 @@ def parse_deno() -> dict[str, str]:
         lockfile = json.load(file)
 
     v = lockfile["version"]
-    if v != "5":
-        msg = f"Unsupported lockfile version: {v} (expected 5)"
+    if v not in ("4", "5"):
+        msg = f"Unsupported lockfile version: {v} (expected 4/5)"
         raise ValueError(msg)
 
     integrities = {}
