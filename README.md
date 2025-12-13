@@ -14,8 +14,8 @@ pip install -U yt-dlp-ejs
 
 The project provides lockfiles for every supported package manager.
 
-If you only have Python and a JS runtime you may instead invoke `./hatch_build.py`,
-which will transparently invoke one of the supported JS runtimes and run the build with it.
+If you only have Python and a JS runtime, then you may instead run `./hatch_build.py`.
+This will transparently invoke one of the supported JS runtimes for the build.
 
 If you notice differences between different runtimes' builds
 please open an issue [here](<https://github.com/yt-dlp/ejs/issues/new>).
@@ -67,7 +67,8 @@ node --test
 ## Upgrading packages
 
 When upgrading packages in package.json, all lockfiles must be updated simultaneously.
-To do this, run the follosing commands:
+To do this, run the following commands:
+
 ```bash
 # Upgrade packages automatically (or manually adjust versions)
 pnpm upgrade --latest
@@ -81,8 +82,11 @@ pnpm import
 bun pm migrate --force
 
 # Make sure to use a deno with lockfile v4 (<2.3)
-deno install
-# Ensure that `deno.json` is the same as `package-lock.json`
+deno install --lockfile-only
+
+# Ensure that `deno.json` is the same as `package-lock.json`.
+# Note: you may need to manually update the `ADDITIONAL_PACKAGES_NODE`
+# and/or `ADDITIONAL_PACKAGES_DENO` variables in `./check.py`.
 python check.py
 ```
 
