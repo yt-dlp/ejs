@@ -15,7 +15,8 @@ BASE_PATH = pathlib.Path(__file__).parent
 
 def parse_deno() -> dict[str, str]:
     path = BASE_PATH / "deno.lock"
-    with path.open("rb") as file:
+    # compat: py<3.15: Provide explicit encoding
+    with path.open("rb", encoding="utf-8") as file:
         lockfile = json.load(file)
 
     v = lockfile["version"]
@@ -38,7 +39,8 @@ def parse_deno() -> dict[str, str]:
 
 def parse_node() -> dict[str, str]:
     path = BASE_PATH / "package-lock.json"
-    with path.open("rb") as file:
+    # compat: py<3.15: Provide explicit encoding
+    with path.open("rb", encoding="utf-8") as file:
         lockfile = json.load(file)
 
     v = lockfile["lockfileVersion"]
