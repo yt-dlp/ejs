@@ -78,8 +78,8 @@ def main():
         print(f"ERROR: Could not read npm lockfile: {error}", file=sys.stderr)
         sys.exit(1)
 
-    packages_deno.update({v: k for k, v in ADDITIONAL_PACKAGES_DENO.items()})
-    packages_node.update({v: k for k, v in ADDITIONAL_PACKAGES_NODE.items()})
+    packages_deno.update({v: k for k, v in ADDITIONAL_PACKAGES_NODE.items()})
+    packages_node.update({v: k for k, v in ADDITIONAL_PACKAGES_DENO.items()})
     differences = packages_deno.keys() ^ packages_node.keys()
 
     if diffs_deno := differences.intersection(packages_deno):
