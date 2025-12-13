@@ -14,7 +14,7 @@ pip install -U yt-dlp-ejs
 
 The project provides lockfiles for every supported package manager.
 
-If you only have Python and a JS runtime you may instead invoke `./build.py`,
+If you only have Python and a JS runtime you may instead invoke `./hatch_build.py`,
 which will transparently invoke one of the supported JS runtimes and run the build with it.
 
 If you notice differences between different runtimes' builds
@@ -28,7 +28,7 @@ The build hook will automatically invoke `deno`, `bun` or `node` as required.
 Alternatively, to only build the JavaScript files you can run the `bundle` script manually:
 
 ```bash
-python build.py
+python hatch_build.py
 ```
 
 This will automatically select an available runtime and build using it.
