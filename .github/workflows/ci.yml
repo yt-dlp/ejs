@@ -174,7 +174,8 @@ jobs:
           version: 10
       - uses: actions/setup-python@v6
         with:
-          python-version: "3.10"  # minimum supported version
+          # minimum supported version
+          python-version: "3.10"
       - name: Install Python requirements
         run: |
           python -m pip install -U build
@@ -210,7 +211,8 @@ jobs:
       - uses: actions/checkout@v6
       - uses: actions/setup-python@v6
         with:
-          python-version: "3.10"  # minimum supported version
+          # minimum supported version
+          python-version: "3.10"
       - name: Verify lockfile
         run: |
           python ./check.py
@@ -226,10 +228,12 @@ jobs:
       - name: Install Deno
         uses: denoland/setup-deno@v2
         with:
-          deno-version: "2.0.0"  # minimum supported version
+          # minimum supported version
+          deno-version: "2.0.0"
       - uses: actions/setup-python@v6
         with:
-          python-version: "3.10"  # minimum supported version
+          # minimum supported version
+          python-version: "3.10"
       - name: Install Python requirements
         run: |
           python -m pip install -U build
@@ -267,7 +271,8 @@ jobs:
       - name: Install Deno
         uses: denoland/setup-deno@v2
         with:
-          deno-version: "2.0.0"  # minimum supported version
+          # minimum supported version
+          deno-version: "2.0.0"
       - name: Install Deno requirements
         run: |
           deno install --frozen
@@ -293,10 +298,12 @@ jobs:
       - name: Install Bun
         uses: oven-sh/setup-bun@v2
         with:
-          bun-version: "1.0.31"  # minimum supported version
+          # minimum supported version
+          bun-version: "1.0.31"
       - uses: actions/setup-python@v6
         with:
-          python-version: "3.10"  # minimum supported version
+          # minimum supported version
+          python-version: "3.10"
       - name: Install Python requirements
         run: |
           python -m pip install -U build
@@ -334,7 +341,8 @@ jobs:
       - name: Install Bun
         uses: oven-sh/setup-bun@v2
         with:
-          bun-version: "1.2.11"  # XXX: We support 1.0.31, but test suite requires 1.2.11+
+          # XXX: We support 1.0.31, but test suite requires 1.2.11+
+          bun-version: "1.2.11"
       - name: Install Bun requirements
         run: |
           bun install --frozen-lockfile
@@ -358,10 +366,12 @@ jobs:
       - name: Install Node
         uses: actions/setup-node@v6
         with:
-          node-version: "20.0"  # minimum supported version
+          # minimum supported version
+          node-version: "20.0"
       - uses: actions/setup-python@v6
         with:
-          python-version: "3.10"  # minimum supported version
+          # minimum supported version
+          python-version: "3.10"
       - name: Install Python requirements
         run: |
           python -m pip install -U build
@@ -399,7 +409,8 @@ jobs:
       - name: Install Node
         uses: actions/setup-node@v6
         with:
-          node-version: "22.18"  # XXX: We support 20.0, but test suite requires 22.18+
+          # XXX: We support 20.0, but test suite requires 22.18+
+          node-version: "22.18"
       - name: Install Node requirements
         run: |
           npm ci
