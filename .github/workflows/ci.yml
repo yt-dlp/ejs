@@ -194,7 +194,7 @@ jobs:
         run: |
           pnpm run bundle
       - name: Download bundle hashes
-        uses: actions/download-artifact@v5
+        uses: actions/download-artifact@v7
         with:
           path: dist
           name: bundle-hashes
@@ -249,7 +249,7 @@ jobs:
         run: |
           deno task bundle
       - name: Download bundle hashes
-        uses: actions/download-artifact@v5
+        uses: actions/download-artifact@v7
         with:
           path: dist
           name: bundle-hashes
@@ -272,7 +272,7 @@ jobs:
         run: |
           deno install --frozen
       - name: Download player JS artifact
-        uses: actions/download-artifact@v5
+        uses: actions/download-artifact@v7
         with:
           path: src/yt/solver/test/players
           name: player-js
@@ -316,7 +316,7 @@ jobs:
         run: |
           bun --bun run bundle
       - name: Download bundle hashes
-        uses: actions/download-artifact@v5
+        uses: actions/download-artifact@v7
         with:
           path: dist
           name: bundle-hashes
@@ -339,7 +339,7 @@ jobs:
         run: |
           bun install --frozen-lockfile
       - name: Download player JS artifact
-        uses: actions/download-artifact@v5
+        uses: actions/download-artifact@v7
         with:
           path: src/yt/solver/test/players
           name: player-js
@@ -381,7 +381,7 @@ jobs:
         run: |
           npm run bundle
       - name: Download bundle hashes
-        uses: actions/download-artifact@v5
+        uses: actions/download-artifact@v7
         with:
           path: dist
           name: bundle-hashes
@@ -404,7 +404,7 @@ jobs:
         run: |
           npm ci
       - name: Download player JS artifact
-        uses: actions/download-artifact@v5
+        uses: actions/download-artifact@v7
         with:
           path: src/yt/solver/test/players
           name: player-js
