@@ -129,7 +129,7 @@ jobs:
           sha256sum -- yt.solver.*.js | tee SHA2-256SUMS
           popd
       - name: Upload bundle hashes
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: bundle-hashes
           path: |
@@ -153,7 +153,7 @@ jobs:
             --allow-sys=uid \
             src/yt/solver/test/download.ts
       - name: Upload player JS artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: player-js
           path: |

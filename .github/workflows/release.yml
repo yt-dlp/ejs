@@ -28,7 +28,7 @@ jobs:
         run: |
           python -m build
       - name: Upload Python artifacts
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: artifacts-py
           path: |
@@ -40,7 +40,7 @@ jobs:
           deno install --frozen
           deno task bundle
       - name: Upload JavaScript artifacts
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: artifacts-js
           path: |
