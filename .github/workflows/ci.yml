@@ -136,7 +136,7 @@ jobs:
             dist/SHA2-256SUMS
           compression-level: 0
       - name: Cache player JS files
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         env:
           SEGMENT_DOWNLOAD_TIMEOUT_MINS: 1
         with:
