@@ -11,8 +11,7 @@ on:
       - 'README.md'
       - 'LICENSE'
 
-permissions:
-  contents: read
+permissions: {}
 
 concurrency:
   group: ci-${{ github.event.pull_request.number || github.ref }}
@@ -21,27 +20,39 @@ concurrency:
 jobs:
   ruff-format:
     name: Ruff format check
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v6
-    - uses: astral-sh/ruff-action@v3
-      with:
-        args: "check --output-format github"
-
-  ruff-lint:
-    name: Ruff linting check
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v6
-    - uses: astral-sh/ruff-action@v3
-      with:
-        args: "format --check --diff"
-
-  prettier:
-    name: Prettier check
+    permissions:
+      contents: read
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+      - uses: astral-sh/ruff-action@v3
+        with:
+          args: "check --output-format github"
+
+  ruff-lint:
+    name: Ruff linting check
+    permissions:
+      contents: read
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+      - uses: astral-sh/ruff-action@v3
+        with:
+          args: "format --check --diff"
+
+  prettier:
+    name: Prettier check
+    permissions:
+      contents: read
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
       - name: Install Deno v2.x (latest)
         uses: denoland/setup-deno@v2
         with:
@@ -55,9 +66,13 @@ jobs:
 
   eslint:
     name: ESLint check
+    permissions:
+      contents: read
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
       - name: Install Deno v2.x (latest)
         uses: denoland/setup-deno@v2
         with:
@@ -71,6 +86,8 @@ jobs:
 
   python_tests:
     name: Python tests
+    permissions:
+      contents: read
     runs-on: ${{ matrix.runner }}
     strategy:
       fail-fast: false
@@ -80,7 +97,9 @@ jobs:
     steps:
       - uses: actions/checkout@v6
         with:
+          # required for hatch-vcs versioning
           fetch-depth: 0
+          persist-credentials: false
       - name: Install Deno v2.x (latest)
         uses: denoland/setup-deno@v2
         with:
@@ -110,9 +129,13 @@ jobs:
 
   prepare:
     name: Prepare JS runtime tests
+    permissions:
+      contents: read
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
       - name: Install Deno v2.x (latest)
         uses: denoland/setup-deno@v2
         with:
@@ -163,11 +186,15 @@ jobs:
   pnpm_build:
     name: Test pnpm build
     needs: [prepare]
+    permissions:
+      contents: read
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
         with:
+          # required for hatch-vcs versioning
           fetch-depth: 0
+          persist-credentials: false
       - name: Install pnpm
         uses: pnpm/action-setup@v4
         with:
@@ -206,9 +233,13 @@ jobs:
 
   deno_lock_check:
     name: Test Deno lockfile
+    permissions:
+      contents: read
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
       - uses: actions/setup-python@v6
         with:
           # minimum supported version
@@ -220,11 +251,15 @@ jobs:
   deno_build:
     name: Test Deno build
     needs: [prepare]
+    permissions:
+      contents: read
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
         with:
+          # required for hatch-vcs versioning
           fetch-depth: 0
+          persist-credentials: false
       - name: Install Deno
         uses: denoland/setup-deno@v2
         with:
@@ -265,9 +300,13 @@ jobs:
   deno_tests:
     name: Run Deno tests
     needs: [prepare]
+    permissions:
+      contents: read
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
       - name: Install Deno
         uses: denoland/setup-deno@v2
         with:
@@ -290,11 +329,15 @@ jobs:
   bun_build:
     name: Test Bun build
     needs: [prepare]
+    permissions:
+      contents: read
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
         with:
+          # required for hatch-vcs versioning
           fetch-depth: 0
+          persist-credentials: false
       - name: Install Bun
         uses: oven-sh/setup-bun@v2
         with:
@@ -335,9 +378,13 @@ jobs:
   bun_tests:
     name: Run Bun tests
     needs: [prepare]
+    permissions:
+      contents: read
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
       - name: Install Bun
         uses: oven-sh/setup-bun@v2
         with:
@@ -358,11 +405,15 @@ jobs:
   node_build:
     name: Test Node build
     needs: [prepare]
+    permissions:
+      contents: read
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
         with:
+          # required for hatch-vcs versioning
           fetch-depth: 0
+          persist-credentials: false
       - name: Install Node
         uses: actions/setup-node@v6
         with:
@@ -403,9 +454,13 @@ jobs:
   node_tests:
     name: Run Node tests
     needs: [prepare]
+    permissions:
+      contents: read
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
       - name: Install Node
         uses: actions/setup-node@v6
         with:

@@ -4,17 +4,20 @@ on:
     tags:
       - "*"
 
-permissions:
-  contents: read
+permissions: {}
 
 jobs:
   build:
     name: Build artifacts
+    permissions:
+      contents: read
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
         with:
+          # required for hatch-vcs versioning
           fetch-depth: 0
+          persist-credentials: false
       - uses: denoland/setup-deno@v2
         with:
           deno-version: v2.x
@@ -51,10 +54,10 @@ jobs:
     name: Publish to PyPI
     needs: [build]
     if: github.repository == 'yt-dlp/ejs'
-    runs-on: ubuntu-latest
     permissions:
-      contents: read
-      id-token: write  # required for PyPI trusted publishing
+      # required for PyPI trusted publishing
+      id-token: write
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/download-artifact@v7
         with:
@@ -69,13 +72,13 @@ jobs:
     name: Create GitHub release
     needs: [build, publish_pypi]
     if: always() && !failure() && !cancelled()
-    runs-on: ubuntu-latest
     permissions:
       contents: write
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
         with:
-          fetch-depth: 0
+          persist-credentials: false
       - uses: actions/download-artifact@v7
         with:
           path: dist
