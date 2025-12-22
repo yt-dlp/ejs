@@ -167,6 +167,7 @@ jobs:
             src/yt/solver/test/players
           key: test-player-js-${{ hashFiles('src/yt/solver/test/tests.ts') }}
       - name: Download player JS files
+        timeout-minutes: 15
         run: |
           deno run \
             --no-prompt \
@@ -343,6 +344,7 @@ jobs:
         with:
           # minimum supported version
           bun-version: "1.0.31"
+          no-cache: true
       - uses: actions/setup-python@v6
         with:
           # minimum supported version
@@ -390,6 +392,7 @@ jobs:
         with:
           # XXX: We support 1.0.31, but test suite requires 1.2.11+
           bun-version: "1.2.11"
+          no-cache: true
       - name: Install Bun requirements
         run: |
           bun install --frozen-lockfile
