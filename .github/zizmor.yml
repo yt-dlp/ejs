@@ -1,0 +1,8 @@
+rules:
+  concurrency-limits:
+    ignore:
+      - release.yml  # Can only be dispatched by maintainers
+  unpinned-uses:
+    config:
+      policies:
+        "*": hash-pin
