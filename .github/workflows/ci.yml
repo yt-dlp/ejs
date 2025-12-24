@@ -531,6 +531,7 @@ jobs:
           node --test
 
   all_passed:
+    name: all_passed
     needs:
       - actionlint
       - zizmor
