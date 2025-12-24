@@ -15,8 +15,7 @@ jobs:
     steps:
       - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8  # v6.0.1
         with:
-          # required for hatch-vcs versioning
-          fetch-depth: 0
+          fetch-depth: 0  # Needed for hatch-vcs versioning
           persist-credentials: false
       - uses: denoland/setup-deno@e95548e56dfa95d4e1a28d6f422fafe75c4c26fb  # v2.0.3
         with:
@@ -56,8 +55,7 @@ jobs:
     needs: [build]
     if: github.repository == 'yt-dlp/ejs'
     permissions:
-      # required for PyPI trusted publishing
-      id-token: write
+      id-token: write  # Needed for PyPI trusted publishing
     runs-on: ubuntu-latest
     steps:
       - uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131  # v7.0.0
@@ -74,7 +72,7 @@ jobs:
     needs: [build, publish_pypi]
     if: always() && !failure() && !cancelled()
     permissions:
-      contents: write
+      contents: write  # Needed by gh to publish release to Github
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8  # v6.0.1
