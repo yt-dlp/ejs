@@ -196,6 +196,7 @@ jobs:
         run: |
           deno task bundle
       - name: Generate bundle hashes
+        shell: bash
         run: |
           pushd dist
           sha256sum -- yt.solver.*.js | tee SHA2-256SUMS
@@ -260,6 +261,7 @@ jobs:
         run: |
           python -m build
       - name: Verify artifact contents
+        shell: bash
         run: |
           tar -tvzf dist/yt_dlp_ejs-*.tar.gz
           unzip -l dist/yt_dlp_ejs-*.whl | tee .wheel_contents
@@ -326,6 +328,7 @@ jobs:
         run: |
           python -m build
       - name: Verify artifact contents
+        shell: bash
         run: |
           tar -tvzf dist/yt_dlp_ejs-*.tar.gz
           unzip -l dist/yt_dlp_ejs-*.whl | tee .wheel_contents
@@ -405,6 +408,7 @@ jobs:
         run: |
           python -m build
       - name: Verify artifact contents
+        shell: bash
         run: |
           tar -tvzf dist/yt_dlp_ejs-*.tar.gz
           unzip -l dist/yt_dlp_ejs-*.whl | tee .wheel_contents
@@ -482,6 +486,7 @@ jobs:
         run: |
           python -m build
       - name: Verify artifact contents
+        shell: bash
         run: |
           tar -tvzf dist/yt_dlp_ejs-*.tar.gz
           unzip -l dist/yt_dlp_ejs-*.whl | tee .wheel_contents
