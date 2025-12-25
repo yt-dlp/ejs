@@ -1,7 +1,7 @@
 rules:
   concurrency-limits:
     ignore:
-      - release.yml  # Can only be dispatched by maintainers
+      - release.yml  # Can only be triggered by a tag pushed by a maintainer
   unpinned-uses:
     config:
       policies:
