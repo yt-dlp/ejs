@@ -1,0 +1,8 @@
+rules:
+  concurrency-limits:
+    ignore:
+      - release.yml  # Can only be triggered by a tag pushed by a maintainer
+  unpinned-uses:
+    config:
+      policies:
+        "*": hash-pin

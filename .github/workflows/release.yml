@@ -4,21 +4,24 @@ on:
     tags:
       - "*"
 
-permissions:
-  contents: read
+permissions: {}
 
 jobs:
   build:
     name: Build artifacts
+    permissions:
+      contents: read
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8  # v6.0.1
         with:
-          fetch-depth: 0
-      - uses: denoland/setup-deno@v2
+          fetch-depth: 0  # Needed for hatch-vcs versioning
+          persist-credentials: false
+      - uses: denoland/setup-deno@e95548e56dfa95d4e1a28d6f422fafe75c4c26fb  # v2.0.3
         with:
-          deno-version: v2.x
-      - uses: actions/setup-python@v6
+          deno-version: 3fbb1daddbc9333cddf0d8c0735811717dd70f7a  # v2.6.3
+          cache: false
+      - uses: actions/setup-python@83679a892e2d95755f2dac6acb0bfd1e9ac5d548  # v6.1.0
         with:
           python-version: "3.10"
       - name: Install Python requirements
@@ -28,7 +31,7 @@ jobs:
         run: |
           python -m build
       - name: Upload Python artifacts
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f  # v6.0.0
         with:
           name: artifacts-py
           path: |
@@ -40,7 +43,7 @@ jobs:
           deno install --frozen
           deno task bundle
       - name: Upload JavaScript artifacts
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f  # v6.0.0
         with:
           name: artifacts-js
           path: |
@@ -51,17 +54,16 @@ jobs:
     name: Publish to PyPI
     needs: [build]
     if: github.repository == 'yt-dlp/ejs'
-    runs-on: ubuntu-latest
     permissions:
-      contents: read
-      id-token: write  # required for PyPI trusted publishing
+      id-token: write  # Needed for PyPI trusted publishing
+    runs-on: ubuntu-latest
     steps:
-      - uses: actions/download-artifact@v7
+      - uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131  # v7.0.0
         with:
           path: dist
           name: artifacts-py
       - name: Publish to PyPI
-        uses: pypa/gh-action-pypi-publish@release/v1
+        uses: pypa/gh-action-pypi-publish@ed0c53931b1dc9bd32cbe73a98c7f6766f8a527e  # v1.13.0
         with:
           verbose: true
 
@@ -69,14 +71,14 @@ jobs:
     name: Create GitHub release
     needs: [build, publish_pypi]
     if: always() && !failure() && !cancelled()
-    runs-on: ubuntu-latest
     permissions:
-      contents: write
+      contents: write  # Needed by gh to publish release to Github
+    runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8  # v6.0.1
         with:
-          fetch-depth: 0
-      - uses: actions/download-artifact@v7
+          persist-credentials: false
+      - uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131  # v7.0.0
         with:
           path: dist
           pattern: artifacts-*
