@@ -2,6 +2,34 @@ import { type ESTree } from "meriyah";
 import { matchesStructure } from "../../utils.ts";
 import { type DeepPartial } from "../../types.ts";
 
+const nsigExpression: DeepPartial<ESTree.Statement> = {
+  type: "VariableDeclaration",
+  kind: "var",
+  declarations: [
+    {
+      type: "VariableDeclarator",
+      init: {
+        type: "CallExpression",
+        callee: {
+          type: "Identifier",
+        },
+        arguments: [
+          {
+            type: "Literal",
+          },
+          {
+            type: "CallExpression",
+            callee: {
+              type: "Identifier",
+              name: "decodeURIComponent",
+            },
+          },
+        ],
+      },
+    },
+  ],
+};
+
 const logicalExpression: DeepPartial<ESTree.ExpressionStatement> = {
   type: "ExpressionStatement",
   expression: {
@@ -106,9 +134,11 @@ export function extract(
     return null;
   }
   let block: ESTree.BlockStatement | undefined | null;
-  if (node.type === "ExpressionStatement" &&
+  if (
+    node.type === "ExpressionStatement" &&
     node.expression.type === "AssignmentExpression" &&
-    node.expression.right.type === "FunctionExpression") {
+    node.expression.right.type === "FunctionExpression"
+  ) {
     block = node.expression.right.body;
   } else if (node.type === "VariableDeclaration") {
     for (const decl of node.declarations) {
@@ -127,20 +157,40 @@ export function extract(
     return null;
   }
   const relevantExpression = block?.body.at(-2);
-  if (!matchesStructure(relevantExpression!, logicalExpression)) {
-    return null;
-  }
-  if (
-    relevantExpression?.type !== "ExpressionStatement" ||
-    relevantExpression.expression.type !== "LogicalExpression" ||
-    relevantExpression.expression.right.type !== "SequenceExpression" ||
-    relevantExpression.expression.right.expressions[0].type !==
-      "AssignmentExpression"
+
+  let call: ESTree.CallExpression | null = null;
+  if (matchesStructure(relevantExpression!, logicalExpression)) {
+    if (
+      relevantExpression?.type !== "ExpressionStatement" ||
+      relevantExpression.expression.type !== "LogicalExpression" ||
+      relevantExpression.expression.right.type !== "SequenceExpression" ||
+      relevantExpression.expression.right.expressions[0].type !==
+        "AssignmentExpression" ||
+      relevantExpression.expression.right.expressions[0].right.type !==
+        "CallExpression"
+    ) {
+      return null;
+    }
+    call = relevantExpression.expression.right.expressions[0].right;
+  } else if (
+    relevantExpression?.type === "IfStatement" &&
+    relevantExpression.consequent.type === "BlockStatement"
   ) {
-    return null;
+    for (const n of relevantExpression.consequent.body) {
+      if (!matchesStructure(n, nsigExpression)) {
+        continue;
+      }
+      if (
+        n.type !== "VariableDeclaration" ||
+        n.declarations[0].init?.type !== "CallExpression"
+      ) {
+        continue;
+      }
+      call = n.declarations[0].init;
+      break;
+    }
   }
-  const call = relevantExpression.expression.right.expressions[0].right;
-  if (call.type !== "CallExpression" || call.callee.type !== "Identifier") {
+  if (call === null) {
     return null;
   }
   // TODO: verify identifiers here

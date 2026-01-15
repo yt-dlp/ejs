@@ -283,6 +283,19 @@ export const tests: {
       },
     ],
   },
+  {
+    player: "c1c87fb0",
+    variants: ["tce"],
+    sig: [
+      // Synthetic test
+      {
+        input:
+          "gN7a-hudCuAuPH6fByOk1_GNXN0yNMHShjZXS2VOgsEItAJz0tipeavEOmNdYN-wUtcEqD3bCXjc0iyKfAyZxCBGgIARwsSdQfJ2CJtt",
+        expected:
+          "ttJC2JfQdSswRAIgGBCxZyAfKyi0cjXCb3DqEctUw-NYdNmOEvaepit0zJAtIEsgOV2SXZjhSHMNy0NXNGa1kOyBf6HPuAuCduh-_",
+      },
+    ],
+  },
 ];
 
 export const players = new Map([
