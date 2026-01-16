@@ -37,6 +37,7 @@ async function _getIO(): Promise<IO> {
     const assert: Assert = {
       equal: deepStrictEqual,
     };
+    let args: string[];
     let test: Test;
     let writeFile: (
       file: string,
@@ -44,6 +45,7 @@ async function _getIO(): Promise<IO> {
     ) => Promise<void>;
     if (typeof globalThis.Deno !== "undefined") {
       // Except for Deno, which does its own thing
+      args = Deno.args;
       writeFile = Deno.writeFile;
       test = (name, func) => {
         Deno.test(name, (t) => {
@@ -56,6 +58,7 @@ async function _getIO(): Promise<IO> {
         return Promise.resolve();
       };
     } else {
+      args = process.argv;
       writeFile = (await import("node:fs/promises"))["writeFile"];
       const { suite, test: subtest } = await import("node:test");
       test = (name, func) => {
@@ -71,7 +74,7 @@ async function _getIO(): Promise<IO> {
     }
     return {
       async args(): Promise<string[]> {
-        return process.argv.slice(2);
+        return args.slice(2);
       },
       readdir(path: string): Promise<string[]> {
         return readdir(path);
