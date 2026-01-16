@@ -221,6 +221,8 @@ jobs:
           path: |
             src/yt/solver/test/players
           key: test-player-js-${{ hashFiles('src/yt/solver/test/tests.ts') }}
+          restore-keys: |
+            test-player-js-
       - name: Download player JS files
         timeout-minutes: 15
         run: |
@@ -230,7 +232,7 @@ jobs:
             --allow-write=src/yt/solver/test/players/ \
             --allow-net=www.youtube.com \
             --allow-sys=uid \
-            src/yt/solver/test/download.ts
+            src/yt/solver/test/download.ts --cleanup
       - name: Upload player JS artifact
         uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f  # v6.0.0
         with:

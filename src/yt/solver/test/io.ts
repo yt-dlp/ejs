@@ -1,4 +1,7 @@
 type IO = {
+  args(): Promise<string[]>;
+  readdir(path: string): Promise<string[]>;
+  unlink(path: string): Promise<void>;
   exists(path: string): Promise<boolean>;
   read(path: string): Promise<string>;
   write(path: string, response: Response): Promise<void>;
@@ -27,7 +30,9 @@ async function _getIO(): Promise<IO> {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   if ((globalThis as any).process?.release?.name === "node") {
     // Assume node compatibility
-    const { access, readFile } = await import("node:fs/promises");
+    const { access, readFile, readdir, unlink } = await import(
+      "node:fs/promises"
+    );
     const { deepStrictEqual } = await import("node:assert");
     const assert: Assert = {
       equal: deepStrictEqual,
@@ -65,6 +70,15 @@ async function _getIO(): Promise<IO> {
       };
     }
     return {
+      async args(): Promise<string[]> {
+        return process.argv.slice(2);
+      },
+      readdir(path: string): Promise<string[]> {
+        return readdir(path);
+      },
+      unlink(path: string): Promise<void> {
+        return unlink(path);
+      },
       async exists(path: string): Promise<boolean> {
         try {
           await access(path);
