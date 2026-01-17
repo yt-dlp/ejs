@@ -2,7 +2,7 @@
   "name": "ejs",
   "type": "module",
   "scripts": {
-    "bundle": "python _build.py node_modules/.bin/esbuild",
+    "bundle": "python hatch_build.py",
     "fmt": "prettier --write \"src/**.ts\" \"package.json\" \"run.ts\" \"eslint.config.js\"",
     "fmt:check": "prettier --check \"src/**.ts\" \"package.json\" \"run.ts\" \"eslint.config.js\"",
     "lint": "eslint src"
