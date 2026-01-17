@@ -116,7 +116,7 @@ def null():
     return "NUL" if os.name == "nt" else "/dev/null"
 
 
-def create_builds():
+def create_builds(esbuild: list[str]):
     with (BASE_PATH / "package.json").open("rb") as file:
         pkg = json.load(file)
     LICENSE_PREAMBLE = f"""\
@@ -128,7 +128,7 @@ def create_builds():
         temp.close()
         process = subprocess.run(
             [
-                "esbuild",
+                *esbuild,
                 "--bundle",
                 "--abs-paths=metafile",
                 f"--metafile={temp.name}",
@@ -334,9 +334,6 @@ def run():
             )
         print(f"Install command: {shlex.join(cmd)}")
         subprocess.run(cmd, env=env, check=True)
-
-    builds = create_builds()
-
     cmd, env = build_bundle_cmd()
     if cmd is None:
         raise RuntimeError(
@@ -344,6 +341,8 @@ def run():
             "Please install one of them to bundle the TypeScript files."
         )
     print(f"Bundle cmd: {shlex.join(cmd)}", file=sys.stderr)
+
+    builds = create_builds(cmd)
     print("SHA3-512 checksums:", file=sys.stderr)
     for path, digest in build(sys.argv[1:], builds):
         print(f"{digest} {path.name}")
