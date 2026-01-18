@@ -28,7 +28,8 @@ export async function getIO(): Promise<IO> {
 async function _getIO(): Promise<IO> {
   // Old Deno requires casting to any as globalThis lacks an index signature
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  if ((globalThis as any).process?.release?.name === "node") {
+  const process = (globalThis as any).process;
+  if (process?.release?.name === "node") {
     // Assume node compatibility
     const { access, readFile, readdir, unlink } = await import(
       "node:fs/promises"
@@ -58,7 +59,7 @@ async function _getIO(): Promise<IO> {
         return Promise.resolve();
       };
     } else {
-      args = process.argv;
+      args = process?.argv;
       writeFile = (await import("node:fs/promises"))["writeFile"];
       const { suite, test: subtest } = await import("node:test");
       test = (name, func) => {
