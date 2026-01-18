@@ -3,6 +3,7 @@
   "type": "module",
   "scripts": {
     "bundle": "python hatch_build.py",
+    "esbuild": "esbuild",
     "fmt": "prettier --write \"src/**.ts\" \"package.json\" \"run.ts\" \"eslint.config.js\"",
     "fmt:check": "prettier --check \"src/**.ts\" \"package.json\" \"run.ts\" \"eslint.config.js\"",
     "lint": "eslint src"

@@ -254,30 +254,6 @@ def create_builds(esbuild: list[str]):
     ]
 
 
-def build(esbuild: list[str], builds: list[tuple[str, str, list[str]]]):
-    for src, dst, args in builds:
-        process = subprocess.run(
-            [
-                "esbuild",
-                "--bundle",
-                *args,
-                str(BASE_PATH / src),
-                f"--outfile={BASE_PATH / dst}",
-            ],
-            stdout=subprocess.DEVNULL,
-            stderr=subprocess.PIPE,
-            text=True,
-            check=False,
-        )
-        if process.returncode:
-            print(process.stderr, file=sys.stderr)
-            sys.exit(process.returncode)
-
-        path = BASE_PATH / dst
-        digest = hashlib.sha3_512(path.read_bytes()).hexdigest()
-        yield path, digest
-
-
 def build_install_cmd():
     env = os.environ.copy()
 
@@ -295,7 +271,10 @@ def build_install_cmd():
         cmd = [npm, "ci"]
 
     else:
-        return None, None
+        raise RuntimeError(
+            "One of 'pnpm', 'deno', 'bun', or 'npm' could not be found. "
+            "Please install one of them to automatically install dependencies."
+        )
 
     return cmd, env
 
@@ -307,21 +286,23 @@ def build_bundle_cmd():
         cmd = [esbuild]
 
     elif pnpm := shutil.which("pnpm"):
-        cmd = [pnpm, "run", "node_modules/.bin/esbuild"]
+        cmd = [pnpm, "run", "esbuild"]
 
     elif deno := shutil.which("deno"):
         env["DENO_NO_UPDATE_CHECK"] = "1"
-        # TODO(Grub4K): fix permissions here
-        cmd = [deno, "run", "--allow-all", "node_modules/.bin/esbuild"]
+        cmd = [deno, "task", "esbuild"]
 
     elif bun := shutil.which("bun"):
-        cmd = [bun, "--bun", "run", "node_modules/.bin/esbuild"]
+        cmd = [bun, "--bun", "run", "esbuild"]
 
     elif npm := shutil.which("npm"):
-        cmd = [npm, "run", "node_modules/.bin/esbuild"]
+        cmd = [npm, "run", "esbuild"]
 
     else:
-        return None, None
+        raise RuntimeError(
+            "One of 'esbuild', 'pnpm', 'deno', 'bun', or 'npm' could not be found. "
+            "Please install one of them to bundle the TypeScript files."
+        )
 
     return cmd, env
 
@@ -329,24 +310,33 @@ def build_bundle_cmd():
 def run():
     if not os.environ.get("EJS_BUILD_SKIP_INSTALL"):
         cmd, env = build_install_cmd()
-        if cmd is None:
-            raise RuntimeError(
-                "One of 'pnpm', 'deno', 'bun', or 'npm' could not be found. "
-                "Please install one of them to automatically install dependencies."
-            )
         print(f"Install command: {shlex.join(cmd)}")
         subprocess.run(cmd, env=env, check=True)
     cmd, env = build_bundle_cmd()
-    if cmd is None:
-        raise RuntimeError(
-            "One of 'esbuild', 'pnpm', 'deno', 'bun', or 'npm' could not be found. "
-            "Please install one of them to bundle the TypeScript files."
-        )
     print(f"Bundle cmd: {shlex.join(cmd)}", file=sys.stderr)
 
     builds = create_builds(cmd)
     print("SHA3-512 checksums:", file=sys.stderr)
-    for path, digest in build(sys.argv[1:], builds):
+    for src, dst, args in builds:
+        process = subprocess.run(
+            [
+                *cmd,
+                "--bundle",
+                *args,
+                str(BASE_PATH / src),
+                f"--outfile={BASE_PATH / dst}",
+            ],
+            env=env,
+            stdout=subprocess.DEVNULL,
+            stderr=subprocess.PIPE,
+            text=True,
+            check=False,
+        )
+        if process.returncode:
+            raise RuntimeError(process.stderr)
+
+        path = BASE_PATH / dst
+        digest = hashlib.sha3_512(path.read_bytes()).hexdigest()
         print(f"{digest} {path.name}")
 
 
