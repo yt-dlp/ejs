@@ -34,6 +34,7 @@ def run():
         subprocess.run(cmd, env=env, check=False)
 
     esbuild = ESBuild(*find_executable("EJS_BUILD_BUNDLER", DEFAULT_BUNDLER))
+    print(esbuild.cmd)
     print(f"Bundle command: {shlex.join(esbuild.cmd)}", file=sys.stderr)
 
     externals = list(get_external_packages(esbuild))
@@ -191,7 +192,7 @@ class ESBuild:
             self.cmd = [path]
 
         elif name == "pnpm":
-            self.cmd = [path, "run", "build.mjs"]
+            self.cmd = [path, "run", "--silent", "build.mjs"]
 
         elif name == "deno":
             self._env = os.environ.copy()
@@ -255,7 +256,9 @@ class ESBuild:
             check=False,
         )
         if process.returncode:
-            raise RuntimeError("failed to run esbuild:\n" + process.stderr)
+            raise RuntimeError(
+                "failed to run esbuild:\n" + process.stdout + process.stdout
+            )
         return process
 
     @staticmethod
