@@ -64,7 +64,7 @@ def create_builds(externals: list[Package]) -> list[ESBuildOptions]:
     return [
         {
             "entryPoints": ["src/yt/solver/main.ts"],
-            "outfile": "dist/yt.solver.core.js.eslmao",
+            "outfile": "dist/yt.solver.core.js",
             "format": "iife",
             "globalName": "jsc",
             "banner": BANNER_WITHOUT_DEPENDENCIES,
@@ -72,7 +72,7 @@ def create_builds(externals: list[Package]) -> list[ESBuildOptions]:
         },
         {
             "entryPoints": ["src/yt/solver/main.ts"],
-            "outfile": "dist/yt.solver.core.min.js.eslmao",
+            "outfile": "dist/yt.solver.core.min.js",
             "minify": True,
             "format": "iife",
             "globalName": "jsc",
@@ -81,14 +81,14 @@ def create_builds(externals: list[Package]) -> list[ESBuildOptions]:
         },
         {
             "entryPoints": ["src/yt/solver/lib.ts"],
-            "outfile": "dist/yt.solver.lib.js.eslmao",
+            "outfile": "dist/yt.solver.lib.js",
             "format": "iife",
             "globalName": "lib",
             "banner": BANNER_WITH_DEPENDENCIES,
         },
         {
             "entryPoints": ["src/yt/solver/lib.ts"],
-            "outfile": "dist/yt.solver.lib.min.js.eslmao",
+            "outfile": "dist/yt.solver.lib.min.js",
             "minify": True,
             "format": "iife",
             "globalName": "lib",
@@ -96,7 +96,7 @@ def create_builds(externals: list[Package]) -> list[ESBuildOptions]:
         },
         {
             "entryPoints": ["src/yt/solver/lib.ts"],
-            "outfile": "dist/yt.solver.bun.lib.js.eslmao",
+            "outfile": "dist/yt.solver.bun.lib.js",
             "minifySyntax": True,
             "format": "esm",
             "globalName": "lib",
@@ -106,7 +106,7 @@ def create_builds(externals: list[Package]) -> list[ESBuildOptions]:
         },
         {
             "entryPoints": ["src/yt/solver/lib.ts"],
-            "outfile": "dist/yt.solver.deno.lib.js.eslmao",
+            "outfile": "dist/yt.solver.deno.lib.js",
             "minifySyntax": True,
             "format": "esm",
             "globalName": "lib",
