@@ -4,6 +4,7 @@ from __future__ import annotations
 import hashlib
 import json
 import os
+import os.path
 import pathlib
 import re
 import shlex
@@ -13,25 +14,27 @@ import sys
 import tempfile
 import typing
 
-BASE_PATH = pathlib.Path(__file__).parent.resolve()
-
 try:
     from hatchling.builders.hooks.plugin.interface import BuildHookInterface
 except ImportError:
     BuildHookInterface = object
 
 
+BASE_PATH = pathlib.Path(__file__).parent.resolve()
+DEFAULT_BUNDLER = ["esbuild", "pnpm", "deno", "bun", "node"]
+DEFAULT_INSTALLER = ["pnpm", "deno", "bun", "npm"]
+
+
 def run():
     if not os.environ.get("EJS_BUILD_SKIP_INSTALL"):
-        cmd, env = build_install_cmd()
+        name, path = find_executable("EJS_BUILD_INSTALLER", DEFAULT_INSTALLER)
+        args, env = build_install_args(name)
+        cmd = [path, *args]
         print(f"Install command: {shlex.join(cmd)}")
-        subprocess.run(cmd, env=env, check=True)
-    allowed = os.environ.get("EJS_BUILD_ALLOWED_BUNDLERS")
-    if isinstance(allowed, str):
-        allowed = [a.strip() for a in allowed.split(",")]
+        subprocess.run(cmd, env=env, check=False)
 
-    esbuild = ESBuild(allowed)
-    print(f"Bundle cmd: {shlex.join(esbuild.cmd)}", file=sys.stderr)
+    esbuild = ESBuild(*find_executable("EJS_BUILD_BUNDLER", DEFAULT_BUNDLER))
+    print(f"Bundle command: {shlex.join(esbuild.cmd)}", file=sys.stderr)
 
     externals = list(get_external_packages(esbuild))
     builds = create_builds(externals)
@@ -145,51 +148,56 @@ class CustomBuildHook(BuildHookInterface):
         shutil.rmtree("node_modules", ignore_errors=True)
 
 
-def build_install_cmd():
-    env = os.environ.copy()
+def find_executable(env: str, defaults: list[str]):
+    values = defaults
+    if value := os.getenv(env):
+        values = value.split(os.path.pathsep)
+    for value in values:
+        if path := shutil.which(value):
+            name = pathlib.Path(path).name.partition(".")[0]
+            return name, path
 
-    if pnpm := shutil.which("pnpm"):
-        cmd = [pnpm, "install", "--frozen-lockfile"]
+    return None, ""
 
-    elif deno := shutil.which("deno"):
+
+def build_install_args(name: str | None):
+    if name == "pnpm":
+        return ["install", "--frozen-lockfile"], None
+
+    if name == "deno":
+        env = os.environ.copy()
         env["DENO_NO_UPDATE_CHECK"] = "1"
-        cmd = [deno, "install", "--frozen"]
+        return ["install", "--frozen"], env
 
-    elif bun := shutil.which("bun"):
-        cmd = [bun, "install", "--frozen-lockfile"]
+    if name == "bun":
+        return ["install", "--frozen-lockfile"], None
 
-    elif npm := shutil.which("npm"):
-        cmd = [npm, "ci"]
+    if name == "npm":
+        return ["ci"], None
 
-    else:
-        raise RuntimeError(
-            "One of 'pnpm', 'deno', 'bun', or 'npm' could not be found. "
-            "Please install one of them to automatically install dependencies."
-        )
-
-    return cmd, env
+    raise RuntimeError(
+        "Only 'pnpm', 'deno', 'bun', or 'npm' are supported for installing dependencies. "
+        "Please install one of them or pass EJS_BUILD_SKIP_INSTALL=1 to skip install step."
+    )
 
 
 class ESBuild:
-    def __init__(self, /, allowed: list[str] | None = None):
-        if not allowed:
-            allowed = []
-
+    def __init__(self, name: str | None, path: str, /):
         self._stdin = True
         self._env = None
 
-        if "esbuild" in allowed and (esbuild := shutil.which("esbuild")):
+        if name == "esbuild":
             self._stdin = False
-            self.cmd = [esbuild]
+            self.cmd = [path]
 
-        elif "pnpm" in allowed and (pnpm := shutil.which("pnpm")):
-            self.cmd = [pnpm, "run", "build.mjs"]
+        elif name == "pnpm":
+            self.cmd = [path, "run", "build.mjs"]
 
-        elif "deno" in allowed and (deno := shutil.which("deno")):
+        elif name == "deno":
             self._env = os.environ.copy()
             self._env["DENO_NO_UPDATE_CHECK"] = "1"
             self.cmd = [
-                deno,
+                path,
                 "run",
                 "--allow-read",
                 "--allow-env",
@@ -197,11 +205,11 @@ class ESBuild:
                 "build.mjs",
             ]
 
-        elif "bun" in allowed and (bun := shutil.which("bun")):
-            self.cmd = [bun, "--bun", "run", "build.mjs"]
+        elif name == "bun":
+            self.cmd = [path, "--bun", "run", "build.mjs"]
 
-        elif "node" in allowed and (node := shutil.which("node")):
-            self.cmd = [node, "build.mjs"]
+        elif name == "node":
+            self.cmd = [path, "build.mjs"]
 
         else:
             raise RuntimeError(
