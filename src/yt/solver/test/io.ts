@@ -43,7 +43,7 @@ async function _getIO(): Promise<IO> {
       file: string,
       data: ReadableStream<Uint8Array>,
     ) => Promise<void>;
-    if (typeof globalThis.Deno !== "undefined") {
+    if (globalThis.Deno) {
       // Except for Deno, which does its own thing
       args = Deno.args;
       writeFile = Deno.writeFile;
