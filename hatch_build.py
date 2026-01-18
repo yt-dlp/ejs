@@ -152,7 +152,7 @@ def create_builds(esbuild: list[str]):
     _externals = {}
     for input_file, meta in metafile["inputs"].items():
         try:
-            pathlib.Path(input_file).relative_to(BASE_PATH, walk_up=False)
+            pathlib.Path(input_file).relative_to(BASE_PATH)
         except ValueError:
             continue
         for import_meta in meta["imports"]:
