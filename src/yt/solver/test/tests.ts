@@ -284,8 +284,12 @@ export const tests: {
     ],
   },
   {
+    // tce variant broke sig solving; n and other variants are added only for regression testing
     player: "c1c87fb0",
-    variants: ["tce"],
+    n: [
+      // Synthetic test
+      { input: "ZdZIqFPQK-Ty8wId", expected: "jCHBK5GuAFNa2" },
+    ],
     sig: [
       // Synthetic test
       {
