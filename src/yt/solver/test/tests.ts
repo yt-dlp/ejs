@@ -286,6 +286,8 @@ export const tests: {
   {
     // tce variant broke sig solving; n and other variants are added only for regression testing
     player: "c1c87fb0",
+    // tablet variant no longer exists
+    variants: ["main", "tcc", "tce", "es5", "es6", "tv", "tv_es6", "phone"],
     n: [
       // Synthetic test
       { input: "ZdZIqFPQK-Ty8wId", expected: "jCHBK5GuAFNa2" },
