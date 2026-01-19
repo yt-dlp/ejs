@@ -41,8 +41,8 @@ export function preprocessPlayer(data: string): string {
   })();
 
   const found = {
-    n: [] as ESTree.ArrowFunctionExpression[],
-    sig: [] as ESTree.ArrowFunctionExpression[],
+    n: [] as ESTree.Expression[],
+    sig: [] as ESTree.Expression[],
   };
   const plainExpressions = block.body.filter((node: ESTree.Node) => {
     const n = extractN(node);
@@ -64,15 +64,22 @@ export function preprocessPlayer(data: string): string {
   block.body = plainExpressions;
 
   for (const [name, options] of Object.entries(found)) {
-    // TODO: this is cringe fix plz
     const unique = new Set(options.map((x) => JSON.stringify(x)));
-    if (unique.size !== 1) {
-      const message = `found ${unique.size} ${name} function possibilities`;
-      throw (
-        message +
-        (unique.size ? `: ${options.map((x) => generate(x)).join(", ")}` : "")
-      );
-    }
+    const result =
+      unique.size === 1
+        ? options[0]
+        : ({
+            type: "BlockStatement",
+            body: [
+              {
+                type: "ThrowStatement",
+                argument: {
+                  type: "Literal",
+                  value: `found ${unique.size} ${name} function possibilities`,
+                },
+              },
+            ],
+          } satisfies ESTree.BlockStatement);
     plainExpressions.push({
       type: "ExpressionStatement",
       expression: {
@@ -90,7 +97,19 @@ export function preprocessPlayer(data: string): string {
             name: name,
           },
         },
-        right: options[0],
+        right: {
+          type: "ArrowFunctionExpression",
+          params: [
+            {
+              type: "Identifier",
+              name,
+            },
+          ],
+          body: result,
+          async: false,
+          expression: false,
+          generator: false,
+        },
       },
     });
   }

@@ -99,16 +99,16 @@ const identifier: DeepPartial<ESTree.Node> = {
   ],
 } as const;
 
-export function extract(
-  node: ESTree.Node,
-): ESTree.ArrowFunctionExpression | null {
+export function extract(node: ESTree.Node): ESTree.Expression | null {
   if (!matchesStructure(node, identifier)) {
     return null;
   }
   let block: ESTree.BlockStatement | undefined | null;
-  if (node.type === "ExpressionStatement" &&
+  if (
+    node.type === "ExpressionStatement" &&
     node.expression.type === "AssignmentExpression" &&
-    node.expression.right.type === "FunctionExpression") {
+    node.expression.right.type === "FunctionExpression"
+  ) {
     block = node.expression.right.body;
   } else if (node.type === "VariableDeclaration") {
     for (const decl of node.declarations) {
@@ -145,38 +145,26 @@ export function extract(
   }
   // TODO: verify identifiers here
   return {
-    type: "ArrowFunctionExpression",
-    params: [
-      {
-        type: "Identifier",
-        name: "sig",
-      },
-    ],
-    body: {
-      type: "CallExpression",
-      callee: {
-        type: "Identifier",
-        name: call.callee.name,
-      },
-      arguments:
-        call.arguments.length === 1
-          ? [
-              {
-                type: "Identifier",
-                name: "sig",
-              },
-            ]
-          : [
-              call.arguments[0],
-              {
-                type: "Identifier",
-                name: "sig",
-              },
-            ],
-      optional: false,
+    type: "CallExpression",
+    callee: {
+      type: "Identifier",
+      name: call.callee.name,
     },
-    async: false,
-    expression: false,
-    generator: false,
+    arguments:
+      call.arguments.length === 1
+        ? [
+            {
+              type: "Identifier",
+              name: "sig",
+            },
+          ]
+        : [
+            call.arguments[0],
+            {
+              type: "Identifier",
+              name: "sig",
+            },
+          ],
+    optional: false,
   };
 }

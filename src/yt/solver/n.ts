@@ -71,9 +71,7 @@ const catchBlockBody = [
   },
 ] as const;
 
-export function extract(
-  node: ESTree.Node,
-): ESTree.ArrowFunctionExpression | null {
+export function extract(node: ESTree.Node): ESTree.Expression | null {
   if (!matchesStructure(node, identifier)) {
     // Fallback search for try { } catch { return X[12] + Y }
     let name: string | undefined | null = null;
@@ -149,31 +147,19 @@ export function extract(
   return null;
 }
 
-function makeSolverFuncFromName(name: string): ESTree.ArrowFunctionExpression {
+function makeSolverFuncFromName(name: string): ESTree.Expression {
   return {
-    type: "ArrowFunctionExpression",
-    params: [
+    type: "CallExpression",
+    callee: {
+      type: "Identifier",
+      name: name,
+    },
+    arguments: [
       {
         type: "Identifier",
         name: "n",
       },
     ],
-    body: {
-      type: "CallExpression",
-      callee: {
-        type: "Identifier",
-        name: name,
-      },
-      arguments: [
-        {
-          type: "Identifier",
-          name: "n",
-        },
-      ],
-      optional: false,
-    },
-    async: false,
-    expression: false,
-    generator: false,
+    optional: false,
   };
 }
