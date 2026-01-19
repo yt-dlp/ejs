@@ -86,7 +86,7 @@ export const tests: {
   {
     // tce causes exception even in browser
     player: "3752a005",
-    variants: ["main", "tcc", "es5", "es6", "tv", "tv_es6", "phone", "tablet"],
+    variants: ["main", "tcc", "es5", "es6", "tv", "tv_es6", "phone"],
     n: [
       // Synthetic test
       { input: "0eRGgQWJGfT5rFHFj", expected: "j22ZtsqVsR0Dn" },
@@ -104,7 +104,7 @@ export const tests: {
   {
     // tce causes exception even in browser
     player: "afc7785b",
-    variants: ["main", "tcc", "es5", "es6", "tv", "tv_es6", "phone", "tablet"],
+    variants: ["main", "tcc", "es5", "es6", "tv", "tv_es6", "phone"],
     n: [
       // Synthetic test
       { input: "0eRGgQWJGfT5rFHFj", expected: "j22ZtsqVsR0Dn" },
@@ -122,7 +122,7 @@ export const tests: {
   {
     // tce causes exception even in browser
     player: "b9645327",
-    variants: ["main", "tcc", "es5", "es6", "tv", "tv_es6", "phone", "tablet"],
+    variants: ["main", "tcc", "es5", "es6", "tv", "tv_es6", "phone"],
     n: [
       // Synthetic test
       { input: "0eRGgQWJGfT5rFHFj", expected: "j22ZtsqVsR0Dn" },
@@ -140,7 +140,7 @@ export const tests: {
   {
     // tce causes exception even in browser
     player: "035b9195",
-    variants: ["main", "tcc", "es5", "es6", "tv", "tv_es6", "phone", "tablet"],
+    variants: ["main", "tcc", "es5", "es6", "tv", "tv_es6", "phone"],
     n: [
       // Synthetic test
       { input: "0eRGgQWJGfT5rFHFj", expected: "j22ZtsqVsR0Dn" },
@@ -283,6 +283,23 @@ export const tests: {
       },
     ],
   },
+  {
+    // tce variant broke sig solving; n and other variants are added only for regression testing
+    player: "c1c87fb0",
+    n: [
+      // Synthetic test
+      { input: "ZdZIqFPQK-Ty8wId", expected: "jCHBK5GuAFNa2" },
+    ],
+    sig: [
+      // Synthetic test
+      {
+        input:
+          "gN7a-hudCuAuPH6fByOk1_GNXN0yNMHShjZXS2VOgsEItAJz0tipeavEOmNdYN-wUtcEqD3bCXjc0iyKfAyZxCBGgIARwsSdQfJ2CJtt",
+        expected:
+          "ttJC2JfQdSswRAIgGBCxZyAfKyi0cjXCb3DqEctUw-NYdNmOEvaepit0zJAtIEsgOV2SXZjhSHMNy0NXNGa1kOyBf6HPuAuCduh-_",
+      },
+    ],
+  },
 ];
 
 export const players = new Map([
@@ -294,7 +311,6 @@ export const players = new Map([
   ["tv", "tv-player-ias.vflset/tv-player-ias.js"],
   ["tv_es6", "tv-player-es6.vflset/tv-player-es6.js"],
   ["phone", "player-plasma-ias-phone-en_US.vflset/base.js"],
-  ["tablet", "player-plasma-ias-tablet-en_US.vflset/base.js"],
 ] as const);
 
 export type Variant = typeof players extends Map<infer T, unknown> ? T : never;
