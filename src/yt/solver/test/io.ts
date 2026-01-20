@@ -1,4 +1,7 @@
 type IO = {
+  args(): Promise<string[]>;
+  readdir(path: string): Promise<string[]>;
+  unlink(path: string): Promise<void>;
   exists(path: string): Promise<boolean>;
   read(path: string): Promise<string>;
   write(path: string, response: Response): Promise<void>;
@@ -25,20 +28,25 @@ export async function getIO(): Promise<IO> {
 async function _getIO(): Promise<IO> {
   // Old Deno requires casting to any as globalThis lacks an index signature
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  if ((globalThis as any).process?.release?.name === "node") {
+  const process = (globalThis as any).process;
+  if (process?.release?.name === "node") {
     // Assume node compatibility
-    const { access, readFile } = await import("node:fs/promises");
+    const { access, readFile, readdir, unlink } = await import(
+      "node:fs/promises"
+    );
     const { deepStrictEqual } = await import("node:assert");
     const assert: Assert = {
       equal: deepStrictEqual,
     };
+    let args: string[];
     let test: Test;
     let writeFile: (
       file: string,
       data: ReadableStream<Uint8Array>,
     ) => Promise<void>;
-    if (typeof globalThis.Deno !== "undefined") {
+    if (globalThis.Deno) {
       // Except for Deno, which does its own thing
+      args = Deno.args;
       writeFile = Deno.writeFile;
       test = (name, func) => {
         Deno.test(name, (t) => {
@@ -51,6 +59,7 @@ async function _getIO(): Promise<IO> {
         return Promise.resolve();
       };
     } else {
+      args = process?.argv;
       writeFile = (await import("node:fs/promises"))["writeFile"];
       const { suite, test: subtest } = await import("node:test");
       test = (name, func) => {
@@ -65,6 +74,15 @@ async function _getIO(): Promise<IO> {
       };
     }
     return {
+      async args(): Promise<string[]> {
+        return args.slice(2);
+      },
+      readdir(path: string): Promise<string[]> {
+        return readdir(path);
+      },
+      unlink(path: string): Promise<void> {
+        return unlink(path);
+      },
       async exists(path: string): Promise<boolean> {
         try {
           await access(path);
