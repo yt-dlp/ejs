@@ -49,7 +49,7 @@ def build_bundle_cmds():
 
     elif bun := shutil.which("bun"):
         name = "bun"
-        install = ["bun", "install", "--frozen-lockfile"]
+        install = [bun, "install", "--frozen-lockfile"]
         bundle = [bun, "--bun", "run", "bundle"]
 
     elif npm := shutil.which("npm"):
