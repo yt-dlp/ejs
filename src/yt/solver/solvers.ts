@@ -51,7 +51,7 @@ export function preprocessPlayer(data: string): string {
     }
     const sig = extractSig(node);
     if (sig) {
-      found.sig.push(sig);
+      found.sig.push(sig.expression);
     }
     if (node.type === "ExpressionStatement") {
       if (node.expression.type === "AssignmentExpression") {

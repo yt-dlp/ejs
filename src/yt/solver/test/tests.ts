@@ -300,6 +300,23 @@ export const tests: {
       },
     ],
   },
+  {
+    player: "4e51e895",
+    variants: ["main"],
+    n: [
+      // Synthetic test
+      { input: "0eRGgQWJGfT5rFHFj", expected: "t5kO23_msekBur" },
+    ],
+    sig: [
+      {
+        // Synthetic test
+        input:
+          "AL6p_8AwdY9yAhRzK8rYA_9n97Kizf7_9n97Kizf7_9n97Kizf7_9n97Kizf7_9n97Kizf7_9n97Kizf7",
+        expected:
+          "AwdY9yAhRzK8rYA_9n97Kizf7_9n97Kizf7_9n9pKizf7_9n97Kizf7_9n97Kizf7_9n97Kizf7",
+      },
+    ],
+  },
 ];
 
 export const players = new Map([
