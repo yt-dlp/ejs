@@ -3,8 +3,9 @@
   "type": "module",
   "scripts": {
     "bundle": "rollup -c",
-    "fmt": "prettier --write \"src/**.ts\" \"package.json\" \"rollup.config.js\" \"run.ts\" \"eslint.config.js\"",
-    "fmt:check": "prettier --check \"src/**.ts\" \"package.json\" \"rollup.config.js\" \"run.ts\" \"eslint.config.js\"",
+    "prettier": "prettier",
+    "fmt": "prettier --write \"**/*.[jt]s\" \"package.json\"",
+    "fmt:check": "prettier --check \"**/*.[jt]s\" \"package.json\"",
     "lint": "eslint src"
   },
   "dependencies": {
