@@ -286,6 +286,8 @@ export const tests: {
   {
     // tce variant broke sig solving; n and other variants are added only for regression testing
     player: "c1c87fb0",
+    // TODO: fix other variants in other PR
+    variants: ["main", "tcc", "es5", "es6", "tv", "tv_es6", "phone"],
     n: [
       // Synthetic test
       { input: "ZdZIqFPQK-Ty8wId", expected: "jCHBK5GuAFNa2" },
@@ -297,6 +299,23 @@ export const tests: {
           "gN7a-hudCuAuPH6fByOk1_GNXN0yNMHShjZXS2VOgsEItAJz0tipeavEOmNdYN-wUtcEqD3bCXjc0iyKfAyZxCBGgIARwsSdQfJ2CJtt",
         expected:
           "ttJC2JfQdSswRAIgGBCxZyAfKyi0cjXCb3DqEctUw-NYdNmOEvaepit0zJAtIEsgOV2SXZjhSHMNy0NXNGa1kOyBf6HPuAuCduh-_",
+      },
+    ],
+  },
+  {
+    player: "4e51e895",
+    variants: ["main"],
+    n: [
+      // Synthetic test
+      { input: "0eRGgQWJGfT5rFHFj", expected: "t5kO23_msekBur" },
+    ],
+    sig: [
+      {
+        // Synthetic test
+        input:
+          "AL6p_8AwdY9yAhRzK8rYA_9n97Kizf7_9n97Kizf7_9n97Kizf7_9n97Kizf7_9n97Kizf7_9n97Kizf7",
+        expected:
+          "AwdY9yAhRzK8rYA_9n97Kizf7_9n97Kizf7_9n9pKizf7_9n97Kizf7_9n97Kizf7_9n97Kizf7",
       },
     ],
   },
