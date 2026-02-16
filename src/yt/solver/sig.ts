@@ -1,6 +1,5 @@
 import { type ESTree } from "meriyah";
 import { matchesStructure } from "../../utils.ts";
-import { generate } from "astring";
 import { type DeepPartial } from "../../types.ts";
 
 const nsigExpression: DeepPartial<ESTree.Statement> = {
