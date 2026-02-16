@@ -130,9 +130,8 @@ const identifier: DeepPartial<ESTree.Node> = {
 
 export function extract(
   node: ESTree.Node,
-): { expression: ESTree.ArrowFunctionExpression; name: string } | null {
-  const blocks: { body: ESTree.BlockStatement; params: string[]; name: string }[] =
-    [];
+): ESTree.ArrowFunctionExpression | null {
+  const blocks: ESTree.BlockStatement[] = [];
 
   if (matchesStructure(node, identifier)) {
     if (
@@ -141,38 +140,21 @@ export function extract(
       node.expression.right.type === "FunctionExpression" &&
       node.expression.right.params.length === 3
     ) {
-      blocks.push({
-        name: generate(node.expression.left),
-        body: node.expression.right.body as ESTree.BlockStatement,
-        params: node.expression.right.params
-          .filter((p): p is ESTree.Identifier => p.type === "Identifier")
-          .map((p) => p.name),
-      });
+      blocks.push(node.expression.right.body!);
     } else if (node.type === "VariableDeclaration") {
       for (const decl of node.declarations) {
         if (
           decl.init?.type === "FunctionExpression" &&
           decl.init.params.length === 3
         ) {
-          const name = decl.id.type === "Identifier" ? decl.id.name : "?";
-          blocks.push({
-            name,
-            body: decl.init.body as ESTree.BlockStatement,
-            params: decl.init.params
-              .filter((p): p is ESTree.Identifier => p.type === "Identifier")
-              .map((p) => p.name),
-          });
+          blocks.push(decl.init.body!);
         }
       }
-    } else if (node.type === "FunctionDeclaration" && node.params.length === 3) {
-      const name = node.id?.name || "?";
-      blocks.push({
-        name,
-        body: node.body as ESTree.BlockStatement,
-        params: node.params
-          .filter((p): p is ESTree.Identifier => p.type === "Identifier")
-          .map((p) => p.name),
-      });
+    } else if (
+      node.type === "FunctionDeclaration" &&
+      node.params.length === 3
+    ) {
+      blocks.push(node.body!);
     } else {
       return null;
     }
@@ -186,24 +168,15 @@ export function extract(
         expr.right.type === "FunctionExpression" &&
         expr.right.params.length === 3
       ) {
-        blocks.push({
-          name: generate(expr.left),
-          body: expr.right.body as ESTree.BlockStatement,
-          params: expr.right.params
-            .filter((p): p is ESTree.Identifier => p.type === "Identifier")
-            .map((p) => p.name),
-        });
+        blocks.push(expr.right.body as ESTree.BlockStatement);
       }
     }
   } else {
     return null;
   }
 
-  for (const { body: block, params, name: funcName } of blocks) {
+  for (const block of blocks) {
     let call: ESTree.CallExpression | null = null;
-    let sigVarName: string | null = null;
-
-    const thirdParam = params[2];
 
     for (const stmt of block.body) {
       if (matchesStructure(stmt, logicalExpression)) {
@@ -211,13 +184,11 @@ export function extract(
           stmt.type === "ExpressionStatement" &&
           stmt.expression.type === "LogicalExpression" &&
           stmt.expression.right.type === "SequenceExpression" &&
-          stmt.expression.right.expressions[0].type === "AssignmentExpression" &&
+          stmt.expression.right.expressions[0].type ===
+            "AssignmentExpression" &&
           stmt.expression.right.expressions[0].right.type === "CallExpression"
         ) {
           call = stmt.expression.right.expressions[0].right;
-          if (stmt.expression.left.type === "Identifier") {
-            sigVarName = stmt.expression.left.name;
-          }
           break;
         }
       } else if (stmt.type === "IfStatement") {
@@ -249,76 +220,37 @@ export function extract(
       continue;
     }
 
-    const name = call.callee.name;
-    const targetParam = sigVarName || thirdParam;
-
-    let usesSig = false;
-    let args = call.arguments.map((arg): ESTree.Expression => {
-      if (targetParam && arg.type === "Identifier" && arg.name === targetParam) {
-        usesSig = true;
-        return { type: "Identifier", name: "sig" };
-      }
-      if (
-        targetParam &&
-        arg.type === "CallExpression" &&
-        arg.callee.type === "Identifier" &&
-        arg.callee.name === "decodeURIComponent" &&
-        arg.arguments[0]?.type === "Identifier" &&
-        arg.arguments[0].name === targetParam
-      ) {
-        usesSig = true;
-        return {
-          type: "CallExpression",
-          callee: { type: "Identifier", name: "decodeURIComponent" },
-          arguments: [{ type: "Identifier", name: "sig" }],
-          optional: false,
-        };
-      }
-      return arg as unknown as ESTree.Expression;
-    });
-
-    if (!usesSig) {
-      args =
-        call.arguments.length === 1
-          ? [
-              {
-                type: "Identifier",
-                name: "sig",
-              },
-            ]
-          : [
-              call.arguments[0] as unknown as ESTree.Expression,
-              {
-                type: "Identifier",
-                name: "sig",
-              },
-            ];
-    }
-
     // TODO: verify identifiers here
     return {
-      name: funcName,
-      expression: {
-        type: "ArrowFunctionExpression",
-        params: [
-          {
-            type: "Identifier",
-            name: "sig",
-          },
-        ],
-        body: {
-          type: "CallExpression",
-          callee: {
-            type: "Identifier",
-            name,
-          },
-          arguments: args,
-          optional: false,
+      type: "ArrowFunctionExpression",
+      params: [
+        {
+          type: "Identifier",
+          name: "sig",
         },
-        async: false,
-        expression: false,
-        generator: false,
+      ],
+      body: {
+        type: "CallExpression",
+        callee: {
+          type: "Identifier",
+          name: call.callee.name,
+        },
+        arguments: call.arguments.map((arg): ESTree.Expression => {
+          if (
+            arg.type === "CallExpression" &&
+            arg.callee.type === "Identifier" &&
+            arg.callee.name === "decodeURIComponent" &&
+            arg.arguments[0]?.type === "Identifier"
+          ) {
+            return { type: "Identifier", name: "sig" };
+          }
+          return arg as unknown as ESTree.Expression;
+        }),
+        optional: false,
       },
+      async: false,
+      expression: false,
+      generator: false,
     };
   }
 

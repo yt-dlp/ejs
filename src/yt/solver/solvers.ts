@@ -98,7 +98,7 @@ export function getSolutions(
     }
     const sig = extractSig(statement);
     if (sig) {
-      found.sig.push(sig.expression);
+      found.sig.push(sig);
     }
   }
   return found;
