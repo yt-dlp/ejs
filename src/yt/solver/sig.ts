@@ -2,32 +2,33 @@ import { type ESTree } from "meriyah";
 import { matchesStructure } from "../../utils.ts";
 import { type DeepPartial } from "../../types.ts";
 
-const nsigExpression: DeepPartial<ESTree.Statement> = {
-  type: "VariableDeclaration",
-  kind: "var",
-  declarations: [
+const nsig: DeepPartial<ESTree.CallExpression> = {
+  type: "CallExpression",
+  callee: {
+    or: [{ type: "Identifier" }, { type: "SequenceExpression" }],
+  },
+  arguments: [
+    {},
     {
-      type: "VariableDeclarator",
-      init: {
-        type: "CallExpression",
-        callee: {
-          type: "Identifier",
-        },
-        arguments: [
-          {
-            type: "Literal",
-          },
-          {
-            type: "CallExpression",
-            callee: {
-              type: "Identifier",
-              name: "decodeURIComponent",
-            },
-          },
-        ],
+      type: "CallExpression",
+      callee: {
+        type: "Identifier",
+        name: "decodeURIComponent",
       },
+      arguments: [{}],
     },
   ],
+};
+const nsigAssignment: DeepPartial<ESTree.AssignmentExpression> = {
+  type: "AssignmentExpression",
+  left: { type: "Identifier" },
+  operator: "=",
+  right: nsig,
+};
+const nsigDeclarator: DeepPartial<ESTree.VariableDeclarator> = {
+  type: "VariableDeclarator",
+  id: { type: "Identifier" },
+  init: nsig,
 };
 
 const logicalExpression: DeepPartial<ESTree.ExpressionStatement> = {
@@ -54,6 +55,17 @@ const logicalExpression: DeepPartial<ESTree.ExpressionStatement> = {
             arguments: {
               or: [
                 [
+                  {
+                    type: "CallExpression",
+                    callee: {
+                      type: "Identifier",
+                      name: "decodeURIComponent",
+                    },
+                    arguments: [{ type: "Identifier" }],
+                    optional: false,
+                  },
+                ],
+                [
                   { type: "Literal" },
                   {
                     type: "CallExpression",
@@ -66,6 +78,8 @@ const logicalExpression: DeepPartial<ESTree.ExpressionStatement> = {
                   },
                 ],
                 [
+                  { type: "Literal" },
+                  { type: "Literal" },
                   {
                     type: "CallExpression",
                     callee: {
@@ -98,17 +112,15 @@ const identifier: DeepPartial<ESTree.Node> = {
         type: "AssignmentExpression",
         operator: "=",
         left: {
-          type: "Identifier",
+          or: [{ type: "Identifier" }, { type: "MemberExpression" }],
         },
         right: {
           type: "FunctionExpression",
-          params: [{}, {}, {}],
         },
       },
     },
     {
       type: "FunctionDeclaration",
-      params: [{}, {}, {}],
     },
     {
       type: "VariableDeclaration",
@@ -118,7 +130,6 @@ const identifier: DeepPartial<ESTree.Node> = {
             type: "VariableDeclarator",
             init: {
               type: "FunctionExpression",
-              params: [{}, {}, {}],
             },
           },
         ],
@@ -137,22 +148,19 @@ export function extract(
       node.type === "ExpressionStatement" &&
       node.expression.type === "AssignmentExpression" &&
       node.expression.right.type === "FunctionExpression" &&
-      node.expression.right.params.length === 3
+      node.expression.right.params.length >= 3
     ) {
       blocks.push(node.expression.right.body!);
     } else if (node.type === "VariableDeclaration") {
       for (const decl of node.declarations) {
         if (
           decl.init?.type === "FunctionExpression" &&
-          decl.init.params.length === 3
+          decl.init.params.length >= 3
         ) {
           blocks.push(decl.init.body!);
         }
       }
-    } else if (
-      node.type === "FunctionDeclaration" &&
-      node.params.length === 3
-    ) {
+    } else if (node.type === "FunctionDeclaration" && node.params.length >= 3) {
       blocks.push(node.body!);
     } else {
       return null;
@@ -179,6 +187,7 @@ export function extract(
 
     for (const stmt of block.body) {
       if (matchesStructure(stmt, logicalExpression)) {
+        // legacy matching
         if (
           stmt.type === "ExpressionStatement" &&
           stmt.expression.type === "LogicalExpression" &&
@@ -188,34 +197,61 @@ export function extract(
           stmt.expression.right.expressions[0].right.type === "CallExpression"
         ) {
           call = stmt.expression.right.expressions[0].right;
-          break;
         }
       } else if (stmt.type === "IfStatement") {
+        // if (...) { var a, b = (0, c)(1, decodeURIComponent(...))}
         let consequent = stmt.consequent;
         while (consequent.type === "LabeledStatement") {
           consequent = consequent.body;
         }
+        if (consequent.type !== "BlockStatement") {
+          continue;
+        }
 
-        if (consequent.type === "BlockStatement") {
-          for (const n of consequent.body) {
-            if (!matchesStructure(n, nsigExpression)) {
-              continue;
-            }
-
+        for (const n of consequent.body) {
+          if (n.type !== "VariableDeclaration") {
+            continue;
+          }
+          for (const decl of n.declarations) {
             if (
-              n.type === "VariableDeclaration" &&
-              n.declarations[0]?.init?.type === "CallExpression"
+              matchesStructure(decl, nsigDeclarator) &&
+              decl.init?.type === "CallExpression"
             ) {
-              call = n.declarations[0].init;
+              call = decl.init;
+              break;
+            }
+          }
+          if (call) {
+            break;
+          }
+        }
+      } else if (stmt.type === "ExpressionStatement") {
+        // (...) && ((...), (c = (...)(decodeURIComponent(...))))
+        if (
+          stmt.expression.type !== "LogicalExpression" ||
+          stmt.expression.operator !== "&&" ||
+          stmt.expression.right.type !== "SequenceExpression"
+        ) {
+          continue;
+        }
+        for (const expr of stmt.expression.right.expressions) {
+          if (matchesStructure(expr, nsigAssignment) && expr.type) {
+            if (
+              expr.type === "AssignmentExpression" &&
+              expr.right.type === "CallExpression"
+            ) {
+              call = expr.right;
               break;
             }
           }
         }
-        if (call) break;
+      }
+      if (call) {
+        break;
       }
     }
 
-    if (call?.callee.type !== "Identifier") {
+    if (!call) {
       continue;
     }
 
@@ -230,16 +266,12 @@ export function extract(
       ],
       body: {
         type: "CallExpression",
-        callee: {
-          type: "Identifier",
-          name: call.callee.name,
-        },
+        callee: call.callee,
         arguments: call.arguments.map((arg): ESTree.Expression => {
           if (
             arg.type === "CallExpression" &&
             arg.callee.type === "Identifier" &&
-            arg.callee.name === "decodeURIComponent" &&
-            arg.arguments[0]?.type === "Identifier"
+            arg.callee.name === "decodeURIComponent"
           ) {
             return { type: "Identifier", name: "sig" };
           }
