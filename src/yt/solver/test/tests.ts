@@ -470,6 +470,21 @@ export const tests: {
       },
     ],
   },
+  {
+    // sig: es6: call with 3 parameters
+    player: "94667337",
+    n: [
+      { input: "BQoJvGBkC2nj1ZZLK-", expected: "ib1ShEOGoFXIIw" },
+    ],
+    sig: [
+      {
+        input:
+          "NJAJEij0EwRgIhAI0KExTgjfPk-MPM9MAdzyyPRt=BM8-XO5tm5hlMCSVpAiEAv7eP3CURqZNSPow8BXXAoazVoXgeMP7gH9BdylHCwgw=gwzz",
+        expected:
+          "AJEij0EwRgIhAI0KExTgjfPk-MPM9MNdzyyPRtzBM8-XO5tm5hlMCSVpAiEAv7eP3CURqZNSPow8BXXAoazVoXgeMP7gH9BdylHCwgw=",
+      },
+    ],
+  },
 ];
 
 export const players = new Map([
