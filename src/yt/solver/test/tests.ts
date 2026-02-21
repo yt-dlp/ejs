@@ -473,9 +473,7 @@ export const tests: {
   {
     // sig: es6: call with 3 parameters
     player: "94667337",
-    n: [
-      { input: "BQoJvGBkC2nj1ZZLK-", expected: "ib1ShEOGoFXIIw" },
-    ],
+    n: [{ input: "BQoJvGBkC2nj1ZZLK-", expected: "ib1ShEOGoFXIIw" }],
     sig: [
       {
         input:
