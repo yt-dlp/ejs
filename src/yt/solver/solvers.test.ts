@@ -8,7 +8,7 @@ const io = await getIO();
 for (const test of tests) {
   for (const variant of test.variants ?? players.keys()) {
     const path = getCachePath(test.player, variant);
-    await io.test(` ${test.player} ${variant} `, async (assert, subtest) => {
+    await io.test(`-${test.player}-${variant}-`, async (assert, subtest) => {
       const content = await io.read(path);
       const solvers = getFromPrepared(preprocessPlayer(content));
       for (const mode of ["n", "sig"] as const) {

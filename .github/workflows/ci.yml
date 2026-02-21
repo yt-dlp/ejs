@@ -380,11 +380,11 @@ jobs:
           name: player-js
       - name: Run Deno tests
         run: |
-          xargs -n 1 -P 8 deno test \
+          xargs -n 1 -P 10 deno test \
             --no-prompt \
             --no-check \
             --allow-read=src/yt/solver/test/players/ \
-            --filter <<<"$(printf -- ' %s \n' main tcc tce es5 es6 tv tv_es6 phone)"
+            --filter <<<"$(printf -- '-%s-\n' main tcc tce es5 es6 tv tv_es6 phone es6_tcc es6_tce)"
 
   bun_build:
     name: Test Bun build
