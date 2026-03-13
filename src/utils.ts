@@ -1,4 +1,4 @@
-import { type ESTree } from "meriyah";
+import { parse, type ESTree } from "meriyah";
 import { type DeepPartial } from "./types.ts";
 
 export function matchesStructure<T extends ESTree.Node>(
@@ -41,4 +41,11 @@ export function matchesStructure<T extends ESTree.Node>(
 
 export function isOneOf<T>(value: unknown, ...of: readonly T[]): value is T {
   return of.includes(value as T);
+}
+
+export function generateArrowFunction(
+  data: string,
+): ESTree.ArrowFunctionExpression {
+  return (parse(data).body[0] as ESTree.ExpressionStatement)
+    .expression as ESTree.ArrowFunctionExpression;
 }

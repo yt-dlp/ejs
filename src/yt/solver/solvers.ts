@@ -1,8 +1,8 @@
 import { type ESTree, parse } from "meriyah";
 import { generate } from "astring";
-import { extract as extractSig } from "./sig.ts";
-import { extract as extractN } from "./n.ts";
+import { extract } from "./nsig.ts";
 import { setupNodes } from "./setup.ts";
+import { generateArrowFunction } from "../../utils.ts";
 
 export function preprocessPlayer(data: string): string {
   const program = parse(data);
@@ -92,16 +92,63 @@ export function getSolutions(
     sig: [] as ESTree.ArrowFunctionExpression[],
   };
   for (const statement of statements) {
-    const n = extractN(statement);
-    if (n) {
-      found.n.push(n);
-    }
-    const sig = extractSig(statement);
-    if (sig) {
-      found.sig.push(sig);
+    const result = extract(statement);
+    if (result) {
+      found.n.push(
+        makeSolver(result, {
+          type: "Identifier",
+          name: "n",
+        }),
+      );
+      found.sig.push(
+        makeSolver(result, {
+          type: "Identifier",
+          name: "sig",
+        }),
+      );
     }
   }
   return found;
+}
+
+function makeSolver(
+  result: ESTree.ArrowFunctionExpression,
+  ident: ESTree.Identifier,
+): ESTree.ArrowFunctionExpression {
+  return {
+    type: "ArrowFunctionExpression",
+    params: [ident],
+    body: {
+      type: "MemberExpression",
+      object: {
+        type: "CallExpression",
+        callee: result,
+        arguments: [
+          {
+            type: "ObjectExpression",
+            properties: [
+              {
+                type: "Property",
+                key: ident,
+                value: ident,
+                kind: "init",
+                computed: false,
+                method: false,
+                shorthand: true,
+              },
+            ],
+          },
+        ],
+        optional: false,
+      },
+      computed: false,
+      property: ident,
+      optional: false,
+    },
+    async: false,
+    expression: true,
+    generator: false,
+  };
 }
 
 export function getFromPrepared(code: string): {
@@ -116,289 +163,25 @@ export function getFromPrepared(code: string): {
 function multiTry(
   generators: ESTree.ArrowFunctionExpression[],
 ): ESTree.ArrowFunctionExpression {
-  return {
-    type: "ArrowFunctionExpression",
-    params: [
-      {
-        type: "Identifier",
-        name: "_input",
-      },
-    ],
-    body: {
-      type: "BlockStatement",
-      body: [
-        {
-          type: "VariableDeclaration",
-          kind: "const",
-          declarations: [
-            {
-              type: "VariableDeclarator",
-              id: {
-                type: "Identifier",
-                name: "_results",
-              },
-              init: {
-                type: "NewExpression",
-                callee: {
-                  type: "Identifier",
-                  name: "Set",
-                },
-                arguments: [],
-              },
-            },
-          ],
-        },
-        {
-          type: "ForOfStatement",
-          left: {
-            type: "VariableDeclaration",
-            kind: "const",
-            declarations: [
-              {
-                type: "VariableDeclarator",
-                id: {
-                  type: "Identifier",
-                  name: "_generator",
-                },
-                init: null,
-              },
-            ],
-          },
-          right: {
-            type: "ArrayExpression",
-            elements: generators,
-          },
-          body: {
-            type: "BlockStatement",
-            body: [
-              {
-                type: "TryStatement",
-                block: {
-                  type: "BlockStatement",
-                  body: [
-                    {
-                      type: "ExpressionStatement",
-                      expression: {
-                        type: "CallExpression",
-                        callee: {
-                          type: "MemberExpression",
-                          object: {
-                            type: "Identifier",
-                            name: "_results",
-                          },
-                          computed: false,
-                          property: {
-                            type: "Identifier",
-                            name: "add",
-                          },
-                          optional: false,
-                        },
-                        arguments: [
-                          {
-                            type: "CallExpression",
-                            callee: {
-                              type: "Identifier",
-                              name: "_generator",
-                            },
-                            arguments: [
-                              {
-                                type: "Identifier",
-                                name: "_input",
-                              },
-                            ],
-                            optional: false,
-                          },
-                        ],
-                        optional: false,
-                      },
-                    },
-                  ],
-                },
-                handler: {
-                  type: "CatchClause",
-                  param: null,
-                  body: {
-                    type: "BlockStatement",
-                    body: [],
-                  },
-                },
-                finalizer: null,
-              },
-            ],
-          },
-          await: false,
-        },
-        {
-          type: "IfStatement",
-          test: {
-            type: "UnaryExpression",
-            operator: "!",
-            argument: {
-              type: "MemberExpression",
-              object: {
-                type: "Identifier",
-                name: "_results",
-              },
-              computed: false,
-              property: {
-                type: "Identifier",
-                name: "size",
-              },
-              optional: false,
-            },
-            prefix: true,
-          },
-          consequent: {
-            type: "BlockStatement",
-            body: [
-              {
-                type: "ThrowStatement",
-                argument: {
-                  type: "TemplateLiteral",
-                  expressions: [],
-                  quasis: [
-                    {
-                      type: "TemplateElement",
-                      value: {
-                        cooked: "no solutions",
-                        raw: "no solutions",
-                      },
-                      tail: true,
-                    },
-                  ],
-                },
-              },
-            ],
-          },
-          alternate: null,
-        },
-        {
-          type: "IfStatement",
-          test: {
-            type: "BinaryExpression",
-            left: {
-              type: "MemberExpression",
-              object: {
-                type: "Identifier",
-                name: "_results",
-              },
-              computed: false,
-              property: {
-                type: "Identifier",
-                name: "size",
-              },
-              optional: false,
-            },
-            right: {
-              type: "Literal",
-              value: 1,
-            },
-            operator: "!==",
-          },
-          consequent: {
-            type: "BlockStatement",
-            body: [
-              {
-                type: "ThrowStatement",
-                argument: {
-                  type: "TemplateLiteral",
-                  expressions: [
-                    {
-                      type: "CallExpression",
-                      callee: {
-                        type: "MemberExpression",
-                        object: {
-                          type: "Identifier",
-                          name: "_results",
-                        },
-                        computed: false,
-                        property: {
-                          type: "Identifier",
-                          name: "join",
-                        },
-                        optional: false,
-                      },
-                      arguments: [
-                        {
-                          type: "Literal",
-                          value: ", ",
-                        },
-                      ],
-                      optional: false,
-                    },
-                  ],
-                  quasis: [
-                    {
-                      type: "TemplateElement",
-                      value: {
-                        cooked: "invalid solutions: ",
-                        raw: "invalid solutions: ",
-                      },
-                      tail: false,
-                    },
-                    {
-                      type: "TemplateElement",
-                      value: {
-                        cooked: "",
-                        raw: "",
-                      },
-                      tail: true,
-                    },
-                  ],
-                },
-              },
-            ],
-          },
-          alternate: null,
-        },
-        {
-          type: "ReturnStatement",
-          argument: {
-            type: "MemberExpression",
-            object: {
-              type: "CallExpression",
-              callee: {
-                type: "MemberExpression",
-                object: {
-                  type: "CallExpression",
-                  callee: {
-                    type: "MemberExpression",
-                    object: {
-                      type: "Identifier",
-                      name: "_results",
-                    },
-                    computed: false,
-                    property: {
-                      type: "Identifier",
-                      name: "values",
-                    },
-                    optional: false,
-                  },
-                  arguments: [],
-                  optional: false,
-                },
-                computed: false,
-                property: {
-                  type: "Identifier",
-                  name: "next",
-                },
-                optional: false,
-              },
-              arguments: [],
-              optional: false,
-            },
-            computed: false,
-            property: {
-              type: "Identifier",
-              name: "value",
-            },
-            optional: false,
-          },
-        },
-      ],
-    },
-    async: false,
-    expression: false,
-    generator: false,
-  };
+  return generateArrowFunction(`
+(_input) => {
+  const _results = new Set();
+  for (const _generator of ${generate({
+    type: "ArrayExpression",
+    elements: generators,
+  } as ESTree.Node)}) {
+    try {
+      _results.add(_generator(_input));
+    } catch (e) {
+    }
+  }
+  if (!_results.size) {
+    throw "no solutions";
+  }
+  if (_results.size !== 1) {
+    throw \`invalid solutions: \${[..._results].map(x => JSON.stringify(x)).join(", ")}\`;
+  }
+  return _results.values().next().value;
+}
+`);
 }
