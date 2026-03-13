@@ -123,7 +123,7 @@ function createSolver(
 ): ESTree.ArrowFunctionExpression {
   return generateArrowFunction(`
 ({sig, n}) => {
-  const url = (${generate(expression)})("https://youtube.com/watch?v=yt-dlp-wins", "s", sig);
+  const url = (${generate(expression)})("https://youtube.com/watch?v=yt-dlp-wins", "s", sig ? encodeURIComponent(sig) : undefined);
   url.set("n", n);
   const proto = Object.getPrototypeOf(url);
   const keys = Object.keys(proto).concat(Object.getOwnPropertyNames(proto));
