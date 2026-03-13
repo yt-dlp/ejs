@@ -166,6 +166,7 @@ function multiTry(
   return generateArrowFunction(`
 (_input) => {
   const _results = new Set();
+  const errors = [];
   for (const _generator of ${generate({
     type: "ArrayExpression",
     elements: generators,
@@ -173,10 +174,11 @@ function multiTry(
     try {
       _results.add(_generator(_input));
     } catch (e) {
+      errors.push(e);
     }
   }
   if (!_results.size) {
-    throw "no solutions";
+    throw \`no solutions: \${errors.join(", ")}\`;
   }
   if (_results.size !== 1) {
     throw \`invalid solutions: \${[..._results].map(x => JSON.stringify(x)).join(", ")}\`;
