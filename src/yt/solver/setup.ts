@@ -31,4 +31,7 @@ if (typeof globalThis.navigator === "undefined") {
 if (typeof globalThis.self === "undefined") {
     globalThis.self = globalThis;
 }
+if (typeof globalThis.self.location === "undefined") {
+    globalThis.self.location = window.location;
+}
 `).body;
