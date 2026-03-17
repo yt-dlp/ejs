@@ -4,9 +4,8 @@ export const setupNodes = parse(`
 if (typeof globalThis.XMLHttpRequest === "undefined") {
     globalThis.XMLHttpRequest = { prototype: {} };
 }
-const window = Object.create(null);
 if (typeof URL === "undefined") {
-    window.location = {
+    globalThis.location = {
         hash: "",
         host: "www.youtube.com",
         hostname: "www.youtube.com",
@@ -20,7 +19,7 @@ if (typeof URL === "undefined") {
         username: "",
     };
 } else {
-    window.location = new URL("https://www.youtube.com/watch?v=yt-dlp-wins");
+    globalThis.location = new URL("https://www.youtube.com/watch?v=yt-dlp-wins");
 }
 if (typeof globalThis.document === "undefined") {
     globalThis.document = Object.create(null);
@@ -31,7 +30,7 @@ if (typeof globalThis.navigator === "undefined") {
 if (typeof globalThis.self === "undefined") {
     globalThis.self = globalThis;
 }
-if (typeof globalThis.self.location === "undefined") {
-    globalThis.self.location = window.location;
+if (typeof globalThis.window === "undefined") {
+    globalThis.window = globalThis;
 }
 `).body;
