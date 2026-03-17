@@ -99,7 +99,7 @@ export const tests: {
   },
   {
     // 20528 (tv & tv_es6 needed 'self.location.origin' fix)
-    player: "5e55da5a",
+    player: "f4f314f0",
     n: [{ input: "V8pdMGD0Sz_M0DRT", expected: "rBnTGCWGFpwByA" }],
     sig: [
       {
