@@ -85,7 +85,7 @@ export const tests: {
     ],
   },
   {
-    // 20528 (tv & tv_es6 needed 'origin' fix)
+    // 20528 (tv & tv_es6 needed 'self.location.origin' fix)
     player: "76ad2fe8",
     n: [{ input: "V8pdMGD0Sz_M0DRT", expected: "rBnTGCWGFpwByA" }],
     sig: [
@@ -98,7 +98,7 @@ export const tests: {
     ],
   },
   {
-    // 20528 (tv & tv_es6 needed 'origin' fix)
+    // 20528 (tv & tv_es6 needed 'self.location.origin' fix)
     player: "5e55da5a",
     n: [{ input: "V8pdMGD0Sz_M0DRT", expected: "rBnTGCWGFpwByA" }],
     sig: [
