@@ -191,6 +191,10 @@ class ESBuild:
             self._stdin = False
             self.cmd = [path]
 
+        elif name == "pnpm":
+            self._stdin = False
+            self.cmd = ["pnpm", "run", path]
+
         elif name == "deno":
             self._env = os.environ.copy()
             self._env["DENO_NO_UPDATE_CHECK"] = "1"
@@ -211,7 +215,7 @@ class ESBuild:
 
         else:
             raise RuntimeError(
-                "One of 'esbuild', 'deno', 'bun', or 'node' could not be found. "
+                "One of 'esbuild', 'pnpm', 'deno', 'bun', or 'node' could not be found. "
                 "Please install one of them to be able to run esbuild."
             )
 

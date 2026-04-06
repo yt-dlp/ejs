@@ -3,10 +3,11 @@
   "type": "module",
   "scripts": {
     "bundle": "python hatch_build.py",
-    "prettier": "prettier",
+    "esbuild": "esbuild",
     "fmt": "prettier --write \"**/*.[jt]s\" \"package.json\"",
     "fmt:check": "prettier --check \"**/*.[jt]s\" \"package.json\"",
-    "lint": "eslint src"
+    "lint": "eslint src",
+    "prettier": "prettier"
   },
   "homepage": "https://github.com/yt-dlp/ejs",
   "dependencies": {
