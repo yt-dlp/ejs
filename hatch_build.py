@@ -34,7 +34,6 @@ def run():
         subprocess.run(cmd, env=env, check=False)
 
     esbuild = ESBuild(*find_executable("EJS_BUILD_BUNDLER", DEFAULT_BUNDLER))
-    print(esbuild.cmd)
     print(f"Bundle command: {shlex.join(esbuild.cmd)}", file=sys.stderr)
 
     externals = list(get_external_packages(esbuild))
