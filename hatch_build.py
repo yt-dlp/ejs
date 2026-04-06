@@ -193,7 +193,7 @@ class ESBuild:
 
         elif name == "pnpm":
             self._stdin = False
-            self.cmd = ["pnpm", "run", path]
+            self.cmd = [path, "run", "esbuild"]
 
         elif name == "deno":
             self._env = os.environ.copy()
