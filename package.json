@@ -4,6 +4,7 @@
   "scripts": {
     "bundle": "python hatch_build.py",
     "build.mjs": "node build.mjs",
+    "prettier": "prettier",
     "fmt": "prettier --write \"**/*.[jt]s\" \"package.json\"",
     "fmt:check": "prettier --check \"**/*.[jt]s\" \"package.json\"",
     "lint": "eslint src"
