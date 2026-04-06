@@ -10,276 +10,103 @@ export const tests: {
   sig?: Step[];
 }[] = [
   {
-    player: "3d3ba064",
+    // 20522
+    player: "74edf1a3",
     n: [
-      { input: "ZdZIqFPQK-Ty8wId", expected: "qmtUsIz04xxiNW" },
-      { input: "4GMrWHyKI5cEvhDO", expected: "N9gmEX7YhKTSmw" },
+      { input: "IlLiA21ny7gqA2m4p37", expected: "9nRTxrbM1f0yHg" },
+      { input: "eabGFpsUKuWHXGh6FR4", expected: "izmYqDEY6kl7Sg" },
+      { input: "eabGF/ps%UK=uWHXGh6FR4", expected: "LACmqlhaBpiPlgE-a" },
     ],
     sig: [
       {
         input:
-          "gN7a-hudCuAuPH6fByOk1_GNXN0yNMHShjZXS2VOgsEItAJz0tipeavEOmNdYN-wUtcEqD3bCXjc0iyKfAyZxCBGgIARwsSdQfJ2CJtt",
+          "NJAJEij0EwRgIhAI0KExTgjfPk-MPM9MAdzyyPRt=BM8-XO5tm5hlMCSVpAiEAv7eP3CURqZNSPow8BXXAoazVoXgeMP7gH9BdylHCwgw=gwzz",
         expected:
-          "ttJC2JfQdSswRAIgGBCxZyAfKyi0cjXCb3gqEctUw-NYdNmOEvaepit0zJAtIEsgOV2SXZjhSHMNy0NXNG_1kNyBf6HPuAuCduh-a7O",
+          "NJAJEij0EwRgIhAI0KExTgjfPk-MPM9MAdzyyPRt=BM8-XO5tm5hzMCSVpAiEAv7eP3CURqZNSPow8BXXAoazVoXgeMP7gH9BdylHCwgw=gwzl",
+      },
+      {
+        input:
+          "\x00\x01\x02%\x03\x04\x05\x06\x07\x08\x09\x10\x11\x12\x13\x14\x15\x16\x17\x18\x19\x20\x21\x22\x23\x24\x25\x26\x27\x28\x29\x30\x31\x32\x33\x34\x35\x36\x37\x38\x39\x40\x41\x42\x43\x44\x45\x46\x47\x48\x49",
+        expected:
+          "\x00\x01\x02%\x03\x04\x05\x06\x07\x08\x09\x10\x11\x12\x13\x14\x15\x16\x17\x18\x19\x20\x21\x22\x23\x24\x25\x26\x27\x28\x29\x30\x31\x32\x33\x34\x35\x36\x37\x38\x39\x40\x41\x42\x49\x44\x45\x46\x47\x48\x43",
       },
     ],
   },
   {
-    player: "5ec65609",
-    n: [{ input: "0eRGgQWJGfT5rFHFj", expected: "4SvMpDQH-vBJCw" }],
+    // 20523
+    player: "901741ab",
+    n: [{ input: "BQoJvGBkC2nj1ZZLK-", expected: "UMPovvBZRh-sjb" }],
     sig: [
       {
         input:
-          "AAJAJfQdSswRQIhAMG5SN7-cAFChdrE7tLA6grH0rTMICA1mmDc0HoXgW3CAiAQQ4=CspfaF_vt82XH5yewvqcuEkvzeTsbRuHssRMyJQ=I",
+          "NJAJEij0EwRgIhAI0KExTgjfPk-MPM9MAdzyyPRt=BM8-XO5tm5hlMCSVpAiEAv7eP3CURqZNSPow8BXXAoazVoXgeMP7gH9BdylHCwgw=gwzz",
         expected:
-          "AJfQdSswRQIhAMG5SN7-cAFChdrE7tLA6grI0rTMICA1mmDc0HoXgW3CAiAQQ4HCspfaF_vt82XH5yewvqcuEkvzeTsbRuHssRMyJQ==",
+          "wgwCHlydB9Hg7PMegXoVzaoAXXB8woPSNZqRUC3Pe7vAEiApVSCMlhwmt5ON-8MB=5RPyyzdAM9MPM-kPfjgTxEK0IAhIgRwE0jiEJA",
       },
     ],
   },
   {
-    player: "6742b2b9",
-    n: [
-      { input: "_HPB-7GFg1VTkn9u", expected: "qUAsPryAO_ByYg" },
-      { input: "K1t_fcB6phzuq2SF", expected: "Y7PcOt3VE62mog" },
-    ],
+    // 20524
+    player: "e7573094",
+    n: [{ input: "IlLiA21ny7gqA2m4p37", expected: "3KuQ3235dojTSjo4" }],
     sig: [
       {
         input:
-          "MMGZJMUucirzS_SnrSPYsc85CJNnTUi6GgR5NKn-znQEICACojE8MHS6S7uYq4TGjQX_D4aPk99hNU6wbTvorvVVMgIARwsSdQfJAA",
+          "NJAJEij0EwRgIhAI0KExTgjfPk-MPM9MAdzyyPRt=BM8-XO5tm5hlMCSVpAiEAv7eP3CURqZNSPow8BXXAoazVoXgeMP7gH9BdylHCwgw=gwzz",
         expected:
-          "AJfQdSswRAIgMVVvrovTbw6UNh99kPa4D_XQjGT4qYu7S6SHM8EjoCACIEQnz-nKN5RgG6iUTnNJC58csYPSrnS_SzricuUMJZGM",
+          "yEij0EwRgIhAI0KExTgjfPk-MPM9MAdzyNPRt=BM8-XO5tm5hlMCSVNAiEAvpeP3CURqZJSPow8BXXAoazVoXgeMP7gH9BdylHCwgw=g",
       },
     ],
   },
   {
-    player: "23ccdd25",
-    n: [
-      // Synthetic test
-      { input: "0eRGgQWJGfT5rFHFj", expected: "orSsTqUaUO-j" },
-    ],
+    // 20525
+    player: "9fcf08e8",
+    n: [{ input: "4JRSxxN0E_fLVnxmd", expected: "xhAoMP8xPcR5wg" }],
     sig: [
-      // Synthetic test
       {
         input:
-          "MMGZJMUucirzS_SnrSPYsc85CJNnTUi6GgR5NKn-znQEICACojE8MHS6S7uYq4TGjQX_D4aPk99hNU6wbTvorvVVMgIARwsSdQfJAA",
+          "\x00\x01\x02\x03\x04\x05\x06\x07\x08\x09\x0a\x0b\x0c\x0d\x0e\x0f\x10\x11\x12\x13\x14\x15\x16\x17\x18\x19\x1a\x1b\x1c\x1d\x1e\x1f\x20\x21\x22\x23\x24\x25\x26\x27\x28\x29\x2a\x2b\x2c\x2d\x2e\x2f\x30\x31\x32\x33\x34\x35\x36\x37\x38\x39\x3a\x3b\x3c\x3d\x3e\x3f\x40\x41\x42\x43\x44\x45\x46\x47\x48\x49\x4a\x4b\x4c\x4d\x4e\x4f\x50\x51\x52\x53\x54\x55\x56\x57\x58\x59\x5a\x5b\x5c\x5d\x5e\x5f\x60\x61\x62\x63\x64\x65\x66\x67\x68\x69\x6a",
         expected:
-          "ZJMUucirzS_SnrSPYsc85CJNnTUi6GgR5NKn-znQEICACojE8MHS6S7uYq4TGjQX_D4aPk99hAU6wbTvorvVVMgIARwsSdQfJAN",
+          "\x6a\x69\x68\x67\x66\x65\x64\x63\x62\x61\x60\x5f\x5e\x5d\x5c\x5b\x5a\x59\x58\x57\x56\x55\x54\x53\x52\x51\x50\x4f\x4e\x4d\x4c\x4b\x4a\x49\x48\x47\x46\x45\x44\x43\x42\x41\x40\x3f\x3e\x3d\x3c\x3b\x3a\x39\x38\x37\x36\x35\x34\x33\x32\x31\x30\x2f\x2e\x2d\x2c\x2b\x2a\x29\x28\x27\x26\x25\x24\x23\x22\x21\x20\x1f\x1e\x1d\x1c\x1b\x1a\x19\x18\x17\x16\x15\x14\x13\x12\x11\x10\x0f\x0e\x0d\x0c\x0b\x03\x09\x08\x07\x06\x05\x04\x0a",
       },
     ],
   },
   {
-    player: "3597727b",
-    n: [
-      // Synthetic test
-      { input: "0eRGgQWJGfT5rFHFj", expected: "PRwo5dDfisg0ejA2" },
-    ],
+    // 20527
+    player: "21cd2156",
+    n: [{ input: "16EF3jx-Mr_TLuGH", expected: "OQJDc7IrlWCkfg" }],
     sig: [
-      // Synthetic test
       {
         input:
-          "MMGZJMUucirzS_SnrSPYsc85CJNnTUi6GgR5NKn-znQEICACojE8MHS6S7uYq4TGjQX_D4aPk99hNU6wbTvorvVVMgIARwsSdQfJAA",
+          "\x00\x01\x02\x03\x04\x05\x06\x07\x08\x09\x0a\x0b\x0c\x0d\x0e\x0f\x10\x11\x12\x13\x14\x15\x16\x17\x18\x19\x1a\x1b\x1c\x1d\x1e\x1f\x20\x21\x22\x23\x24\x25\x26\x27\x28\x29\x2a\x2b\x2c\x2d\x2e\x2f\x30\x31\x32\x33\x34\x35\x36\x37\x38\x39\x3a\x3b\x3c\x3d\x3e\x3f\x40\x41\x42\x43\x44\x45\x46\x47\x48\x49\x4a\x4b\x4c\x4d\x4e\x4f\x50\x51\x52\x53\x54\x55\x56\x57\x58\x59\x5a\x5b\x5c\x5d\x5e\x5f\x60\x61\x62\x63\x64\x65\x66\x67\x68\x69\x6a",
         expected:
-          "AAJfQdSswRAIgMVVvrovTbw6UNh99kPa4D_XQjGT4qYuMS6SHM8Ej7CACIEQnz-nKN5RgG6iUTnNJC58csYPSroS_SzricuUMJZG",
+          "\x03\x04\x05\x06\x07\x08\x09\x0a\x0b\x0c\x0d\x0e\x0f\x10\x11\x12\x13\x14\x15\x16\x17\x18\x19\x1a\x1b\x1c\x1d\x1e\x1f\x20\x21\x22\x23\x24\x25\x26\x27\x28\x29\x2a\x2b\x2c\x2d\x2e\x2f\x30\x31\x32\x33\x34\x35\x36\x37\x38\x39\x3a\x3b\x3c\x3d\x3e\x3f\x40\x41\x42\x43\x44\x00\x46\x47\x48\x49\x4a\x4b\x6a\x4d\x4e\x4f\x50\x51\x52\x53\x54\x55\x56\x57\x58\x59\x5a\x5b\x5c\x5d\x5e\x5f\x60\x61\x62\x63\x64\x65\x66\x67\x68\x69\x4c",
       },
     ],
   },
   {
-    // tce causes exception even in browser
-    player: "3752a005",
-    variants: ["main", "tcc", "es5", "es6", "tv", "tv_es6", "phone", "tablet"],
-    n: [
-      // Synthetic test
-      { input: "0eRGgQWJGfT5rFHFj", expected: "j22ZtsqVsR0Dn" },
-    ],
+    // 20528 (tv & tv_es6 needed self.location.origin fix)
+    player: "76ad2fe8",
+    n: [{ input: "V8pdMGD0Sz_M0DRT", expected: "rBnTGCWGFpwByA" }],
     sig: [
-      // Synthetic test
       {
         input:
-          "MMGZJMUucirzS_SnrSPYsc85CJNnTUi6GgR5NKn-znQEICACojE8MHS6S7uYq4TGjQX_D4aPk99hNU6wbTvorvVVMgIARwsSdQfJAA",
+          "\x00\x01\x02\x03\x04\x05\x06\x07\x08\x09\x0a\x0b\x0c\x0d\x0e\x0f\x10\x11\x12\x13\x14\x15\x16\x17\x18\x19\x1a\x1b\x1c\x1d\x1e\x1f\x20\x21\x22\x23\x24\x25\x26\x27\x28\x29\x2a\x2b\x2c\x2d\x2e\x2f\x30\x31\x32\x33\x34\x35\x36\x37\x38\x39\x3a\x3b\x3c\x3d\x3e\x3f\x40\x41\x42\x43\x44\x45\x46\x47\x48\x49\x4a\x4b\x4c\x4d\x4e\x4f\x50\x51\x52\x53\x54\x55\x56\x57\x58\x59\x5a\x5b\x5c\x5d\x5e\x5f\x60\x61\x62\x63\x64\x65\x66\x67\x68\x69\x6a",
         expected:
-          "ZJM_ucirzS_SnrSPYsc85CJNnTUi6GgR5NKn-znQEICACojE8MHG6S7uYq4TGjQXSD4aPk99hNU6wbTvorvVVMgIARwsSdQfJAA",
+          "\x46\x66\x65\x64\x63\x62\x61\x60\x5f\x5e\x67\x6a\x5b\x5a\x59\x58\x57\x56\x55\x54\x53\x52\x51\x50\x4f\x4e\x4d\x4c\x4b\x4a\x49\x48\x47\x2c\x45\x44\x43\x42\x41\x40\x3f\x3e\x3d\x3c\x3b\x3a\x39\x38\x13\x36\x35\x34\x33\x32\x31\x30\x2f\x2e\x2d\x5d\x2b\x2a\x29\x28\x27\x26\x25\x24\x23\x22\x21\x20\x1f\x1e\x1d\x1c\x1b\x1a\x19\x18\x17\x16\x15\x14\x0c\x12\x11\x10\x0f\x0e\x0d\x00\x0b\x0a\x09\x08\x07\x06\x05\x04\x03\x02\x01\x37",
       },
     ],
   },
   {
-    // tce causes exception even in browser
-    player: "afc7785b",
-    variants: ["main", "tcc", "es5", "es6", "tv", "tv_es6", "phone", "tablet"],
-    n: [
-      // Synthetic test
-      { input: "0eRGgQWJGfT5rFHFj", expected: "j22ZtsqVsR0Dn" },
-    ],
+    // 20529 (tv & tv_es6 needed self.location.origin fix)
+    player: "631d3938",
+    n: [{ input: "KBx1qz7jMhxELa8c", expected: "ttPvh7WIptsgSw" }],
     sig: [
-      // Synthetic test
       {
         input:
-          "MMGZJMUucirzS_SnrSPYsc85CJNnTUi6GgR5NKn-znQEICACojE8MHS6S7uYq4TGjQX_D4aPk99hNU6wbTvorvVVMgIARwsSdQfJAA",
+          "\x00\x01\x02\x03\x04\x05\x06\x07\x08\x09\x0a\x0b\x0c\x0d\x0e\x0f\x10\x11\x12\x13\x14\x15\x16\x17\x18\x19\x1a\x1b\x1c\x1d\x1e\x1f\x20\x21\x22\x23\x24\x25\x26\x27\x28\x29\x2a\x2b\x2c\x2d\x2e\x2f\x30\x31\x32\x33\x34\x35\x36\x37\x38\x39\x3a\x3b\x3c\x3d\x3e\x3f\x40\x41\x42\x43\x44\x45\x46\x47\x48\x49\x4a\x4b\x4c\x4d\x4e\x4f\x50\x51\x52\x53\x54\x55\x56\x57\x58\x59\x5a\x5b\x5c\x5d\x5e\x5f\x60\x61\x62\x63\x64\x65\x66",
         expected:
-          "ZJM_ucirzS_SnrSPYsc85CJNnTUi6GgR5NKn-znQEICACojE8MHG6S7uYq4TGjQXSD4aPk99hNU6wbTvorvVVMgIARwsSdQfJAA",
-      },
-    ],
-  },
-  {
-    // tce causes exception even in browser
-    player: "b9645327",
-    variants: ["main", "tcc", "es5", "es6", "tv", "tv_es6", "phone", "tablet"],
-    n: [
-      // Synthetic test
-      { input: "0eRGgQWJGfT5rFHFj", expected: "j22ZtsqVsR0Dn" },
-    ],
-    sig: [
-      // Synthetic test
-      {
-        input:
-          "MMGZJMUucirzS_SnrSPYsc85CJNnTUi6GgR5NKn-znQEICACojE8MHS6S7uYq4TGjQX_D4aPk99hNU6wbTvorvVVMgIARwsSdQfJAA",
-        expected:
-          "ZJM_ucirzS_SnrSPYsc85CJNnTUi6GgR5NKn-znQEICACojE8MHG6S7uYq4TGjQXSD4aPk99hNU6wbTvorvVVMgIARwsSdQfJAA",
-      },
-    ],
-  },
-  {
-    // tce causes exception even in browser
-    player: "035b9195",
-    variants: ["main", "tcc", "es5", "es6", "tv", "tv_es6", "phone", "tablet"],
-    n: [
-      // Synthetic test
-      { input: "0eRGgQWJGfT5rFHFj", expected: "j22ZtsqVsR0Dn" },
-    ],
-    sig: [
-      // Synthetic test
-      {
-        input:
-          "MMGZJMUucirzS_SnrSPYsc85CJNnTUi6GgR5NKn-znQEICACojE8MHS6S7uYq4TGjQX_D4aPk99hNU6wbTvorvVVMgIARwsSdQfJAA",
-        expected:
-          "ZJM_ucirzS_SnrSPYsc85CJNnTUi6GgR5NKn-znQEICACojE8MHG6S7uYq4TGjQXSD4aPk99hNU6wbTvorvVVMgIARwsSdQfJAA",
-      },
-    ],
-  },
-  {
-    player: "6740c111",
-    n: [
-      // Synthetic test
-      { input: "0eRGgQWJGfT5rFHFj", expected: "AVsXYE0uE1k8e" },
-    ],
-    sig: [
-      // Synthetic test
-      {
-        input:
-          "MMGZJMUucirzS_SnrSPYsc85CJNnTUi6GgR5NKn-znQEICACojE8MHS6S7uYq4TGjQX_D4aPk99hNU6wbTvorvVVMgIARwsSdQfJAA",
-        expected:
-          "JfQdSswRAIgMVVvrovTbw6UNh99kPa4D_XQjGT4qYu7S6SHM8EjoCACIEQnz-MKN5RgG6iUTnNJC58csYPSrnS_SzricuUMJZGn",
-      },
-    ],
-  },
-  {
-    player: "f6a4f3bc",
-    n: [
-      // Synthetic test
-      { input: "0eRGgQWJGfT5rFHFj", expected: "H1NKYFbhlqZ" },
-    ],
-    sig: [
-      // Synthetic test
-      {
-        input:
-          "MMGZJMUucirzS_SnrSPYsc85CJNnTUi6GgR5NKn-znQEICACojE8MHS6S7uYq4TGjQX_D4aPk99hNU6wbTvorvVVMgIARwsSdQfJAA",
-        expected:
-          "JfQdSswRAIgMVVvrovTbw6UNh99kPa4D_XQjGT4qYM7S6SHM8EjoCACIEQnz-nKM5RgG6iUTnNJC58cNYPSrnS_SzricuUMJZGu",
-      },
-    ],
-  },
-  {
-    player: "b66835e2",
-    n: [
-      // Synthetic test
-      { input: "0eRGgQWJGfT5rFHFj", expected: "H1NKYFbhlqZ" },
-    ],
-    sig: [
-      // Synthetic test
-      {
-        input:
-          "MMGZJMUucirzS_SnrSPYsc85CJNnTUi6GgR5NKn-znQEICACojE8MHS6S7uYq4TGjQX_D4aPk99hNU6wbTvorvVVMgIARwsSdQfJAA",
-        expected:
-          "JfQdSswRAIgMVVvrovTbw6UNh99kPa4D_XQjGT4qYM7S6SHM8EjoCACIEQnz-nKM5RgG6iUTnNJC58cNYPSrnS_SzricuUMJZGu",
-      },
-    ],
-  },
-  {
-    player: "4f8fa943",
-    n: [
-      // Synthetic test
-      { input: "0eRGgQWJGfT5rFHFj", expected: "JWWr7hDSRpMq5" },
-    ],
-    sig: [
-      // Synthetic test
-      {
-        input:
-          "MMGZJMUucirzS_SnrSPYsc85CJNnTUi6GgR5NKn-znQEICACojE8MHS6S7uYq4TGjQX_D4aPk99hNU6wbTvorvVVMgIARwsSdQfJAA",
-        expected:
-          "AAJfQdSswRAIgMVVvrovTbw6UNh99kPa4D_XQjGT4qYu7S6SHr8EjoCACIEQnz-nKN5RgG6iUTnNZC58csYPSMnS_SzricuUM",
-      },
-    ],
-  },
-  {
-    player: "0004de42",
-    n: [
-      // Synthetic test
-      { input: "0eRGgQWJGfT5rFHFj", expected: "OPd7UEsCDmCw4qD0" },
-    ],
-    sig: [
-      // Synthetic test
-      {
-        input:
-          "MMGZJMUucirzS_SnrSPYsc85CJNnTUi6GgR5NKn-znQEICACojE8MHS6S7uYq4TGjQX_D4aPk99hNU6wbTvorvVVMgIARwsSdQfJAA",
-        expected:
-          "ZJMUucirzS_SnrSPYsc85MJNnTUi6GgR5NCn-znQEICACojE8MHS6S7uYq4TGjQX_D4aPk99hNU6wbTvorvVVMgIARwsSdQ",
-      },
-    ],
-  },
-  {
-    player: "2b83d2e0",
-    n: [
-      // Synthetic test
-      { input: "0eRGgQWJGfT5rFHFj", expected: "euHbygrCMLksxd" },
-    ],
-    sig: [
-      // Synthetic test
-      {
-        input:
-          "MMGZJMUucirzS_SnrSPYsc85CJNnTUi6GgR5NKn-znQEICACojE8MHS6S7uYq4TGjQX_D4aPk99hNU6wbTvorvVVMgIARwsSdQfJA",
-        expected:
-          "-MGZJMUucirzS_SnrSPYsc85CJNnTUi6GgR5NKnMznQEICACojE8MHS6S7uYq4TGjQX_D4aPk99hNU6wbTvorvVVMgIARwsSdQfJ",
-      },
-    ],
-  },
-  {
-    player: "638ec5c6",
-    n: [
-      // Synthetic test
-      { input: "ZdZIqFPQK-Ty8wId", expected: "1qov8-KM-yH" },
-    ],
-    sig: [
-      // Synthetic test
-      {
-        input:
-          "gN7a-hudCuAuPH6fByOk1_GNXN0yNMHShjZXS2VOgsEItAJz0tipeavEOmNdYN-wUtcEqD3bCXjc0iyKfAyZxCBGgIARwsSdQfJ2CJtt",
-        expected:
-          "MhudCuAuP-6fByOk1_GNXN7gNHHShjyXS2VOgsEItAJz0tipeav0OmNdYN-wUtcEqD3bCXjc0iyKfAyZxCBGgIARwsSdQfJ2CJtt",
-      },
-    ],
-  },
-  {
-    player: "87644c66",
-    n: [
-      // Synthetic test
-      { input: "ZdZIqFPQK-Ty8wId", expected: "iF5NxEm1BYk" },
-    ],
-    sig: [
-      // Synthetic test
-      {
-        input:
-          "gN7a-hudCuAuPH6fByOk1_GNXN0yNMHShjZXS2VOgsEItAJz0tipeavEOmNdYN-wUtcEqD3bCXjc0iyKfAyZxCBGgIARwsSdQfJ2CJtt",
-        expected:
-          "atJC2JfQdSswRAtgGBCxZyAfKyi0cjXCb3DqEctUw-NYdNmOEvIepit0zJAtIEsgOV2SXZjhSHMNy0NXNG_1kOyBf6HPuAuCduh-a7Ng",
+          "\x19\x01\x02\x03\x04\x05\x06\x07\x08\x09\x0a\x0b\x0c\x0d\x0e\x0f\x10\x11\x12\x13\x14\x15\x16\x17\x18\x00\x1a\x1b\x1c\x1d\x1e\x1f\x20\x21\x22\x23\x24\x25\x26\x27\x28\x29\x2a\x2b\x2c\x2d\x2e\x2f\x30\x31\x32\x33\x34\x35\x36\x37\x38\x39\x3a\x3b\x3c\x3d\x3e\x3f\x40\x41\x42\x43\x44\x45\x46\x47\x48\x49\x4a\x4b\x4c\x4d\x4e\x4f\x50\x51\x52\x53\x54\x55\x56\x57\x58\x59\x5a\x5b\x5c\x5d\x5e\x5f\x60\x61\x62\x63",
       },
     ],
   },
@@ -289,12 +116,12 @@ export const players = new Map([
   ["main", "player_ias.vflset/en_US/base.js"],
   ["tcc", "player_ias_tcc.vflset/en_US/base.js"],
   ["tce", "player_ias_tce.vflset/en_US/base.js"],
-  ["es5", "player_es5.vflset/en_US/base.js"],
   ["es6", "player_es6.vflset/en_US/base.js"],
   ["tv", "tv-player-ias.vflset/tv-player-ias.js"],
   ["tv_es6", "tv-player-es6.vflset/tv-player-es6.js"],
   ["phone", "player-plasma-ias-phone-en_US.vflset/base.js"],
-  ["tablet", "player-plasma-ias-tablet-en_US.vflset/base.js"],
+  ["es6_tcc", "player_es6_tcc.vflset/en_US/base.js"],
+  ["es6_tce", "player_es6_tce.vflset/en_US/base.js"],
 ] as const);
 
 export type Variant = typeof players extends Map<infer T, unknown> ? T : never;

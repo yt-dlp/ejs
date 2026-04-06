@@ -1,14 +1,45 @@
 import { type ESTree, parse } from "meriyah";
 import { generate } from "astring";
-import { extract as extractSig } from "./sig.ts";
-import { extract as extractN } from "./n.ts";
+import { extract } from "./nsig.ts";
 import { setupNodes } from "./setup.ts";
+import { generateArrowFunction } from "../../utils.ts";
 
 export function preprocessPlayer(data: string): string {
-  const ast = parse(data);
-  const body = ast.body;
+  const program = parse(data);
+  const plainStatements = modifyPlayer(program);
+  const solutions = getSolutions(plainStatements);
+  for (const [name, options] of Object.entries(solutions)) {
+    plainStatements.push({
+      type: "ExpressionStatement",
+      expression: {
+        type: "AssignmentExpression",
+        operator: "=",
+        left: {
+          type: "MemberExpression",
+          computed: false,
+          object: {
+            type: "Identifier",
+            name: "_result",
+          },
+          property: {
+            type: "Identifier",
+            name: name,
+          },
+          optional: false,
+        },
+        right: multiTry(options),
+      },
+    });
+  }
 
-  const block = (() => {
+  program.body.splice(0, 0, ...setupNodes);
+  return generate(program);
+}
+
+export function modifyPlayer(program: ESTree.Program) {
+  const body = program.body;
+
+  const block: ESTree.BlockStatement = (() => {
     switch (body.length) {
       case 1: {
         const func = body[0];
@@ -40,19 +71,7 @@ export function preprocessPlayer(data: string): string {
     throw "unexpected structure";
   })();
 
-  const found = {
-    n: [] as ESTree.ArrowFunctionExpression[],
-    sig: [] as ESTree.ArrowFunctionExpression[],
-  };
-  const plainExpressions = block.body.filter((node: ESTree.Node) => {
-    const n = extractN(node);
-    if (n) {
-      found.n.push(n);
-    }
-    const sig = extractSig(node);
-    if (sig) {
-      found.sig.push(sig);
-    }
+  block.body = block.body.filter((node: ESTree.Statement) => {
     if (node.type === "ExpressionStatement") {
       if (node.expression.type === "AssignmentExpression") {
         return true;
@@ -61,43 +80,75 @@ export function preprocessPlayer(data: string): string {
     }
     return true;
   });
-  block.body = plainExpressions;
 
-  for (const [name, options] of Object.entries(found)) {
-    // TODO: this is cringe fix plz
-    const unique = new Set(options.map((x) => JSON.stringify(x)));
-    if (unique.size !== 1) {
-      const message = `found ${unique.size} ${name} function possibilities`;
-      throw (
-        message +
-        (unique.size ? `: ${options.map((x) => generate(x)).join(", ")}` : "")
+  return block.body;
+}
+
+export function getSolutions(
+  statements: ESTree.Statement[],
+): Record<string, ESTree.ArrowFunctionExpression[]> {
+  const found = {
+    n: [] as ESTree.ArrowFunctionExpression[],
+    sig: [] as ESTree.ArrowFunctionExpression[],
+  };
+  for (const statement of statements) {
+    const result = extract(statement);
+    if (result) {
+      found.n.push(
+        makeSolver(result, {
+          type: "Identifier",
+          name: "n",
+        }),
+      );
+      found.sig.push(
+        makeSolver(result, {
+          type: "Identifier",
+          name: "sig",
+        }),
       );
     }
-    plainExpressions.push({
-      type: "ExpressionStatement",
-      expression: {
-        type: "AssignmentExpression",
-        operator: "=",
-        left: {
-          type: "MemberExpression",
-          computed: false,
-          object: {
-            type: "Identifier",
-            name: "_result",
-          },
-          property: {
-            type: "Identifier",
-            name: name,
-          },
-        },
-        right: options[0],
-      },
-    });
   }
+  return found;
+}
 
-  ast.body.splice(0, 0, ...setupNodes);
-
-  return generate(ast);
+function makeSolver(
+  result: ESTree.ArrowFunctionExpression,
+  ident: ESTree.Identifier,
+): ESTree.ArrowFunctionExpression {
+  return {
+    type: "ArrowFunctionExpression",
+    params: [ident],
+    body: {
+      type: "MemberExpression",
+      object: {
+        type: "CallExpression",
+        callee: result,
+        arguments: [
+          {
+            type: "ObjectExpression",
+            properties: [
+              {
+                type: "Property",
+                key: ident,
+                value: ident,
+                kind: "init",
+                computed: false,
+                method: false,
+                shorthand: true,
+              },
+            ],
+          },
+        ],
+        optional: false,
+      },
+      computed: false,
+      property: ident,
+      optional: false,
+    },
+    async: false,
+    expression: true,
+    generator: false,
+  };
 }
 
 export function getFromPrepared(code: string): {
@@ -107,4 +158,32 @@ export function getFromPrepared(code: string): {
   const resultObj = { n: null, sig: null };
   Function("_result", code)(resultObj);
   return resultObj;
+}
+
+function multiTry(
+  generators: ESTree.ArrowFunctionExpression[],
+): ESTree.ArrowFunctionExpression {
+  return generateArrowFunction(`
+(_input) => {
+  const _results = new Set();
+  const errors = [];
+  for (const _generator of ${generate({
+    type: "ArrayExpression",
+    elements: generators,
+  } as ESTree.Node)}) {
+    try {
+      _results.add(_generator(_input));
+    } catch (e) {
+      errors.push(e);
+    }
+  }
+  if (!_results.size) {
+    throw \`no solutions: \${errors.join(", ")}\`;
+  }
+  if (_results.size !== 1) {
+    throw \`invalid solutions: \${[..._results].map(x => JSON.stringify(x)).join(", ")}\`;
+  }
+  return _results.values().next().value;
+}
+`);
 }

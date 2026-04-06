@@ -4,8 +4,8 @@
   "scripts": {
     "bundle": "python hatch_build.py",
     "build.mjs": "node build.mjs",
-    "fmt": "prettier --write \"src/**.ts\" \"package.json\" \"run.ts\" \"eslint.config.js\"",
-    "fmt:check": "prettier --check \"src/**.ts\" \"package.json\" \"run.ts\" \"eslint.config.js\"",
+    "fmt": "prettier --write \"**/*.[jt]s\" \"package.json\"",
+    "fmt:check": "prettier --check \"**/*.[jt]s\" \"package.json\"",
     "lint": "eslint src"
   },
   "homepage": "https://github.com/yt-dlp/ejs",
