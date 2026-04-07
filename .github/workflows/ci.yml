@@ -18,8 +18,8 @@ concurrency:
   cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 env:
-  ACTIONLINT_VERSION: "1.7.11"
-  ACTIONLINT_SHA256SUM: 900919a84f2229bac68ca9cd4103ea297abc35e9689ebb842c6e34a3d1b01b0a
+  ACTIONLINT_VERSION: "1.7.12"
+  ACTIONLINT_SHA256SUM: 8aca8db96f1b94770f1b0d72b6dddcb1ebb8123cb3712530b08cc387b349a3d8
   ACTIONLINT_REPO: https://github.com/rhysd/actionlint
 
 jobs:
@@ -214,7 +214,7 @@ jobs:
             dist/SHA2-256SUMS
           compression-level: 0
       - name: Cache player JS files
-        uses: actions/cache@cdf6c1fa76f9f475f3d7449005a359c84ca0f306  # v5.0.3
+        uses: actions/cache@668228422ae6a00e4ad889ee87cd7109ec5666a7  # v5.0.4
         env:
           SEGMENT_DOWNLOAD_TIMEOUT_MINS: 1
         with:
