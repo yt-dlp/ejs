@@ -257,7 +257,7 @@ class ESBuild:
         )
         if process.returncode:
             raise RuntimeError(
-                "failed to run esbuild:\n" + process.stdout + process.stdout
+                f"failed to run esbuild:\n{process.stdout}{process.stderr}"
             )
         return process
 
