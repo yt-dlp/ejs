@@ -33,6 +33,17 @@ python hatch_build.py
 
 This will automatically select an available runtime and build using it.
 
+For more fine-grained control over how to build the package, you can set these environment variables:
+- `EJS_BUILD_SKIP_INSTALL`: If this environment variable is set, the install step will be skipped.
+  It is expected that the required packages are available for the selected bundler.
+  No network access should be required if this variable is set.
+- `EJS_BUILD_INSTALLER`: Order of installers to try, separated by `:` on POSIX or `;` on Windows.
+  These will be used to install the required dependencies for bundling the JavaScript package.
+  Can be any of `pnpm`, `deno`, `bun` or `npm` (this is also the default order).
+- `EJS_BUILD_BUNDLER`: Order of bundlers to try, separated by `:` on POSIX or `;` on Windows.
+  These will be used to perform the bundling of the JavaScript package (calling rollup under the hood).
+  Can be any of `esbuild`, `pnpm`, `deno`, `bun`, `node` (this is also the default order).
+
 ### Tests
 
 First, make sure the project's dependencies are installed and download the player JS files:
