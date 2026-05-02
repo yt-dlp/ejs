@@ -12,7 +12,7 @@
   "homepage": "https://github.com/yt-dlp/ejs",
   "dependencies": {
     "astring": "1.9.0",
-    "meriyah": "6.1.4"
+    "meriyah": "7.1.0"
   },
   "devDependencies": {
     "@eslint/js": "9.38.0",
