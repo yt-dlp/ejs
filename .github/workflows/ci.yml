@@ -67,8 +67,8 @@ jobs:
           persona: pedantic
           version: v1.23.1
 
-  ruff_format:
-    name: Ruff format check
+  py_format:
+    name: Python format check
     permissions:
       contents: read
     runs-on: ubuntu-latest
@@ -80,8 +80,8 @@ jobs:
         with:
           args: "check --output-format github"
 
-  ruff_lint:
-    name: Ruff linting check
+  py_lint:
+    name: Python lint check
     permissions:
       contents: read
     runs-on: ubuntu-latest
@@ -93,8 +93,8 @@ jobs:
         with:
           args: "format --check --diff"
 
-  prettier:
-    name: Prettier check
+  js_format:
+    name: JavaScript format check
     permissions:
       contents: read
     runs-on: ubuntu-latest
@@ -109,12 +109,12 @@ jobs:
       - name: Install Deno requirements
         run: |
           deno install --frozen
-      - name: Run Prettier check
+      - name: Run format check
         run: |
           deno task fmt:check
 
-  eslint:
-    name: ESLint check
+  js_lint:
+    name: JavaScript lint check
     permissions:
       contents: read
     runs-on: ubuntu-latest
@@ -129,7 +129,7 @@ jobs:
       - name: Install Deno requirements
         run: |
           deno install --frozen
-      - name: Run ESLint check
+      - name: Run lint check
         run: |
           deno task lint
 
@@ -547,10 +547,10 @@ jobs:
     needs:
       - actionlint
       - zizmor
-      - ruff_format
-      - ruff_lint
-      - prettier
-      - eslint
+      - py_format
+      - py_lint
+      - js_format
+      - js_lint
       - python_tests
       - pnpm_build
       - deno_lock_check
