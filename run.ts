@@ -1,5 +1,5 @@
-import { argv, exit } from "node:process";
 import { readFileSync } from "node:fs";
+import { argv, exit } from "node:process";
 
 import { isOneOf } from "./src/utils.ts";
 import main from "./src/yt/solver/main.ts";
@@ -7,9 +7,7 @@ import main from "./src/yt/solver/main.ts";
 const args = argv.slice(2);
 if (args.length < 2) {
   console.error(
-    `ERROR: Missing argument\nusage: ${
-      argv[1]
-    } <player> [<type>:<request> ...]`,
+    `ERROR: Missing argument\nusage: ${argv[1]} <player> [<type>:<request> ...]`,
   );
   exit(1);
 }

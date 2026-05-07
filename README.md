@@ -18,7 +18,7 @@ If you only have Python and a JS runtime, then you may instead run `./hatch_buil
 This will transparently invoke one of the supported JS runtimes for the build.
 
 If you notice differences between different runtimes' builds
-please open an issue [here](<https://github.com/yt-dlp/ejs/issues/new>).
+please open an issue [here](https://github.com/yt-dlp/ejs/issues/new).
 
 ### Build
 
@@ -34,6 +34,7 @@ python hatch_build.py
 This will automatically select an available runtime and build using it.
 
 For more fine-grained control over how to build the package, you can set these environment variables:
+
 - `EJS_BUILD_SKIP_INSTALL`: If this environment variable is set, the install step will be skipped.
   It is expected that the required packages are available for the selected bundler.
   No network access should be required if this variable is set.
@@ -103,8 +104,8 @@ python check.py
 
 ## Licensing
 
-This code is licensed under [Unlicense](<https://unlicense.org/>).
+This code is licensed under [Unlicense](https://unlicense.org/).
 
 An exception to this is the prebuilt wheels, which contain both
-[`meriyah`](<https://github.com/meriyah/meriyah>) and [`astring`](<https://github.com/davidbonnet/astring>),
-licensed under [`ISC`](<https://github.com/meriyah/meriyah?tab=ISC-1-ov-file>) and [`MIT`](<https://github.com/davidbonnet/astring?tab=MIT-1-ov-file>), respectively.
+[`meriyah`](https://github.com/meriyah/meriyah) and [`astring`](https://github.com/davidbonnet/astring),
+licensed under [`ISC`](https://github.com/meriyah/meriyah?tab=ISC-1-ov-file) and [`MIT`](https://github.com/davidbonnet/astring?tab=MIT-1-ov-file), respectively.
