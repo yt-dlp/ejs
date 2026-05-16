@@ -6,6 +6,9 @@ on:
 
 permissions: {}
 
+env:
+  GH_TELEMETRY: "false"
+
 jobs:
   build:
     name: Build artifacts
@@ -17,19 +20,24 @@ jobs:
         with:
           fetch-depth: 0  # Needed for hatch-vcs versioning
           persist-credentials: false
+
       - uses: denoland/setup-deno@e95548e56dfa95d4e1a28d6f422fafe75c4c26fb  # v2.0.3
         with:
           deno-version: 3fbb1daddbc9333cddf0d8c0735811717dd70f7a  # v2.6.3
           cache: false
+
       - uses: actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405  # v6.2.0
         with:
           python-version: "3.10"
+
       - name: Install Python requirements
         run: |
           python -m pip install -U build
+
       - name: Build Python artifacts
         run: |
           python -m build
+
       - name: Upload Python artifacts
         uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f  # v7.0.0
         with:
@@ -38,10 +46,12 @@ jobs:
             dist/yt_dlp_ejs-*.whl
             dist/yt_dlp_ejs-*.tar.gz
           compression-level: 0
+
       - name: Build JavaScript artifacts
         run: |
           deno install --frozen
           deno task bundle
+
       - name: Upload JavaScript artifacts
         uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f  # v7.0.0
         with:
@@ -62,6 +72,7 @@ jobs:
         with:
           path: dist
           name: artifacts-py
+
       - name: Publish to PyPI
         uses: pypa/gh-action-pypi-publish@ed0c53931b1dc9bd32cbe73a98c7f6766f8a527e  # v1.13.0
         with:
@@ -78,11 +89,13 @@ jobs:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd  # v6.0.2
         with:
           persist-credentials: false
+
       - uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c  # v8.0.1
         with:
           path: dist
           pattern: artifacts-*
           merge-multiple: true
+
       - name: Create GitHub Release
         env:
           TAG: ${{ github.ref_name }}
