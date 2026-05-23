@@ -81,23 +81,27 @@ When upgrading packages in package.json, all lockfiles must be updated simultane
 To do this, run the following commands:
 
 ```bash
-# Upgrade packages automatically (or manually adjust versions)
+# 1. Upgrade all packages automatically
 pnpm upgrade --latest
+#    or upgrade only development dependencies
+pnpm upgrade --latest --dev
+#    or upgrade a specific package, e.g. meriyah
+pnpm upgrade --latest meriyah
 
-# Generate base `package-lock.json`
-rm -rf node_modules
+# 2. Generate base `package-lock.json` with npm (using a 7-day cooldown)
+npm config set min-release-age=7
+rm -rf node_modules package-lock.json
 npm install
 
-# Migrate to other package managers
+# 3. Migrate to other package managers
 pnpm import
+rm bun.lock
 bun pm migrate --force
 
-# Make sure to use a deno with lockfile v4 (<2.3)
-deno install --lockfile-only
+# 4. Generate a separate `deno.lock` (using a 7-day cooldown)
+deno install --lockfile-only --minimum-dependency-age=P7D
 
-# Ensure that `deno.json` is the same as `package-lock.json`.
-# Note: you may need to manually update the `ADDITIONAL_PACKAGES_NODE`
-# and/or `ADDITIONAL_PACKAGES_DENO` variables in `./check.py`.
+# 5. Ensure that `deno.json` is equivalent to `package-lock.json`
 python check.py
 ```
 
