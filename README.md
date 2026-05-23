@@ -10,6 +10,18 @@ Install ejs into the same environment as yt-dlp:
 pip install -U yt-dlp-ejs
 ```
 
+## Runtime requirements
+
+This project supports the following runtimes/engines:
+
+| Runtime / engine       | Required version     |
+|------------------------|----------------------|
+| **deno**               | `>=2.3`              |
+| **node**               | `>=22`               |
+| **quickjs**            | `>=2023-12-9`        |
+| **quickjs-ng**         | any                  |
+| **bun** *(deprecated)* | `>=1.2.11, <=1.3.14` |
+
 ## Development
 
 The project provides lockfiles for every supported package manager.
@@ -19,6 +31,20 @@ This will transparently invoke one of the supported JS runtimes for the build.
 
 If you notice differences between different runtimes' builds
 please open an issue [here](<https://github.com/yt-dlp/ejs/issues/new>).
+
+### Development requirements
+
+Developers should have the following tools installed:
+
+| Runtime / package manager   | Required version              |
+|-----------------------------|-------------------------------|
+| **deno**                    | `>=2.6`                       |
+| **node**                    | `^24.14.1 || ^25.7.0 || >=26` |
+| **npm**                     | `>=11.10`                     |
+| **bun**                     | `>=1.2.11`                    |
+| **pnpm**                    | `>=10.16.0`                   |
+| **quickjs** *(optional)*    | `>=2025-4-26`                 |
+| **quickjs-ng** *(optional)* | `>=0.12.0`                    |
 
 ### Build
 
