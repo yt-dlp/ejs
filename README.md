@@ -41,7 +41,7 @@ Developers should have the following tools installed:
 | deno                      | `>=2.6`                           |
 | node                      | `^24.14.1 \|\| ^25.7.0 \|\| >=26` |
 | npm                       | `>=11.10`                         |
-| bun                       | `>=1.2.11`                        |
+| bun                       | `>=1.2.11, <=1.3.14`              |
 | pnpm                      | `>=10.16.0`                       |
 | quickjs *(optional)*      | `>=2025-4-26`                     |
 | quickjs-ng *(optional)*   | `>=0.12.0`                        |
