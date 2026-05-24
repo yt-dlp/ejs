@@ -121,7 +121,6 @@ npm install
 
 # 3. Migrate to other package managers
 pnpm import
-rm bun.lock
 bun pm migrate --force
 
 # 4. Generate a separate `deno.lock` (using a 7-day cooldown)
