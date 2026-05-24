@@ -10,6 +10,18 @@ Install ejs into the same environment as yt-dlp:
 pip install -U yt-dlp-ejs
 ```
 
+## Runtime requirements
+
+This project supports the following runtimes/engines:
+
+| Runtime / engine   | Required version     |
+|--------------------|----------------------|
+| deno               | `>=2.3`              |
+| node               | `>=22`               |
+| quickjs            | `>=2023-12-9`        |
+| quickjs-ng         | any                  |
+| bun *(deprecated)* | `>=1.2.11, <=1.3.14` |
+
 ## Development
 
 The project provides lockfiles for every supported package manager.
@@ -19,6 +31,23 @@ This will transparently invoke one of the supported JS runtimes for the build.
 
 If you notice differences between different runtimes' builds
 please open an issue [here](https://github.com/yt-dlp/ejs/issues/new).
+
+### Development requirements
+
+Developers should have the following tools installed:
+
+| Runtime / package manager | Required version                  |
+|---------------------------|-----------------------------------|
+| deno                      | `>=2.6`                           |
+| node                      | `^24.14.1 \|\| ^25.7.0 \|\| >=26` |
+| npm                       | `>=11.10`                         |
+| bun                       | `>=1.2.11, <=1.3.14`              |
+| pnpm                      | `>=10.16.0`                       |
+| quickjs *(optional)*      | `>=2025-4-26`                     |
+| quickjs-ng *(optional)*   | `>=0.12.0`                        |
+
+quickjs/quickjs-ng is only needed for yt-dlp integration tests,
+which can usually be handled by CI.
 
 ### Build
 
@@ -82,23 +111,26 @@ When upgrading packages in package.json, all lockfiles must be updated simultane
 To do this, run the following commands:
 
 ```bash
-# Upgrade packages automatically (or manually adjust versions)
+# 1. Upgrade all packages automatically
 pnpm upgrade --latest
+#    or upgrade only development dependencies
+pnpm upgrade --latest --dev
+#    or upgrade a specific package, e.g. meriyah
+pnpm upgrade --latest meriyah
 
-# Generate base `package-lock.json`
-rm -rf node_modules
+# 2. Generate base `package-lock.json` with npm (using a 7-day cooldown)
+npm config set min-release-age=7
+rm -rf node_modules package-lock.json
 npm install
 
-# Migrate to other package managers
+# 3. Migrate to other package managers
 pnpm import
 bun pm migrate --force
 
-# Make sure to use a deno with lockfile v4 (<2.3)
-deno install --lockfile-only
+# 4. Generate a separate `deno.lock` (using a 7-day cooldown)
+deno install --lockfile-only --minimum-dependency-age=P7D
 
-# Ensure that `deno.json` is the same as `package-lock.json`.
-# Note: you may need to manually update the `ADDITIONAL_PACKAGES_NODE`
-# and/or `ADDITIONAL_PACKAGES_DENO` variables in `./check.py`.
+# 5. Ensure that `deno.json` is equivalent to `package-lock.json`
 python check.py
 ```
 
