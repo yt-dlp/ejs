@@ -46,6 +46,9 @@ Developers should have the following tools installed:
 | quickjs *(optional)*      | `>=2025-4-26`                     |
 | quickjs-ng *(optional)*   | `>=0.12.0`                        |
 
+quickjs/quickjs-ng is only needed for yt-dlp integration tests,
+which can usually be handled by CI.
+
 ### Build
 
 To build the Python package you need a PEP518 compatible builder.
