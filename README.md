@@ -15,12 +15,12 @@ pip install -U yt-dlp-ejs
 This project supports the following runtimes/engines:
 
 | Runtime / engine   | Required version     |
-|--------------------|----------------------|
+| ------------------ | -------------------- |
 | deno               | `>=2.3`              |
 | node               | `>=22`               |
 | quickjs            | `>=2023-12-9`        |
 | quickjs-ng         | any                  |
-| bun *(deprecated)* | `>=1.2.11, <=1.3.14` |
+| bun _(deprecated)_ | `>=1.2.11, <=1.3.14` |
 
 ## Development
 
@@ -37,14 +37,14 @@ please open an issue [here](https://github.com/yt-dlp/ejs/issues/new).
 Developers should have the following tools installed:
 
 | Runtime / package manager | Required version                  |
-|---------------------------|-----------------------------------|
+| ------------------------- | --------------------------------- |
 | deno                      | `>=2.6`                           |
 | node                      | `^24.14.1 \|\| ^25.7.0 \|\| >=26` |
 | npm                       | `>=11.10`                         |
 | bun                       | `>=1.2.11, <=1.3.14`              |
 | pnpm                      | `>=10.16.0`                       |
-| quickjs *(optional)*      | `>=2025-4-26`                     |
-| quickjs-ng *(optional)*   | `>=0.12.0`                        |
+| quickjs _(optional)_      | `>=2025-4-26`                     |
+| quickjs-ng _(optional)_   | `>=0.12.0`                        |
 
 quickjs/quickjs-ng is only needed for yt-dlp integration tests,
 which can usually be handled by CI.
@@ -130,7 +130,7 @@ bun pm migrate --force
 # 4. Generate a separate `deno.lock` (using a 7-day cooldown)
 deno install --lockfile-only --minimum-dependency-age=P7D
 
-# 5. Ensure that `deno.json` is equivalent to `package-lock.json`
+# 5. Ensure that `deno.lock` is equivalent to `package-lock.json`
 python check.py
 ```
 
