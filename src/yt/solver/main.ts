@@ -1,5 +1,5 @@
-import { getFromPrepared, preprocessPlayer } from "./solvers.ts";
 import { isOneOf } from "../../utils.ts";
+import { getFromPrepared, preprocessPlayer } from "./solvers.ts";
 
 export default function main(input: Input): Output {
   const preprocessedPlayer =

@@ -15,12 +15,12 @@ pip install -U yt-dlp-ejs
 This project supports the following runtimes/engines:
 
 | Runtime / engine   | Required version     |
-|--------------------|----------------------|
+| ------------------ | -------------------- |
 | deno               | `>=2.3`              |
 | node               | `>=22`               |
 | quickjs            | `>=2023-12-9`        |
 | quickjs-ng         | any                  |
-| bun *(deprecated)* | `>=1.2.11, <=1.3.14` |
+| bun _(deprecated)_ | `>=1.2.11, <=1.3.14` |
 
 ## Development
 
@@ -30,21 +30,21 @@ If you only have Python and a JS runtime, then you may instead run `./hatch_buil
 This will transparently invoke one of the supported JS runtimes for the build.
 
 If you notice differences between different runtimes' builds
-please open an issue [here](<https://github.com/yt-dlp/ejs/issues/new>).
+please open an issue [here](https://github.com/yt-dlp/ejs/issues/new).
 
 ### Development requirements
 
 Developers should have the following tools installed:
 
 | Runtime / package manager | Required version                  |
-|---------------------------|-----------------------------------|
+| ------------------------- | --------------------------------- |
 | deno                      | `>=2.6`                           |
 | node                      | `^24.14.1 \|\| ^25.7.0 \|\| >=26` |
 | npm                       | `>=11.10`                         |
 | bun                       | `>=1.2.11, <=1.3.14`              |
 | pnpm                      | `>=10.16.0`                       |
-| quickjs *(optional)*      | `>=2025-4-26`                     |
-| quickjs-ng *(optional)*   | `>=0.12.0`                        |
+| quickjs _(optional)_      | `>=2025-4-26`                     |
+| quickjs-ng _(optional)_   | `>=0.12.0`                        |
 
 quickjs/quickjs-ng is only needed for yt-dlp integration tests,
 which can usually be handled by CI.
@@ -63,6 +63,7 @@ python hatch_build.py
 This will automatically select an available runtime and build using it.
 
 For more fine-grained control over how to build the package, you can set these environment variables:
+
 - `EJS_BUILD_SKIP_INSTALL`: If this environment variable is set, the install step will be skipped.
   It is expected that the required packages are available for the selected bundler.
   No network access should be required if this variable is set.
@@ -129,14 +130,14 @@ bun pm migrate --force
 # 4. Generate a separate `deno.lock` (using a 7-day cooldown)
 deno install --lockfile-only --minimum-dependency-age=P7D
 
-# 5. Ensure that `deno.json` is equivalent to `package-lock.json`
+# 5. Ensure that `deno.lock` is equivalent to `package-lock.json`
 python check.py
 ```
 
 ## Licensing
 
-This code is licensed under [Unlicense](<https://unlicense.org/>).
+This code is licensed under [Unlicense](https://unlicense.org/).
 
 An exception to this is the prebuilt wheels, which contain both
-[`meriyah`](<https://github.com/meriyah/meriyah>) and [`astring`](<https://github.com/davidbonnet/astring>),
-licensed under [`ISC`](<https://github.com/meriyah/meriyah?tab=ISC-1-ov-file>) and [`MIT`](<https://github.com/davidbonnet/astring?tab=MIT-1-ov-file>), respectively.
+[`meriyah`](https://github.com/meriyah/meriyah) and [`astring`](https://github.com/davidbonnet/astring),
+licensed under [`ISC`](https://github.com/meriyah/meriyah?tab=ISC-1-ov-file) and [`MIT`](https://github.com/davidbonnet/astring?tab=MIT-1-ov-file), respectively.
