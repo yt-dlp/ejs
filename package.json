@@ -6,9 +6,9 @@
     "bundle": "python hatch_build.py",
     "esbuild": "esbuild",
     "fmt": "oxfmt",
-    "fmt:check": "oxfmt **/*.ts **/*.js **/*.json pnpm-workspace.yaml",
+    "fmt:check": "oxfmt --check",
     "lint": "oxlint --fix",
-    "lint:check": "oxlint src"
+    "lint:check": "oxlint"
   },
   "dependencies": {
     "astring": "1.9.0",
