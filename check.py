@@ -6,10 +6,7 @@ import pathlib
 import sys
 
 ADDITIONAL_PACKAGES_NODE = {}
-ADDITIONAL_PACKAGES_DENO = {
-    "@types/node@22.5.4": "sha512-FDuKUJQm/ju9fT/SeX/6+gBzoPzlVCzfzmGkwKvRHQVxi4BntVbyIwf6a4Xn62mrvndLiml6z/UBXIdEVjQLXg==",
-    "undici-types@6.19.8": "sha512-ve2KP6f/JnbPBFyobGHuerC9g1FYGn/F8n1LWTwNxCEzd6IfqTwUQcNXgEtmmQ6DlRrC1hrSrBnCZPokRrDHjw==",
-}
+ADDITIONAL_PACKAGES_DENO = {}
 BASE_PATH = pathlib.Path(__file__).parent
 
 
@@ -19,8 +16,8 @@ def parse_deno() -> dict[str, str]:
         lockfile = json.load(file)
 
     v = lockfile["version"]
-    if v not in ("4", "5"):
-        msg = f"Unsupported lockfile version: {v} (expected 4/5)"
+    if v != "5":
+        msg = f"Unsupported lockfile version: {v} (expected 5)"
         raise ValueError(msg)
 
     integrities = {}
