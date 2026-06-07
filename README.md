@@ -118,8 +118,7 @@ pnpm upgrade --latest --dev
 #    or upgrade a specific package, e.g. meriyah
 pnpm upgrade --latest meriyah
 
-# 2. Generate base `package-lock.json` with npm (using a 7-day cooldown)
-npm config set min-release-age=7
+# 2. Generate base `package-lock.json` with npm
 rm -rf node_modules package-lock.json
 npm install
 
@@ -127,8 +126,8 @@ npm install
 pnpm import
 bun pm migrate --force
 
-# 4. Generate a separate `deno.lock` (using a 7-day cooldown)
-deno install --lockfile-only --minimum-dependency-age=P7D
+# 4. Generate a separate `deno.lock`
+deno install --lockfile-only
 
 # 5. Ensure that `deno.lock` is equivalent to `package-lock.json`
 python check.py
