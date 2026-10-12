@@ -2,7 +2,7 @@ import { generate } from "astring";
 import { type ESTree, parse } from "meriyah";
 
 import { generateArrowFunction } from "../../utils.ts";
-import { extract } from "./nsig.ts";
+import { extract, extractArray } from "./nsig.ts";
 import { setupNodes } from "./setup.ts";
 
 export function preprocessPlayer(data: string): string {
@@ -92,8 +92,9 @@ export function getSolutions(
     n: [] as ESTree.ArrowFunctionExpression[],
     sig: [] as ESTree.ArrowFunctionExpression[],
   };
+  const pool = extractArray(statements);
   for (const statement of statements) {
-    const result = extract(statement);
+    const result = extract(statement, pool, statements);
     if (result) {
       found.n.push(
         makeSolver(result, {

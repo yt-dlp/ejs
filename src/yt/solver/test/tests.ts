@@ -3,6 +3,31 @@ type Step = {
   expected: string;
 };
 
+const playerVariants = [
+  ["main", "player_ias.vflset/en_US/base.js"],
+  ["tcc", "player_ias_tcc.vflset/en_US/base.js"],
+  ["tce", "player_ias_tce.vflset/en_US/base.js"],
+  ["es6", "player_es6.vflset/en_US/base.js"],
+  ["tv", "tv-player-ias.vflset/tv-player-ias.js"],
+  ["tv_es6", "tv-player-es6.vflset/tv-player-es6.js"],
+  ["phone", "player-plasma-ias-phone-en_US.vflset/base.js"],
+  ["es6_tcc", "player_es6_tcc.vflset/en_US/base.js"],
+  ["es6_tce", "player_es6_tce.vflset/en_US/base.js"],
+  ["tcl", "player_ias_tcl.vflset/en_US/base.js"],
+  ["tv_tcl", "tv-player-ias-tcl.vflset/tv-player-ias-tcl.js"],
+  ["es6_tcl", "player_es6_tcl.vflset/en_US/base.js"],
+  ["embed_tcl", "player_embed_tcl.vflset/en_US/base.js"],
+  ["embed_es6_tcl", "player_embed_es6_tcl.vflset/en_US/base.js"],
+] as const;
+
+export type Variant = (typeof playerVariants)[number][0];
+
+export const players = new Map(playerVariants);
+
+function except(...variants: Variant[]): Variant[] {
+  return playerVariants.map((v) => v[0]).filter((v) => !variants.includes(v));
+}
+
 export const tests: {
   player: string;
   variants?: Variant[];
@@ -48,6 +73,7 @@ export const tests: {
   {
     // 20524
     player: "e7573094",
+    variants: except("embed_tcl"),
     n: [{ input: "IlLiA21ny7gqA2m4p37", expected: "3KuQ3235dojTSjo4" }],
     sig: [
       {
@@ -100,6 +126,7 @@ export const tests: {
   {
     // 20529 (tv & tv_es6 needed self.location.origin fix)
     player: "631d3938",
+    variants: except("embed_tcl"),
     n: [{ input: "KBx1qz7jMhxELa8c", expected: "ttPvh7WIptsgSw" }],
     sig: [
       {
@@ -110,18 +137,32 @@ export const tests: {
       },
     ],
   },
+  {
+    // 20671
+    player: "879f7172",
+    variants: ["tv_tcl", "tcl", "es6_tcl", "embed_tcl", "embed_es6_tcl"],
+    n: [{ input: "nkWoI9oUWkorXYqR", expected: "hQ3dJ8aYPJ1Q" }],
+    sig: [
+      {
+        input:
+          "\x00\x01\x02\x03\x04\x05\x06\x07\x08\x09\x0a\x0b\x0c\x0d\x0e\x0f\x10\x11\x12\x13\x14\x15\x16\x17\x18\x19\x1a\x1b\x1c\x1d\x1e\x1f\x20\x21\x22\x23\x24\x25\x26\x27\x28\x29\x2a\x2b\x2c\x2d\x2e\x2f\x30\x31\x32\x33\x34\x35\x36\x37\x38\x39\x3a\x3b\x3c\x3d\x3e\x3f\x40\x41\x42\x43\x44\x45\x46\x47\x48\x49\x4a\x4b\x4c\x4d\x4e\x4f\x50\x51\x52\x53\x54\x55\x56\x57\x58\x59\x5a\x5b\x5c\x5d\x5e\x5f\x60\x61\x62\x63\x64\x65\x66",
+        expected:
+          "fedcba`_^]\\[ZYXWVUTSRQPONMLKJIHGFEDCBA@?>=<;:98765432\x000/.-,+*)('&%$#\"! \x1f\x03\x1d\x1c\x1b\x1a\x19\x18\x17\x16\x15\x14\x13\x12\x11\x10\x0f\x0e\r\f\v\n\t\b\x07\x06",
+      },
+    ],
+  },
+  {
+    // 20676
+    player: "b0d2d49a",
+    variants: ["tv_tcl", "tcl", "es6_tcl", "embed_tcl", "embed_es6_tcl"],
+    n: [{ input: "nkWoI9oUWkorXYqR", expected: "h1OpTHKvcEgai6l" }],
+    sig: [
+      {
+        input:
+          "\x00\x01\x02\x03\x04\x05\x06\x07\x08\x09\x0a\x0b\x0c\x0d\x0e\x0f\x10\x11\x12\x13\x14\x15\x16\x17\x18\x19\x1a\x1b\x1c\x1d\x1e\x1f\x20\x21\x22\x23\x24\x25\x26\x27\x28\x29\x2a\x2b\x2c\x2d\x2e\x2f\x30\x31\x32\x33\x34\x35\x36\x37\x38\x39\x3a\x3b\x3c\x3d\x3e\x3f\x40\x41\x42\x43\x44\x45\x46\x47\x48\x49\x4a\x4b\x4c\x4d\x4e\x4f\x50\x51\x52\x53\x54\x55\x56\x57\x58\x59\x5a\x5b\x5c\x5d\x5e\x5f\x60\x61\x62\x63\x64\x65\x66",
+        expected:
+          "_ba`c^]\\[ZYXWVUTSRQPONMLKJIHGFEDCBA@?>=<;:9876543210/.\x00,+*)('&%$#\"! \x1f\x1e\x1d\x1c\x1b\x1a\x19\x18\x17\x16\x15\x14\x13\x12\x11\x10\x0f\x0e\r\f\v\n\t\b\x07\x06\x05\x04\x03\x02\x01-",
+      },
+    ],
+  },
 ];
-
-export const players = new Map([
-  ["main", "player_ias.vflset/en_US/base.js"],
-  ["tcc", "player_ias_tcc.vflset/en_US/base.js"],
-  ["tce", "player_ias_tce.vflset/en_US/base.js"],
-  ["es6", "player_es6.vflset/en_US/base.js"],
-  ["tv", "tv-player-ias.vflset/tv-player-ias.js"],
-  ["tv_es6", "tv-player-es6.vflset/tv-player-es6.js"],
-  ["phone", "player-plasma-ias-phone-en_US.vflset/base.js"],
-  ["es6_tcc", "player_es6_tcc.vflset/en_US/base.js"],
-  ["es6_tce", "player_es6_tce.vflset/en_US/base.js"],
-] as const);
-
-export type Variant = typeof players extends Map<infer T, unknown> ? T : never;
