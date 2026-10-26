@@ -312,7 +312,7 @@ jobs:
           pnpm run bundle
 
       - name: Download bundle hashes
-        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c  # v8.0.1
+        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333  # v8.0.2
         with:
           path: dist
           name: bundle-hashes
@@ -390,7 +390,7 @@ jobs:
           deno task bundle
 
       - name: Download bundle hashes
-        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c  # v8.0.1
+        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333  # v8.0.2
         with:
           path: dist
           name: bundle-hashes
@@ -422,7 +422,7 @@ jobs:
           deno install --frozen
 
       - name: Download player JS artifact
-        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c  # v8.0.1
+        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333  # v8.0.2
         with:
           path: src/yt/solver/test/players
           name: player-js
@@ -485,7 +485,7 @@ jobs:
           bun --bun run bundle
 
       - name: Download bundle hashes
-        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c  # v8.0.1
+        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333  # v8.0.2
         with:
           path: dist
           name: bundle-hashes
@@ -518,7 +518,7 @@ jobs:
           bun install --frozen-lockfile
 
       - name: Download player JS artifact
-        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c  # v8.0.1
+        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333  # v8.0.2
         with:
           path: src/yt/solver/test/players
           name: player-js
@@ -576,7 +576,7 @@ jobs:
           npm run bundle
 
       - name: Download bundle hashes
-        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c  # v8.0.1
+        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333  # v8.0.2
         with:
           path: dist
           name: bundle-hashes
@@ -608,7 +608,7 @@ jobs:
           npm ci
 
       - name: Download player JS artifact
-        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c  # v8.0.1
+        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333  # v8.0.2
         with:
           path: src/yt/solver/test/players
           name: player-js
