@@ -15,12 +15,12 @@
     "meriyah": "6.1.4"
   },
   "devDependencies": {
-    "@types/bun": "1.4.3",
+    "@types/bun": "1.4.4",
     "@types/deno": "2.7.0",
     "@types/node": "26.6.5",
     "esbuild": "0.28.2",
     "globals": "17.13.0",
-    "oxfmt": "^0.74.0",
-    "oxlint": "^1.89.0"
+    "oxfmt": "^0.75.0",
+    "oxlint": "^1.90.0"
   }
 }
