@@ -1,7 +1,8 @@
 import { generate } from "astring";
 import { type ESTree, parse } from "meriyah";
 
-import { generateArrowFunction } from "../../utils.ts";
+import type { DeepPartial } from "../../types.ts";
+import { generateArrowFunction, matchesStructure } from "../../utils.ts";
 import { extract } from "./nsig.ts";
 import { setupNodes } from "./setup.ts";
 
@@ -72,17 +73,77 @@ export function modifyPlayer(program: ESTree.Program) {
     throw "unexpected structure";
   })();
 
+  const prototypeHelpers = findPrototypeHelpers(block.body);
   block.body = block.body.filter((node: ESTree.Statement) => {
     if (node.type === "ExpressionStatement") {
-      if (node.expression.type === "AssignmentExpression") {
-        return true;
+      if (node.expression.type === "CallExpression") {
+        const call = node.expression
+        return prototypeHelpers.some((identifier) =>
+          matchesStructure(call.callee, identifier),
+        );
       }
-      return node.expression.type === "Literal";
+      return (
+        node.expression.type === "AssignmentExpression" ||
+        node.expression.type === "Literal"
+      );
     }
     return true;
   });
 
   return block.body;
+}
+
+function findPrototypeHelpers(body: ESTree.Statement[]) {
+  const result: DeepPartial<any>[] = [];
+  for (const node of body) {
+    if (
+      node.type !== "ExpressionStatement" ||
+      node.expression.type !== "AssignmentExpression" ||
+      node.expression.right.type !== "FunctionExpression"
+    ) {
+      continue;
+    }
+    const func = node.expression.right;
+    for (const line of func.body?.body ?? []) {
+      if (
+        line.type === "ExpressionStatement" &&
+        line.expression.type === "AssignmentExpression" &&
+        line.expression.left.type === "MemberExpression" &&
+        line.expression.left.property.type === "Identifier" &&
+        line.expression.left.property.name === "prototype"
+      ) {
+        result.push(
+          makePrototypeHelpersIdentifier(node.expression.left),
+        );
+        break;
+      }
+    }
+  }
+  return result;
+}
+
+function makePrototypeHelpersIdentifier(
+  member: ESTree.Expression | ESTree.PrivateIdentifier,
+): DeepPartial<any> {
+  if (member.type === "MemberExpression") {
+    const object = makePrototypeHelpersIdentifier(member.object);
+    const property = makePrototypeHelpersIdentifier(member.property);
+    if (!object || !property) {
+      return null;
+    }
+    return {
+      type: member.type,
+      object,
+      property,
+    };
+  }
+  if (member.type === "Identifier") {
+    return {
+      type: member.type,
+      name: member.name,
+    };
+  }
+  return null;
 }
 
 export function getSolutions(
