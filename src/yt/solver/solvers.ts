@@ -72,9 +72,18 @@ export function modifyPlayer(program: ESTree.Program) {
     throw "unexpected structure";
   })();
 
+  const inherits = findInheritsHelper(block.body);
   block.body = block.body.filter((node: ESTree.Statement) => {
     if (node.type === "ExpressionStatement") {
       if (node.expression.type === "AssignmentExpression") {
+        return true;
+      }
+      if (
+        inherits !== null &&
+        node.expression.type === "CallExpression" &&
+        generate(node.expression.callee) === inherits
+      ) {
+        // Keep `inherits(Sub, Base)`: a kept top-level `new Sub` may need it
         return true;
       }
       return node.expression.type === "Literal";
@@ -83,6 +92,42 @@ export function modifyPlayer(program: ESTree.Program) {
   });
 
   return block.body;
+}
+
+/**
+ * Finds the player's class inheritance helper, e.g. `g.z=function(a,b){
+ * a.prototype=Object.create(b.prototype);a.prototype.constructor=a;...}`,
+ * and returns its generated name.
+ */
+function findInheritsHelper(statements: ESTree.Statement[]): string | null {
+  for (const node of statements) {
+    if (
+      node.type !== "ExpressionStatement" ||
+      node.expression.type !== "AssignmentExpression" ||
+      node.expression.operator !== "=" ||
+      node.expression.right.type !== "FunctionExpression" ||
+      node.expression.right.params.length !== 2
+    ) {
+      continue;
+    }
+    const found = node.expression.right.body.body.some(
+      (stmt) =>
+        stmt.type === "ExpressionStatement" &&
+        stmt.expression.type === "AssignmentExpression" &&
+        stmt.expression.left.type === "MemberExpression" &&
+        !stmt.expression.left.computed &&
+        stmt.expression.left.property.type === "Identifier" &&
+        stmt.expression.left.property.name === "constructor" &&
+        stmt.expression.left.object.type === "MemberExpression" &&
+        !stmt.expression.left.object.computed &&
+        stmt.expression.left.object.property.type === "Identifier" &&
+        stmt.expression.left.object.property.name === "prototype",
+    );
+    if (found) {
+      return generate(node.expression.left);
+    }
+  }
+  return null;
 }
 
 export function getSolutions(

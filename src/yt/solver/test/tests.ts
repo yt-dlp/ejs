@@ -110,6 +110,16 @@ export const tests: {
       },
     ],
   },
+  {
+    // Top-level `new YD` needs the `g.z(YD, g.Q)` inheritance call (#79)
+    player: "05a4ffc0",
+    variants: ["main"],
+    n: [
+      { input: "zyfc6LXJJ_Fc8A16e", expected: "E6D9M3x4irRUjQ" },
+      { input: "urAtKdZDQ_49CNnoM", expected: "xn3bLr-jLoyXLw" },
+      { input: "HgPp0e5U6Rhfmwvzc", expected: "YjxvbUzUN8UHrw" },
+    ],
+  },
 ];
 
 export const players = new Map([
