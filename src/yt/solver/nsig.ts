@@ -169,7 +169,6 @@ export function extract(
   } else if (node.type === "VariableDeclaration") {
     for (const declaration of node.declarations) {
       const name = declaration.id;
-      name.type;
       const fn = declaration.init as ESTree.FunctionExpression;
       if (name && name.type === "Identifier" && fn?.body?.body && !fn.async) {
         options.push({
