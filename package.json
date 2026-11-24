@@ -12,7 +12,7 @@
   },
   "dependencies": {
     "astring": "1.9.0",
-    "meriyah": "6.1.4"
+    "meriyah": "7.4.2"
   },
   "devDependencies": {
     "@types/bun": "1.4.4",
@@ -20,7 +20,7 @@
     "@types/node": "26.6.6",
     "esbuild": "0.28.2",
     "globals": "17.14.0",
-    "oxfmt": "^0.79.0",
-    "oxlint": "^1.94.0"
+    "oxfmt": "0.79.0",
+    "oxlint": "1.94.0"
   }
 }

@@ -7,9 +7,9 @@
     "npm:astring@1.9.0": "1.9.0",
     "npm:esbuild@0.28.2": "0.28.2",
     "npm:globals@17.14.0": "17.14.0",
-    "npm:meriyah@6.1.4": "6.1.4",
-    "npm:oxfmt@0.79": "0.79.0",
-    "npm:oxlint@^1.94.0": "1.94.0"
+    "npm:meriyah@7.4.2": "7.4.2",
+    "npm:oxfmt@0.79.0": "0.79.0",
+    "npm:oxlint@1.94.0": "1.94.0"
   },
   "npm": {
     "@esbuild/aix-ppc64@0.28.2": {
@@ -394,8 +394,8 @@
     "globals@17.14.0": {
       "integrity": "sha512-UtdkTVyAJePQv0J2M9Xe4L0ruNSDV314XiIJsADI2Zf40bcdAonE/D/OhAU8AT99oij9mhLByb+NvA3QWZYgCg=="
     },
-    "meriyah@6.1.4": {
-      "integrity": "sha512-Sz8FzjzI0kN13GK/6MVEsVzMZEPvOhnmmI1lU5+/1cGOiK3QUahntrNNtdVeihrO7t9JpoH75iMNXg6R6uWflQ=="
+    "meriyah@7.4.2": {
+      "integrity": "sha512-plTw1nWGJiZ+sjVDFUWm46S/2Jbu61DrBmFPOOeFET+WIKGet/XnLsQnW97czlM/wpALVzj3U861Mr+0b+Adpg=="
     },
     "oxfmt@0.79.0": {
       "integrity": "sha512-92iLHGxAgtYk6jLp/1ZBnEeABveNduHZgMDQj7tyqO9iafuJG3q+YHJq0R5Aa4YT+E6xswMQXdmPZYMwynS8ig==",
@@ -466,9 +466,9 @@
         "npm:astring@1.9.0",
         "npm:esbuild@0.28.2",
         "npm:globals@17.14.0",
-        "npm:meriyah@6.1.4",
-        "npm:oxfmt@0.79",
-        "npm:oxlint@^1.94.0"
+        "npm:meriyah@7.4.2",
+        "npm:oxfmt@0.79.0",
+        "npm:oxlint@1.94.0"
       ]
     }
   }
