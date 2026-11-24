@@ -112,7 +112,11 @@ export function extract(
   }
 
   for (const { name, statements } of options) {
-    if (matchesStructure(statements, { anykey: [asdasd] } as DeepPartial<ESTree.Node>)) {
+    if (
+      matchesStructure(statements, {
+        anykey: [asdasd],
+      } as DeepPartial<ESTree.Node>)
+    ) {
       return createSolver(name);
     }
   }

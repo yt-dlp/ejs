@@ -27,7 +27,9 @@ export function matchesStructure<T extends ESTree.Node>(
       // Handle `{ anykey: [a, b] }`
       const haystack = Array.isArray(obj) ? obj : Object.values(obj);
       return structure.anykey.every((value) =>
-        haystack.some((el) => matchesStructure(el, value as DeepPartial<ESTree.Node>)),
+        haystack.some((el) =>
+          matchesStructure(el, value as DeepPartial<ESTree.Node>),
+        ),
       );
     }
     for (const [key, value] of Object.entries(structure)) {
