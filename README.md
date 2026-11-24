@@ -71,7 +71,7 @@ For more fine-grained control over how to build the package, you can set these e
   These will be used to install the required dependencies for bundling the JavaScript package.
   Can be any of `pnpm`, `deno`, `bun` or `npm` (this is also the default order).
 - `EJS_BUILD_BUNDLER`: Order of bundlers to try, separated by `:` on POSIX or `;` on Windows.
-  These will be used to perform the bundling of the JavaScript package (calling rollup under the hood).
+  These will be used to perform the bundling of the JavaScript package (calling esbuild under the hood).
   Can be any of `esbuild`, `pnpm`, `deno`, `bun`, `node` (this is also the default order).
 
 ### Tests

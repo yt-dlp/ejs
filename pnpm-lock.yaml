@@ -12,8 +12,8 @@ importers:
         specifier: 1.9.0
         version: 1.9.0
       meriyah:
-        specifier: 7.1.0
-        version: 7.1.0
+        specifier: 7.4.2
+        version: 7.4.2
     devDependencies:
       '@types/bun':
         specifier: 1.4.4
@@ -31,10 +31,10 @@ importers:
         specifier: 17.14.0
         version: 17.14.0
       oxfmt:
-        specifier: ^0.79.0
+        specifier: 0.79.0
         version: 0.79.0
       oxlint:
-        specifier: ^1.94.0
+        specifier: 1.94.0
         version: 1.94.0
 
 packages:
@@ -464,8 +464,8 @@ packages:
     resolution: {integrity: sha512-UtdkTVyAJePQv0J2M9Xe4L0ruNSDV314XiIJsADI2Zf40bcdAonE/D/OhAU8AT99oij9mhLByb+NvA3QWZYgCg==}
     engines: {node: '>=18'}
 
-  meriyah@7.1.0:
-    resolution: {integrity: sha512-4K/lV+RFSrM8vy9H58FSd+wrxrXlPhYOK8AOaNQ7iFaHugYRx4tHIAaRYLMtXx/spMByZ4S080di6lXSTDI9eg==}
+  meriyah@7.4.2:
+    resolution: {integrity: sha512-plTw1nWGJiZ+sjVDFUWm46S/2Jbu61DrBmFPOOeFET+WIKGet/XnLsQnW97czlM/wpALVzj3U861Mr+0b+Adpg==}
     engines: {node: '>=20.0.0'}
 
   oxfmt@0.79.0:
@@ -746,7 +746,7 @@ snapshots:
 
   globals@17.14.0: {}
 
-  meriyah@7.1.0: {}
+  meriyah@7.4.2: {}
 
   oxfmt@0.79.0:
     dependencies:

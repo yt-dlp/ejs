@@ -92,9 +92,9 @@ export function extract(
     const name = node.expression.left;
     const body = (node.expression.right as ESTree.FunctionExpression)?.body
       ?.body;
-    if (name && body) {
+    if (name && !name.type.endsWith("Pattern") && body) {
       options.push({
-        name: name,
+        name: name as ESTree.Expression,
         statements: body,
       });
     }
@@ -102,9 +102,9 @@ export function extract(
     for (const declaration of node.declarations) {
       const name = declaration.id;
       const body = (declaration.init as ESTree.FunctionExpression)?.body?.body;
-      if (name && body) {
+      if (name && !name.type.endsWith("Pattern") && body) {
         options.push({
-          name: name,
+          name: name as ESTree.Expression,
           statements: body,
         });
       }
@@ -112,7 +112,7 @@ export function extract(
   }
 
   for (const { name, statements } of options) {
-    if (matchesStructure(statements, { anykey: [asdasd] })) {
+    if (matchesStructure(statements, { anykey: [asdasd] } as DeepPartial<ESTree.Node>)) {
       return createSolver(name);
     }
   }
