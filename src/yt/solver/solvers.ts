@@ -42,6 +42,7 @@ export function modifyPlayer(program: ESTree.Program) {
   const body = program.body;
 
   const block: ESTree.BlockStatement = (() => {
+    let block: ESTree.BlockStatement | null | undefined = null;
     switch (body.length) {
       case 1: {
         const func = body[0];
@@ -51,7 +52,7 @@ export function modifyPlayer(program: ESTree.Program) {
           func.expression.callee.type === "MemberExpression" &&
           func.expression.callee.object.type === "FunctionExpression"
         ) {
-          return func.expression.callee.object.body;
+          block = func.expression.callee.object.body;
         }
         break;
       }
@@ -62,15 +63,17 @@ export function modifyPlayer(program: ESTree.Program) {
           func.expression.type === "CallExpression" &&
           func.expression.callee.type === "FunctionExpression"
         ) {
-          const block = func.expression.callee.body;
+          block = func.expression.callee.body;
           // Skip `var window = this;`
-          block.body.splice(0, 1);
-          return block;
+          block?.body.splice(0, 1);
         }
         break;
       }
     }
-    throw "unexpected structure";
+    if (!block) {
+      throw "unexpected structure";
+    }
+    return block;
   })();
 
   const prototypeHelpers = findPrototypeHelpers(block.body);
