@@ -1,7 +1,8 @@
-import { type ESTree } from "meriyah";
 import { generate } from "astring";
-import { matchesStructure, generateArrowFunction } from "../../utils.ts";
+import { type ESTree } from "meriyah";
+
 import { type DeepPartial } from "../../types.ts";
+import { matchesStructure, generateArrowFunction } from "../../utils.ts";
 
 const identifier: DeepPartial<ESTree.Node> = {
   or: [

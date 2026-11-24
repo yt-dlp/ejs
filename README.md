@@ -10,6 +10,18 @@ Install ejs into the same environment as yt-dlp:
 pip install -U yt-dlp-ejs
 ```
 
+## Runtime requirements
+
+This project supports the following runtimes/engines:
+
+| Runtime / engine   | Required version     |
+| ------------------ | -------------------- |
+| deno               | `>=2.3`              |
+| node               | `>=22`               |
+| quickjs            | `>=2023-12-9`        |
+| quickjs-ng         | any                  |
+| bun _(deprecated)_ | `>=1.2.11, <=1.3.14` |
+
 ## Development
 
 The project provides lockfiles for every supported package manager.
@@ -18,7 +30,24 @@ If you only have Python and a JS runtime, then you may instead run `./hatch_buil
 This will transparently invoke one of the supported JS runtimes for the build.
 
 If you notice differences between different runtimes' builds
-please open an issue [here](<https://github.com/yt-dlp/ejs/issues/new>).
+please open an issue [here](https://github.com/yt-dlp/ejs/issues/new).
+
+### Development requirements
+
+Developers should have the following tools installed:
+
+| Runtime / package manager | Required version                  |
+| ------------------------- | --------------------------------- |
+| deno                      | `>=2.6`                           |
+| node                      | `^24.14.1 \|\| ^25.7.0 \|\| >=26` |
+| npm                       | `>=11.10`                         |
+| bun                       | `>=1.2.11, <=1.3.14`              |
+| pnpm                      | `>=10.16.0`                       |
+| quickjs _(optional)_      | `>=2025-4-26`                     |
+| quickjs-ng _(optional)_   | `>=0.12.0`                        |
+
+quickjs/quickjs-ng is only needed for yt-dlp integration tests,
+which can usually be handled by CI.
 
 ### Build
 
@@ -34,6 +63,7 @@ python hatch_build.py
 This will automatically select an available runtime and build using it.
 
 For more fine-grained control over how to build the package, you can set these environment variables:
+
 - `EJS_BUILD_SKIP_INSTALL`: If this environment variable is set, the install step will be skipped.
   It is expected that the required packages are available for the selected bundler.
   No network access should be required if this variable is set.
@@ -81,30 +111,32 @@ When upgrading packages in package.json, all lockfiles must be updated simultane
 To do this, run the following commands:
 
 ```bash
-# Upgrade packages automatically (or manually adjust versions)
+# 1. Upgrade all packages automatically
 pnpm upgrade --latest
+#    or upgrade only development dependencies
+pnpm upgrade --latest --dev
+#    or upgrade a specific package, e.g. meriyah
+pnpm upgrade --latest meriyah
 
-# Generate base `package-lock.json`
-rm -rf node_modules
+# 2. Generate base `package-lock.json` with npm
+rm -rf node_modules package-lock.json
 npm install
 
-# Migrate to other package managers
+# 3. Migrate to other package managers
 pnpm import
 bun pm migrate --force
 
-# Make sure to use a deno with lockfile v4 (<2.3)
+# 4. Generate a separate `deno.lock`
 deno install --lockfile-only
 
-# Ensure that `deno.json` is the same as `package-lock.json`.
-# Note: you may need to manually update the `ADDITIONAL_PACKAGES_NODE`
-# and/or `ADDITIONAL_PACKAGES_DENO` variables in `./check.py`.
+# 5. Ensure that `deno.lock` is equivalent to `package-lock.json`
 python check.py
 ```
 
 ## Licensing
 
-This code is licensed under [Unlicense](<https://unlicense.org/>).
+This code is licensed under [Unlicense](https://unlicense.org/).
 
 An exception to this is the prebuilt wheels, which contain both
-[`meriyah`](<https://github.com/meriyah/meriyah>) and [`astring`](<https://github.com/davidbonnet/astring>),
-licensed under [`ISC`](<https://github.com/meriyah/meriyah?tab=ISC-1-ov-file>) and [`MIT`](<https://github.com/davidbonnet/astring?tab=MIT-1-ov-file>), respectively.
+[`meriyah`](https://github.com/meriyah/meriyah) and [`astring`](https://github.com/davidbonnet/astring),
+licensed under [`ISC`](https://github.com/meriyah/meriyah?tab=ISC-1-ov-file) and [`MIT`](https://github.com/davidbonnet/astring?tab=MIT-1-ov-file), respectively.

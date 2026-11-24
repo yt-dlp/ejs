@@ -1,9 +1,11 @@
+import { argv } from "node:process";
+
+import { generate } from "astring";
 import { parse } from "meriyah";
+
+import { getSolutions, modifyPlayer } from "./solvers.ts";
 import { getIO } from "./test/io.ts";
 import { downloadCached } from "./test/utils.ts";
-import { argv } from "node:process";
-import { getSolutions, modifyPlayer } from "./solvers.ts";
-import { generate } from "astring";
 
 const data = await (
   argv.length > 3

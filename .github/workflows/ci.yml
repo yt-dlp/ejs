@@ -1,15 +1,10 @@
 name: CI
 on:
   push:
-    branches:
-      - '**'
-    paths-ignore:
-      - 'README.md'
-      - 'LICENSE'
+    branches: ['main']
+  # This workflow contains required checks and needs to run for EVERY pull_request
   pull_request:
-    paths-ignore:
-      - 'README.md'
-      - 'LICENSE'
+    branches: ['**']
 
 permissions: {}
 
@@ -20,7 +15,8 @@ concurrency:
 env:
   ACTIONLINT_VERSION: "1.7.12"
   ACTIONLINT_SHA256SUM: 8aca8db96f1b94770f1b0d72b6dddcb1ebb8123cb3712530b08cc387b349a3d8
-  ACTIONLINT_REPO: https://github.com/rhysd/actionlint
+  ACTIONLINT_REPO: rhysd/actionlint
+  GH_TELEMETRY: "false"
 
 jobs:
   actionlint:
@@ -29,26 +25,31 @@ jobs:
       contents: read
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd  # v6.0.2
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
         with:
           persist-credentials: false
-      - uses: actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405  # v6.2.0
-        with:
-          python-version: "3.14"
+
       - name: Install requirements
         env:
+          GH_TOKEN: ${{ github.token }}
           ACTIONLINT_TARBALL: ${{ format('actionlint_{0}_linux_amd64.tar.gz', env.ACTIONLINT_VERSION) }}
         shell: bash
         run: |
           sudo apt -y install shellcheck
-          python -m pip install -U pyflakes
-          curl -LO "${ACTIONLINT_REPO}/releases/download/v${ACTIONLINT_VERSION}/${ACTIONLINT_TARBALL}"
+          gh release download \
+            --repo "${ACTIONLINT_REPO}" \
+            --pattern "${ACTIONLINT_TARBALL}" \
+            "v${ACTIONLINT_VERSION}"
+          gh attestation verify \
+            --repo "${ACTIONLINT_REPO}" \
+            "${ACTIONLINT_TARBALL}"
           printf '%s  %s' "${ACTIONLINT_SHA256SUM}" "${ACTIONLINT_TARBALL}" | sha256sum -c -
           tar xvzf "${ACTIONLINT_TARBALL}" actionlint
-          chmod +x actionlint
+          sudo install -D --mode=755 actionlint /usr/bin/
+
       - name: Run actionlint
         run: |
-          ./actionlint -color
+          actionlint -color
 
   zizmor:
     name: Audit workflows
@@ -57,79 +58,87 @@ jobs:
       actions: read  # Needed by zizmorcore/zizmor-action if repository is private
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd  # v6.0.2
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
         with:
           persist-credentials: false
+
       - name: Run zizmor
-        uses: zizmorcore/zizmor-action@71321a20a9ded102f6e9ce5718a2fcec2c4f70d8  # v0.5.2
+        uses: zizmorcore/zizmor-action@53290badfa369cb0bf7ad16342cb62c2fa47ac7b  # v0.8.0
         with:
           advanced-security: false
           persona: pedantic
-          version: v1.23.1
 
-  ruff_format:
-    name: Ruff format check
+  py_format:
+    name: Python format check
     permissions:
       contents: read
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd  # v6.0.2
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
         with:
           persist-credentials: false
-      - uses: astral-sh/ruff-action@4919ec5cf1f49eff0871dbcea0da843445b837e6  # v3.6.1
+
+      - uses: astral-sh/ruff-action@278981a28ce3188b1e39527901f38254bf3aac89  # v4.1.0
         with:
           args: "check --output-format github"
 
-  ruff_lint:
-    name: Ruff linting check
+  py_lint:
+    name: Python lint check
     permissions:
       contents: read
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd  # v6.0.2
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
         with:
           persist-credentials: false
-      - uses: astral-sh/ruff-action@4919ec5cf1f49eff0871dbcea0da843445b837e6  # v3.6.1
+
+      - uses: astral-sh/ruff-action@278981a28ce3188b1e39527901f38254bf3aac89  # v4.1.0
         with:
           args: "format --check --diff"
 
-  prettier:
-    name: Prettier check
+  js_format:
+    name: JavaScript format check
     permissions:
       contents: read
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd  # v6.0.2
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
         with:
           persist-credentials: false
+
       - name: Install Deno v2.x (latest)
-        uses: denoland/setup-deno@e95548e56dfa95d4e1a28d6f422fafe75c4c26fb  # v2.0.3
+        uses: denoland/setup-deno@22d081ff2d3a40755e97629de92e3bcbfa7cf2ed  # v2.0.5
         with:
           deno-version: v2.x
+
       - name: Install Deno requirements
         run: |
           deno install --frozen
-      - name: Run Prettier check
+
+      - name: Run format check
         run: |
           deno task fmt:check
 
-  eslint:
-    name: ESLint check
+  js_lint:
+    name: JavaScript lint check
     permissions:
       contents: read
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd  # v6.0.2
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
         with:
           persist-credentials: false
+
       - name: Install Deno v2.x (latest)
-        uses: denoland/setup-deno@e95548e56dfa95d4e1a28d6f422fafe75c4c26fb  # v2.0.3
+        uses: denoland/setup-deno@22d081ff2d3a40755e97629de92e3bcbfa7cf2ed  # v2.0.5
         with:
           deno-version: v2.x
+
       - name: Install Deno requirements
         run: |
           deno install --frozen
-      - name: Run ESLint check
+
+      - name: Run lint check
         run: |
           deno task lint
 
@@ -142,32 +151,38 @@ jobs:
       fail-fast: false
       matrix:
         runner: [ubuntu-latest, windows-latest]
-        python-version: ['3.10', '3.11', '3.12', '3.13', '3.14', pypy-3.11]
+        python-version: ['3.10', '3.11', '3.12', '3.13', '3.14', '3.15', pypy-3.11]
     steps:
-      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd  # v6.0.2
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
         with:
           # required for hatch-vcs versioning
           fetch-depth: 0
           persist-credentials: false
+
       - name: Install Deno v2.x (latest)
-        uses: denoland/setup-deno@e95548e56dfa95d4e1a28d6f422fafe75c4c26fb  # v2.0.3
+        uses: denoland/setup-deno@22d081ff2d3a40755e97629de92e3bcbfa7cf2ed  # v2.0.5
         with:
           deno-version: v2.x
+
       - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405  # v6.2.0
+        uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0  # v7.1.0
         with:
           python-version: ${{ matrix.python-version }}
+          allow-prereleases: true
+
       - name: Build project
         shell: bash
         run: |
           # `pip install -e` omits the force-included JS, so use `build` instead
           python -m pip install -U build
           python -m build
+
       - name: Unpack wheel (Linux)
         if: matrix.runner == 'ubuntu-latest'
         shell: bash
         run: |
           unzip -u dist/yt_dlp_ejs-*.whl "yt_dlp_ejs/*"
+
       - name: Unpack wheel (Windows)
         if: matrix.runner == 'windows-latest'
         shell: pwsh
@@ -175,6 +190,7 @@ jobs:
           $ErrorActionPreference = "Stop"
           $PSNativeCommandUseErrorActionPreference = $true
           Expand-Archive -Path dist/yt_dlp_ejs-*.whl -DestinationPath ./ -Force
+
       - name: Run Python tests
         timeout-minutes: 5
         shell: bash
@@ -187,40 +203,47 @@ jobs:
       contents: read
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd  # v6.0.2
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
         with:
           persist-credentials: false
+
       - name: Install Deno v2.x (latest)
-        uses: denoland/setup-deno@e95548e56dfa95d4e1a28d6f422fafe75c4c26fb  # v2.0.3
+        uses: denoland/setup-deno@22d081ff2d3a40755e97629de92e3bcbfa7cf2ed  # v2.0.5
         with:
           deno-version: v2.x
+
       - name: Install Deno requirements
         run: |
           deno install --frozen
+
       - name: Build control bundle
         run: |
           deno task bundle
+
       - name: Generate bundle hashes
         shell: bash
         run: |
           pushd dist
           sha256sum -- yt.solver.*.js | tee SHA2-256SUMS
           popd
+
       - name: Upload bundle hashes
-        uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f  # v7.0.0
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9  # v7.0.2
         with:
           name: bundle-hashes
           path: |
             dist/SHA2-256SUMS
           compression-level: 0
+
       - name: Cache player JS files
-        uses: actions/cache@668228422ae6a00e4ad889ee87cd7109ec5666a7  # v5.0.4
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9  # v6.1.0
         env:
           SEGMENT_DOWNLOAD_TIMEOUT_MINS: 1
         with:
           path: |
             src/yt/solver/test/players
           key: test-player-js-${{ hashFiles('src/yt/solver/test/tests.ts') }}
+
       - name: Download player JS files
         timeout-minutes: 15
         run: |
@@ -231,8 +254,9 @@ jobs:
             --allow-net=www.youtube.com \
             --allow-sys=uid \
             src/yt/solver/test/download.ts
+
       - name: Upload player JS artifact
-        uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f  # v7.0.0
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9  # v7.0.2
         with:
           name: player-js
           path: |
@@ -246,25 +270,31 @@ jobs:
       contents: read
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd  # v6.0.2
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
         with:
           # required for hatch-vcs versioning
           fetch-depth: 0
           persist-credentials: false
+
       - name: Install pnpm
-        uses: pnpm/action-setup@fc06bc1257f339d1d5d8b3a19a8cae5388b55320  # v5.0.0
+        uses: pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413  # v6.1.0
         with:
-          version: 10
-      - uses: actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405  # v6.2.0
+          # minimum supported version
+          version: "10.16.0"
+
+      - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0  # v7.1.0
         with:
           # minimum supported version
           python-version: "3.10"
+
       - name: Install Python requirements
         run: |
           python -m pip install -U build
+
       - name: Test pnpm build
         run: |
           python -m build
+
       - name: Verify artifact contents
         shell: bash
         run: |
@@ -272,17 +302,21 @@ jobs:
           unzip -l dist/yt_dlp_ejs-*.whl | tee .wheel_contents
           grep -q 'yt_dlp_ejs/yt/solver/core\.min\.js' .wheel_contents
           grep -q 'yt_dlp_ejs/yt/solver/lib\.min\.js' .wheel_contents
+
       - name: Install pnpm requirements
         run: |
           pnpm install --frozen-lockfile
+
       - name: Bundle with pnpm
         run: |
           pnpm run bundle
+
       - name: Download bundle hashes
-        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c  # v8.0.1
+        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333  # v8.0.2
         with:
           path: dist
           name: bundle-hashes
+
       - name: Verify bundle hashes
         run: |
           cd dist
@@ -294,13 +328,15 @@ jobs:
       contents: read
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd  # v6.0.2
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
         with:
           persist-credentials: false
-      - uses: actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405  # v6.2.0
+
+      - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0  # v7.1.0
         with:
           # minimum supported version
           python-version: "3.10"
+
       - name: Verify lockfile
         run: |
           python ./check.py
@@ -312,26 +348,31 @@ jobs:
       contents: read
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd  # v6.0.2
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
         with:
           # required for hatch-vcs versioning
           fetch-depth: 0
           persist-credentials: false
+
       - name: Install Deno
-        uses: denoland/setup-deno@e95548e56dfa95d4e1a28d6f422fafe75c4c26fb  # v2.0.3
+        uses: denoland/setup-deno@22d081ff2d3a40755e97629de92e3bcbfa7cf2ed  # v2.0.5
         with:
           # minimum supported version
-          deno-version: "2.0.0"
-      - uses: actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405  # v6.2.0
+          deno-version: "2.3.0"
+
+      - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0  # v7.1.0
         with:
           # minimum supported version
           python-version: "3.10"
+
       - name: Install Python requirements
         run: |
           python -m pip install -U build
+
       - name: Test Deno build
         run: |
           python -m build
+
       - name: Verify artifact contents
         shell: bash
         run: |
@@ -339,17 +380,21 @@ jobs:
           unzip -l dist/yt_dlp_ejs-*.whl | tee .wheel_contents
           grep -q 'yt_dlp_ejs/yt/solver/core\.min\.js' .wheel_contents
           grep -q 'yt_dlp_ejs/yt/solver/lib\.min\.js' .wheel_contents
+
       - name: Install Deno requirements
         run: |
           deno install --frozen
+
       - name: Bundle with Deno
         run: |
           deno task bundle
+
       - name: Download bundle hashes
-        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c  # v8.0.1
+        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333  # v8.0.2
         with:
           path: dist
           name: bundle-hashes
+
       - name: Verify bundle hashes
         run: |
           cd dist
@@ -362,22 +407,26 @@ jobs:
       contents: read
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd  # v6.0.2
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
         with:
           persist-credentials: false
+
       - name: Install Deno
-        uses: denoland/setup-deno@e95548e56dfa95d4e1a28d6f422fafe75c4c26fb  # v2.0.3
+        uses: denoland/setup-deno@22d081ff2d3a40755e97629de92e3bcbfa7cf2ed  # v2.0.5
         with:
           # minimum supported version
-          deno-version: "2.0.0"
+          deno-version: "2.3.0"
+
       - name: Install Deno requirements
         run: |
           deno install --frozen
+
       - name: Download player JS artifact
-        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c  # v8.0.1
+        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333  # v8.0.2
         with:
           path: src/yt/solver/test/players
           name: player-js
+
       - name: Run Deno tests
         run: |
           xargs -n 1 -P 10 deno test \
@@ -393,27 +442,32 @@ jobs:
       contents: read
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd  # v6.0.2
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
         with:
           # required for hatch-vcs versioning
           fetch-depth: 0
           persist-credentials: false
+
       - name: Install Bun
         uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6  # v2.2.0
         with:
           # minimum supported version
-          bun-version: "1.0.31"
+          bun-version: "1.2.11"
           no-cache: true
-      - uses: actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405  # v6.2.0
+
+      - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0  # v7.1.0
         with:
           # minimum supported version
           python-version: "3.10"
+
       - name: Install Python requirements
         run: |
           python -m pip install -U build
+
       - name: Test Bun build
         run: |
           python -m build
+
       - name: Verify artifact contents
         shell: bash
         run: |
@@ -421,17 +475,21 @@ jobs:
           unzip -l dist/yt_dlp_ejs-*.whl | tee .wheel_contents
           grep -q 'yt_dlp_ejs/yt/solver/core\.min\.js' .wheel_contents
           grep -q 'yt_dlp_ejs/yt/solver/lib\.min\.js' .wheel_contents
+
       - name: Install Bun requirements
         run: |
           bun install --frozen-lockfile
+
       - name: Bundle with Bun
         run: |
           bun --bun run bundle
+
       - name: Download bundle hashes
-        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c  # v8.0.1
+        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333  # v8.0.2
         with:
           path: dist
           name: bundle-hashes
+
       - name: Verify bundle hashes
         run: |
           cd dist
@@ -444,23 +502,27 @@ jobs:
       contents: read
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd  # v6.0.2
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
         with:
           persist-credentials: false
+
       - name: Install Bun
         uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6  # v2.2.0
         with:
-          # XXX: We support 1.0.31, but test suite requires 1.2.11+
+          # minimum supported version
           bun-version: "1.2.11"
           no-cache: true
+
       - name: Install Bun requirements
         run: |
           bun install --frozen-lockfile
+
       - name: Download player JS artifact
-        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c  # v8.0.1
+        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333  # v8.0.2
         with:
           path: src/yt/solver/test/players
           name: player-js
+
       - name: Run Bun tests
         run: |
           bun test
@@ -472,26 +534,31 @@ jobs:
       contents: read
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd  # v6.0.2
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
         with:
           # required for hatch-vcs versioning
           fetch-depth: 0
           persist-credentials: false
+
       - name: Install Node
-        uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f  # v6.3.0
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1  # v7.1.0
         with:
           # minimum supported version
-          node-version: "20.0"
-      - uses: actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405  # v6.2.0
+          node-version: "22.0.0"
+
+      - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0  # v7.1.0
         with:
           # minimum supported version
           python-version: "3.10"
+
       - name: Install Python requirements
         run: |
           python -m pip install -U build
+
       - name: Test Node build
         run: |
           python -m build
+
       - name: Verify artifact contents
         shell: bash
         run: |
@@ -499,17 +566,21 @@ jobs:
           unzip -l dist/yt_dlp_ejs-*.whl | tee .wheel_contents
           grep -q 'yt_dlp_ejs/yt/solver/core\.min\.js' .wheel_contents
           grep -q 'yt_dlp_ejs/yt/solver/lib\.min\.js' .wheel_contents
+
       - name: Install Node requirements
         run: |
           npm ci
+
       - name: Bundle with Node
         run: |
           npm run bundle
+
       - name: Download bundle hashes
-        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c  # v8.0.1
+        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333  # v8.0.2
         with:
           path: dist
           name: bundle-hashes
+
       - name: Verify bundle hashes
         run: |
           cd dist
@@ -522,35 +593,40 @@ jobs:
       contents: read
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd  # v6.0.2
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
         with:
           persist-credentials: false
+
       - name: Install Node
-        uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f  # v6.3.0
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1  # v7.1.0
         with:
-          # XXX: We support 20.0, but test suite requires 22.18+
-          node-version: "22.18"
+          # minimum supported version
+          node-version: "22.0.0"
+
       - name: Install Node requirements
         run: |
           npm ci
+
       - name: Download player JS artifact
-        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c  # v8.0.1
+        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333  # v8.0.2
         with:
           path: src/yt/solver/test/players
           name: player-js
+
       - name: Run Node tests
         run: |
           node --test
 
   all_passed:
+    # Required check; do not change name
     name: all_passed
     needs:
       - actionlint
       - zizmor
-      - ruff_format
-      - ruff_lint
-      - prettier
-      - eslint
+      - py_format
+      - py_lint
+      - js_format
+      - js_lint
       - python_tests
       - pnpm_build
       - deno_lock_check
@@ -560,8 +636,7 @@ jobs:
       - bun_tests
       - node_build
       - node_tests
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-slim
     steps:
-      - name: All checks passed
-        run: |
-          echo "All checks passed!"
+      - run: |
+          true

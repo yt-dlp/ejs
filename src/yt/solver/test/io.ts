@@ -83,8 +83,6 @@ async function _getIO(): Promise<IO> {
     };
   }
   throw new Error(
-    `unsupported runtime for testing${
-      navigator.userAgent ? `: ${navigator.userAgent}` : ""
-    }`,
+    `unsupported runtime for testing${navigator.userAgent ? `: ${navigator.userAgent}` : ""}`,
   );
 }

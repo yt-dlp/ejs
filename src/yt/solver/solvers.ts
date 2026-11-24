@@ -1,8 +1,9 @@
-import { type ESTree, parse } from "meriyah";
 import { generate } from "astring";
+import { type ESTree, parse } from "meriyah";
+
+import { generateArrowFunction } from "../../utils.ts";
 import { extract } from "./nsig.ts";
 import { setupNodes } from "./setup.ts";
-import { generateArrowFunction } from "../../utils.ts";
 
 export function preprocessPlayer(data: string): string {
   const program = parse(data);
