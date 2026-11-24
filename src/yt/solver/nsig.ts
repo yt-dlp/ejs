@@ -289,6 +289,21 @@ function findXorValue(
   return result;
 }
 
+function getCalleeName(callee: ESTree.Node): string | null {
+  if (callee.type === "Identifier") return callee.name;
+  if (
+    callee.type === "MemberExpression" &&
+    callee.property.type === "Identifier"
+  ) {
+    return callee.property.name;
+  }
+  if (callee.type === "SequenceExpression") {
+    const last = callee.expressions[callee.expressions.length - 1];
+    return last ? getCalleeName(last) : null;
+  }
+  return null;
+}
+
 function findArgs(
   allStatements: ESTree.Statement[],
   name: string,
@@ -299,8 +314,7 @@ function findArgs(
     if (found) return;
     if (
       node.type === "CallExpression" &&
-      node.callee.type === "Identifier" &&
-      node.callee.name === name &&
+      getCalleeName(node.callee) === name &&
       node.arguments?.length
     ) {
       const a0 = node.arguments[0];
@@ -422,10 +436,19 @@ function matchPoolSolver(
     return createSolver(identifier);
   }
 
-  if (identifier.type === "Identifier" && allStatements) {
-    const args = findArgs(allStatements, identifier.name, found.key);
-    if (args) {
-      return createSolver(identifier, args);
+  if (allStatements) {
+    const name =
+      identifier.type === "Identifier"
+        ? identifier.name
+        : identifier.type === "MemberExpression" &&
+            identifier.property.type === "Identifier"
+          ? identifier.property.name
+          : null;
+    if (name) {
+      const args = findArgs(allStatements, name, found.key);
+      if (args) {
+        return createSolver(identifier, args);
+      }
     }
   }
 

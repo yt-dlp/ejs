@@ -33,4 +33,5 @@ if (typeof globalThis.self === "undefined") {
 if (typeof globalThis.window === "undefined") {
     globalThis.window = globalThis;
 }
+globalThis.window.location = globalThis.location;
 `).body;

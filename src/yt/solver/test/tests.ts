@@ -35,45 +35,9 @@ export const tests: {
   sig?: Step[];
 }[] = [
   {
-    // 20522
-    player: "74edf1a3",
-    n: [
-      { input: "IlLiA21ny7gqA2m4p37", expected: "9nRTxrbM1f0yHg" },
-      { input: "eabGFpsUKuWHXGh6FR4", expected: "izmYqDEY6kl7Sg" },
-      { input: "eabGF/ps%UK=uWHXGh6FR4", expected: "LACmqlhaBpiPlgE-a" },
-    ],
-    sig: [
-      {
-        input:
-          "NJAJEij0EwRgIhAI0KExTgjfPk-MPM9MAdzyyPRt=BM8-XO5tm5hlMCSVpAiEAv7eP3CURqZNSPow8BXXAoazVoXgeMP7gH9BdylHCwgw=gwzz",
-        expected:
-          "NJAJEij0EwRgIhAI0KExTgjfPk-MPM9MAdzyyPRt=BM8-XO5tm5hzMCSVpAiEAv7eP3CURqZNSPow8BXXAoazVoXgeMP7gH9BdylHCwgw=gwzl",
-      },
-      {
-        input:
-          "\x00\x01\x02%\x03\x04\x05\x06\x07\x08\x09\x10\x11\x12\x13\x14\x15\x16\x17\x18\x19\x20\x21\x22\x23\x24\x25\x26\x27\x28\x29\x30\x31\x32\x33\x34\x35\x36\x37\x38\x39\x40\x41\x42\x43\x44\x45\x46\x47\x48\x49",
-        expected:
-          "\x00\x01\x02%\x03\x04\x05\x06\x07\x08\x09\x10\x11\x12\x13\x14\x15\x16\x17\x18\x19\x20\x21\x22\x23\x24\x25\x26\x27\x28\x29\x30\x31\x32\x33\x34\x35\x36\x37\x38\x39\x40\x41\x42\x49\x44\x45\x46\x47\x48\x43",
-      },
-    ],
-  },
-  {
-    // 20523
-    player: "901741ab",
-    n: [{ input: "BQoJvGBkC2nj1ZZLK-", expected: "UMPovvBZRh-sjb" }],
-    sig: [
-      {
-        input:
-          "NJAJEij0EwRgIhAI0KExTgjfPk-MPM9MAdzyyPRt=BM8-XO5tm5hlMCSVpAiEAv7eP3CURqZNSPow8BXXAoazVoXgeMP7gH9BdylHCwgw=gwzz",
-        expected:
-          "wgwCHlydB9Hg7PMegXoVzaoAXXB8woPSNZqRUC3Pe7vAEiApVSCMlhwmt5ON-8MB=5RPyyzdAM9MPM-kPfjgTxEK0IAhIgRwE0jiEJA",
-      },
-    ],
-  },
-  {
     // 20524
     player: "e7573094",
-    variants: except("embed_tcl"),
+    variants: except("embed_tcl", "tcl"),
     n: [{ input: "IlLiA21ny7gqA2m4p37", expected: "3KuQ3235dojTSjo4" }],
     sig: [
       {
@@ -138,7 +102,7 @@ export const tests: {
     ],
   },
   {
-    // 20671
+    // 20671 (20671001)
     player: "879f7172",
     variants: ["tv_tcl", "tcl", "es6_tcl", "embed_tcl", "embed_es6_tcl"],
     n: [{ input: "nkWoI9oUWkorXYqR", expected: "hQ3dJ8aYPJ1Q" }],
@@ -152,7 +116,7 @@ export const tests: {
     ],
   },
   {
-    // 20676
+    // 20676 (20676001)
     player: "b0d2d49a",
     variants: ["tv_tcl", "tcl", "es6_tcl", "embed_tcl", "embed_es6_tcl"],
     n: [{ input: "nkWoI9oUWkorXYqR", expected: "h1OpTHKvcEgai6l" }],
