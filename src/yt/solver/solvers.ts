@@ -77,7 +77,7 @@ export function modifyPlayer(program: ESTree.Program) {
   block.body = block.body.filter((node: ESTree.Statement) => {
     if (node.type === "ExpressionStatement") {
       if (node.expression.type === "CallExpression") {
-        const call = node.expression
+        const call = node.expression;
         return prototypeHelpers.some((identifier) =>
           matchesStructure(call.callee, identifier),
         );
@@ -112,9 +112,7 @@ function findPrototypeHelpers(body: ESTree.Statement[]) {
         line.expression.left.property.type === "Identifier" &&
         line.expression.left.property.name === "prototype"
       ) {
-        result.push(
-          makePrototypeHelpersIdentifier(node.expression.left),
-        );
+        result.push(makePrototypeHelpersIdentifier(node.expression.left));
         break;
       }
     }
