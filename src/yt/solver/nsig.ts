@@ -153,7 +153,14 @@ export function extract(
     }
     const name = node.expression.left;
     const fn = node.expression.right as ESTree.FunctionExpression;
-    if (name && fn?.body?.body && !fn.async) {
+    if (
+      name &&
+      (name.type === "CallExpression" ||
+        name.type === "Identifier" ||
+        name.type === "MemberExpression") &&
+      fn?.body?.body &&
+      !fn.async
+    ) {
       options.push({
         name: name,
         statements: fn.body.body,
@@ -162,8 +169,9 @@ export function extract(
   } else if (node.type === "VariableDeclaration") {
     for (const declaration of node.declarations) {
       const name = declaration.id;
+      name.type;
       const fn = declaration.init as ESTree.FunctionExpression;
-      if (name && fn?.body?.body && !fn.async) {
+      if (name && name.type === "Identifier" && fn?.body?.body && !fn.async) {
         options.push({
           name: name,
           statements: fn.body.body,
@@ -173,7 +181,11 @@ export function extract(
   }
 
   for (const { name, statements } of options) {
-    if (matchesStructure(statements, { anykey: [asdasd] })) {
+    if (
+      matchesStructure(statements, {
+        anykey: [asdasd],
+      } as DeepPartial<ESTree.Node>)
+    ) {
       return createSolver(name);
     }
     if (pool) {
@@ -463,7 +475,7 @@ function matchPoolSolver(
 }
 
 function createSolver(
-  expression: ESTree.Expression,
+  expression: ESTree.Expression | ESTree.Pattern,
   args?: [number, number] | number[],
   code?: string,
 ): ESTree.ArrowFunctionExpression {
