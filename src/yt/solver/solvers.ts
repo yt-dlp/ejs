@@ -1,8 +1,9 @@
 import { generate } from "astring";
 import { type ESTree, parse } from "meriyah";
 
-import { generateArrowFunction } from "../../utils.ts";
-import { extract } from "./nsig.ts";
+import type { DeepPartial } from "../../types.ts";
+import { generateArrowFunction, matchesStructure } from "../../utils.ts";
+import { extract, extractArray } from "./nsig.ts";
 import { setupNodes } from "./setup.ts";
 
 export function preprocessPlayer(data: string): string {
@@ -75,17 +76,80 @@ export function modifyPlayer(program: ESTree.Program) {
     return block;
   })();
 
+  const prototypeHelpers = findPrototypeHelpers(block.body);
   block.body = block.body.filter((node: ESTree.Statement) => {
     if (node.type === "ExpressionStatement") {
-      if (node.expression.type === "AssignmentExpression") {
-        return true;
+      if (node.expression.type === "CallExpression") {
+        const call = node.expression;
+        return prototypeHelpers.some((identifier) =>
+          matchesStructure(call.callee, identifier),
+        );
       }
-      return node.expression.type === "Literal";
+      return (
+        node.expression.type === "AssignmentExpression" ||
+        node.expression.type === "Literal"
+      );
     }
     return true;
   });
 
   return block.body;
+}
+
+function findPrototypeHelpers(body: ESTree.Statement[]) {
+  const result: DeepPartial<any>[] = [];
+  for (const node of body) {
+    if (
+      node.type !== "ExpressionStatement" ||
+      node.expression.type !== "AssignmentExpression" ||
+      node.expression.right.type !== "FunctionExpression" ||
+      node.expression.left.type.endsWith("Pattern")
+    ) {
+      continue;
+    }
+    const func = node.expression.right;
+    for (const line of func.body?.body ?? []) {
+      if (
+        line.type === "ExpressionStatement" &&
+        line.expression.type === "AssignmentExpression" &&
+        line.expression.left.type === "MemberExpression" &&
+        line.expression.left.property.type === "Identifier" &&
+        line.expression.left.property.name === "prototype"
+      ) {
+        result.push(
+          makePrototypeHelpersIdentifier(
+            node.expression.left as ESTree.Expression,
+          ),
+        );
+        break;
+      }
+    }
+  }
+  return result;
+}
+
+function makePrototypeHelpersIdentifier(
+  member: ESTree.Expression | ESTree.PrivateIdentifier,
+): DeepPartial<any> {
+  if (member.type === "MemberExpression" && member.object.type !== "Super") {
+    const object = makePrototypeHelpersIdentifier(member.object);
+    const property = makePrototypeHelpersIdentifier(member.property);
+    if (!object || !property) {
+      return null;
+    }
+    return {
+      type: member.type,
+      object,
+      property,
+    };
+  }
+  if (member.type === "Identifier") {
+    return {
+      type: member.type,
+      name: member.name,
+    };
+  }
+  return null;
 }
 
 export function getSolutions(
@@ -95,8 +159,9 @@ export function getSolutions(
     n: [] as ESTree.ArrowFunctionExpression[],
     sig: [] as ESTree.ArrowFunctionExpression[],
   };
+  const pool = extractArray(statements);
   for (const statement of statements) {
-    const result = extract(statement);
+    const result = extract(statement, pool, statements);
     if (result) {
       found.n.push(
         makeSolver(result, {
