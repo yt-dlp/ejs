@@ -28,6 +28,14 @@ function except(...variants: Variant[]): Variant[] {
   return playerVariants.map((v) => v[0]).filter((v) => !variants.includes(v));
 }
 
+function except_tcl_variants(): Variant[] {
+  return playerVariants.map((v) => v[0]).filter((v) => !v.endsWith("tcl"));
+}
+
+function only_tcl_variants(): Variant[] {
+  return playerVariants.map((v) => v[0]).filter((v) => v.endsWith("tcl"));
+}
+
 export const tests: {
   player: string;
   variants?: Variant[];
@@ -102,9 +110,9 @@ export const tests: {
     ],
   },
   {
-    // 20671 (20671001)
+    // 20671001 (*tcl)
     player: "879f7172",
-    variants: ["tv_tcl", "tcl", "es6_tcl", "embed_tcl", "embed_es6_tcl"],
+    variants: only_tcl_variants(),
     n: [{ input: "nkWoI9oUWkorXYqR", expected: "hQ3dJ8aYPJ1Q" }],
     sig: [
       {
@@ -116,9 +124,9 @@ export const tests: {
     ],
   },
   {
-    // 20676 (20676001)
+    // 20676001 (*tcl)
     player: "b0d2d49a",
-    variants: ["tv_tcl", "tcl", "es6_tcl", "embed_tcl", "embed_es6_tcl"],
+    variants: only_tcl_variants(),
     n: [{ input: "nkWoI9oUWkorXYqR", expected: "h1OpTHKvcEgai6l" }],
     sig: [
       {
@@ -132,7 +140,7 @@ export const tests: {
   {
     // 20780 (main, tce, tcc: a.addOnDisposeCallback is not a function)
     player: "92eef845",
-    variants: except("tv_tcl", "tcl", "es6_tcl", "embed_tcl", "embed_es6_tcl"),
+    variants: except_tcl_variants(),
     n: [{ input: "rYKKd90cGmViBQaX", expected: "3tU2ya-IJqhNt" }],
     sig: [
       {
@@ -144,9 +152,9 @@ export const tests: {
     ],
   },
   {
-    // 20780001 (tcl variants of above)
+    // 20780001 (*tcl)
     player: "92eef845",
-    variants: ["tv_tcl", "tcl", "es6_tcl", "embed_tcl", "embed_es6_tcl"],
+    variants: only_tcl_variants(),
     n: [{ input: "rYKKd90cGmViBQaX", expected: "Tk5OqnIAYVzPJeT" }],
     sig: [
       {
