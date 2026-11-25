@@ -102,7 +102,8 @@ function findPrototypeHelpers(body: ESTree.Statement[]) {
     if (
       node.type !== "ExpressionStatement" ||
       node.expression.type !== "AssignmentExpression" ||
-      node.expression.right.type !== "FunctionExpression"
+      node.expression.right.type !== "FunctionExpression" ||
+      node.expression.left.type.endsWith("Pattern")
     ) {
       continue;
     }
@@ -115,7 +116,7 @@ function findPrototypeHelpers(body: ESTree.Statement[]) {
         line.expression.left.property.type === "Identifier" &&
         line.expression.left.property.name === "prototype"
       ) {
-        result.push(makePrototypeHelpersIdentifier(node.expression.left));
+        result.push(makePrototypeHelpersIdentifier(node.expression.left as ESTree.Expression));
         break;
       }
     }
@@ -126,7 +127,7 @@ function findPrototypeHelpers(body: ESTree.Statement[]) {
 function makePrototypeHelpersIdentifier(
   member: ESTree.Expression | ESTree.PrivateIdentifier,
 ): DeepPartial<any> {
-  if (member.type === "MemberExpression") {
+  if (member.type === "MemberExpression" && member.object.type !== "Super") {
     const object = makePrototypeHelpersIdentifier(member.object);
     const property = makePrototypeHelpersIdentifier(member.property);
     if (!object || !property) {
