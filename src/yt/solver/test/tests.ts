@@ -28,11 +28,11 @@ function except(...variants: Variant[]): Variant[] {
   return playerVariants.map((v) => v[0]).filter((v) => !variants.includes(v));
 }
 
-function except_tcl_variants(): Variant[] {
+function exceptTclVariants(): Variant[] {
   return playerVariants.map((v) => v[0]).filter((v) => !v.endsWith("tcl"));
 }
 
-function only_tcl_variants(): Variant[] {
+function onlyTclVariants(): Variant[] {
   return playerVariants.map((v) => v[0]).filter((v) => v.endsWith("tcl"));
 }
 
@@ -112,7 +112,7 @@ export const tests: {
   {
     // 20671001 (*tcl)
     player: "879f7172",
-    variants: only_tcl_variants(),
+    variants: onlyTclVariants(),
     n: [{ input: "nkWoI9oUWkorXYqR", expected: "hQ3dJ8aYPJ1Q" }],
     sig: [
       {
@@ -126,7 +126,7 @@ export const tests: {
   {
     // 20676001 (*tcl)
     player: "b0d2d49a",
-    variants: only_tcl_variants(),
+    variants: onlyTclVariants(),
     n: [{ input: "nkWoI9oUWkorXYqR", expected: "h1OpTHKvcEgai6l" }],
     sig: [
       {
@@ -140,7 +140,7 @@ export const tests: {
   {
     // 20780 (main, tce, tcc: a.addOnDisposeCallback is not a function)
     player: "92eef845",
-    variants: except_tcl_variants(),
+    variants: exceptTclVariants(),
     n: [{ input: "rYKKd90cGmViBQaX", expected: "3tU2ya-IJqhNt" }],
     sig: [
       {
@@ -154,7 +154,7 @@ export const tests: {
   {
     // 20780001 (*tcl)
     player: "92eef845",
-    variants: only_tcl_variants(),
+    variants: onlyTclVariants(),
     n: [{ input: "rYKKd90cGmViBQaX", expected: "Tk5OqnIAYVzPJeT" }],
     sig: [
       {
