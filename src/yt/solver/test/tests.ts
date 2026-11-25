@@ -46,7 +46,7 @@ export const players = new Map(playerVariants);
 
 function except(
   inputVariantArray: Variant[],
-  ...excludedVariants: Variant[],
+  ...excludedVariants: Variant[]
 ): Variant[] {
   return inputVariantArray.filter((v) => !excludedVariants.includes(v));
 }
