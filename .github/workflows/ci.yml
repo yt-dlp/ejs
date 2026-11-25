@@ -151,7 +151,7 @@ jobs:
       fail-fast: false
       matrix:
         runner: [ubuntu-latest, windows-latest]
-        python-version: ['3.10', '3.11', '3.12', '3.13', '3.14', '3.15', pypy-3.11]
+        python-version: ['3.11', '3.12', '3.13', '3.14', '3.15', pypy-3.11, pypy-3.12]
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
         with:
@@ -285,7 +285,7 @@ jobs:
       - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0  # v7.1.0
         with:
           # minimum supported version
-          python-version: "3.10"
+          python-version: "3.11"
 
       - name: Install Python requirements
         run: |
@@ -335,7 +335,7 @@ jobs:
       - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0  # v7.1.0
         with:
           # minimum supported version
-          python-version: "3.10"
+          python-version: "3.11"
 
       - name: Verify lockfile
         run: |
@@ -363,7 +363,7 @@ jobs:
       - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0  # v7.1.0
         with:
           # minimum supported version
-          python-version: "3.10"
+          python-version: "3.11"
 
       - name: Install Python requirements
         run: |
@@ -458,7 +458,7 @@ jobs:
       - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0  # v7.1.0
         with:
           # minimum supported version
-          python-version: "3.10"
+          python-version: "3.11"
 
       - name: Install Python requirements
         run: |
@@ -549,7 +549,7 @@ jobs:
       - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0  # v7.1.0
         with:
           # minimum supported version
-          python-version: "3.10"
+          python-version: "3.11"
 
       - name: Install Python requirements
         run: |
