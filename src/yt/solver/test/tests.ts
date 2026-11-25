@@ -3,6 +3,51 @@ type Step = {
   expected: string;
 };
 
+const playerVariants = [
+  ["main", "player_ias.vflset/en_US/base.js"],
+  ["tcc", "player_ias_tcc.vflset/en_US/base.js"],
+  ["tce", "player_ias_tce.vflset/en_US/base.js"],
+  ["es6", "player_es6.vflset/en_US/base.js"],
+  ["es6_tcc", "player_es6_tcc.vflset/en_US/base.js"],
+  ["es6_tce", "player_es6_tce.vflset/en_US/base.js"],
+  ["tv", "tv-player-ias.vflset/tv-player-ias.js"],
+  ["tv_tcc", "tv-player-ias-tcc.vflset/tv-player-ias-tcc.js"],
+  ["tv_tce", "tv-player-ias-tce.vflset/tv-player-ias-tce.js"],
+  ["tv_es6", "tv-player-es6.vflset/tv-player-es6.js"],
+  ["tv_es6_tcc", "tv-player-es6-tcc.vflset/tv-player-es6-tcc.js"],
+  ["tv_es6_tce", "tv-player-es6-tce.vflset/tv-player-es6-tce.js"],
+  ["phone", "player-plasma-ias-phone-en_US.vflset/base.js"],
+  ["phone_tcc", "player-plasma-ias-phone-tcc-en_US.vflset/base.js"],
+  ["phone_tce", "player-plasma-ias-phone-tce-en_US.vflset/base.js"],
+  ["plasma_es6", "player-plasma-es6-en_US.vflset/base.js"],
+  ["plasma_es6_tcc", "player-plasma-es6-tcc-en_US.vflset/base.js"],
+  ["plasma_es6_tce", "player-plasma-es6-tce-en_US.vflset/base.js"],
+  ["embed", "player_embed.vflset/en_US/base.js"],
+  ["embed_tcc", "player_embed_tcc.vflset/en_US/base.js"],
+  ["embed_tce", "player_embed_tce.vflset/en_US/base.js"],
+  ["embed_es6", "player_embed_es6.vflset/en_US/base.js"],
+  ["embed_es6_tcc", "player_embed_es6_tcc.vflset/en_US/base.js"],
+  ["embed_es6_tce", "player_embed_es6_tce.vflset/en_US/base.js"],
+  ["house", "house_brand_player.vflset/en_US/base.js"],
+  ["house_es6", "house_brand_player_es6.vflset/en_US/base.js"],
+  ["tcl", "player_ias_tcl.vflset/en_US/base.js"],
+  ["es6_tcl", "player_es6_tcl.vflset/en_US/base.js"],
+  ["tv_tcl", "tv-player-ias-tcl.vflset/tv-player-ias-tcl.js"],
+  ["tv_es6_tcl", "tv-player-es6-tcl.vflset/tv-player-es6-tcl.js"],
+  ["phone_tcl", "player-plasma-ias-phone-tcl-en_US.vflset/base.js"],
+  ["plasma_es6_tcl", "player-plasma-es6-tcl-en_US.vflset/base.js"],
+  ["embed_tcl", "player_embed_tcl.vflset/en_US/base.js"],
+  ["embed_es6_tcl", "player_embed_es6_tcl.vflset/en_US/base.js"],
+] as const;
+
+export type Variant = (typeof playerVariants)[number][0] & {};
+
+export const players = new Map(playerVariants);
+
+const all = withExcept<Variant>(playerVariants.map((x) => x[0]));
+const regular = withExcept(all.filter((v) => !v.endsWith("tcl")));
+const tcl = withExcept(all.filter((v) => v.endsWith("tcl")));
+
 export const tests: {
   player: string;
   variants?: Variant[];
@@ -10,131 +55,267 @@ export const tests: {
   sig?: Step[];
 }[] = [
   {
-    // 20522
-    player: "74edf1a3",
-    n: [
-      { input: "IlLiA21ny7gqA2m4p37", expected: "9nRTxrbM1f0yHg" },
-      { input: "eabGFpsUKuWHXGh6FR4", expected: "izmYqDEY6kl7Sg" },
-      { input: "eabGF/ps%UK=uWHXGh6FR4", expected: "LACmqlhaBpiPlgE-a" },
-    ],
+    // 20770
+    player: "f9c6b6bd",
+    variants: regular,
+    n: [{ input: "rYKKd90cGmViBQaX", expected: "FGCrdHZnN1fPu" }],
     sig: [
       {
         input:
-          "NJAJEij0EwRgIhAI0KExTgjfPk-MPM9MAdzyyPRt=BM8-XO5tm5hlMCSVpAiEAv7eP3CURqZNSPow8BXXAoazVoXgeMP7gH9BdylHCwgw=gwzz",
+          "000102030405060708090A0B0C0D0E0F101112131415161718191A1B1C1D1E1F202122232425262728292A2B2C2D2E2F303132333435363738393A3B3C3D3E3F404142434445464748494A4B4C4D4E4F505152535455565758595A5B5C5D5E5F606162636465666768696A",
         expected:
-          "NJAJEij0EwRgIhAI0KExTgjfPk-MPM9MAdzyyPRt=BM8-XO5tm5hzMCSVpAiEAv7eP3CURqZNSPow8BXXAoazVoXgeMP7gH9BdylHCwgw=gwzl",
-      },
-      {
-        input:
-          "\x00\x01\x02%\x03\x04\x05\x06\x07\x08\x09\x10\x11\x12\x13\x14\x15\x16\x17\x18\x19\x20\x21\x22\x23\x24\x25\x26\x27\x28\x29\x30\x31\x32\x33\x34\x35\x36\x37\x38\x39\x40\x41\x42\x43\x44\x45\x46\x47\x48\x49",
-        expected:
-          "\x00\x01\x02%\x03\x04\x05\x06\x07\x08\x09\x10\x11\x12\x13\x14\x15\x16\x17\x18\x19\x20\x21\x22\x23\x24\x25\x26\x27\x28\x29\x30\x31\x32\x33\x34\x35\x36\x37\x38\x39\x40\x41\x42\x49\x44\x45\x46\x47\x48\x43",
+          "180405060708090A0B0C0D0E0F101112131415161741191A1B1C1D1E1F202122232425262728292A2B2C2D2E2F303132333435363738393A3B3C3D3E3F400342434445464748494A4B4C4D4E4F505152535455565758595A5B5C5D5E5F60616263646566676869",
       },
     ],
   },
   {
-    // 20523
-    player: "901741ab",
-    n: [{ input: "BQoJvGBkC2nj1ZZLK-", expected: "UMPovvBZRh-sjb" }],
+    // 20770001 (*tcl)
+    player: "f9c6b6bd",
+    variants: tcl,
+    n: [{ input: "rYKKd90cGmViBQaX", expected: "n9FE0-b7eQQa" }],
     sig: [
       {
         input:
-          "NJAJEij0EwRgIhAI0KExTgjfPk-MPM9MAdzyyPRt=BM8-XO5tm5hlMCSVpAiEAv7eP3CURqZNSPow8BXXAoazVoXgeMP7gH9BdylHCwgw=gwzz",
+          "000102030405060708090A0B0C0D0E0F101112131415161718191A1B1C1D1E1F202122232425262728292A2B2C2D2E2F303132333435363738393A3B3C3D3E3F404142434445464748494A4B4C4D4E4F505152535455565758595A5B5C5D5E5F606162636465666768696A",
         expected:
-          "wgwCHlydB9Hg7PMegXoVzaoAXXB8woPSNZqRUC3Pe7vAEiApVSCMlhwmt5ON-8MB=5RPyyzdAM9MPM-kPfjgTxEK0IAhIgRwE0jiEJA",
+          "67666564636261605F5E5D5C5B5A595857565554535251504F4E4D4C4B4A494847464544434241403F3E3D3C3B3A393837363534333231302F2E2D2C2B2A292827262524232221001E031D1C1B1A191817161514130411100F0E0D0C0B0A090807060512",
       },
     ],
   },
   {
-    // 20524
-    player: "e7573094",
-    n: [{ input: "IlLiA21ny7gqA2m4p37", expected: "3KuQ3235dojTSjo4" }],
+    // 20772
+    player: "907ce1cd",
+    variants: regular,
+    n: [{ input: "rYKKd90cGmViBQaX", expected: "9KH_qoCyDcUT2aK" }],
     sig: [
       {
         input:
-          "NJAJEij0EwRgIhAI0KExTgjfPk-MPM9MAdzyyPRt=BM8-XO5tm5hlMCSVpAiEAv7eP3CURqZNSPow8BXXAoazVoXgeMP7gH9BdylHCwgw=gwzz",
+          "000102030405060708090A0B0C0D0E0F101112131415161718191A1B1C1D1E1F202122232425262728292A2B2C2D2E2F303132333435363738393A3B3C3D3E3F404142434445464748494A4B4C4D4E4F505152535455565758595A5B5C5D5E5F606162636465666768696A",
         expected:
-          "yEij0EwRgIhAI0KExTgjfPk-MPM9MAdzyNPRt=BM8-XO5tm5hlMCSVNAiEAvpeP3CURqZJSPow8BXXAoazVoXgeMP7gH9BdylHCwgw=g",
+          "4F696867666564636261605F5E5D5C5B5A595857565554535251506A4E4D4C4B4A49484746454443423C402B3E3D3F3B3A393837363534333231302F2E2D2C172A292827262524232221201F1E1D1C1B1A191800161514131211100F0E0D0C0B0A09080706050403020141",
       },
     ],
   },
   {
-    // 20525
-    player: "9fcf08e8",
-    n: [{ input: "4JRSxxN0E_fLVnxmd", expected: "xhAoMP8xPcR5wg" }],
+    // 20772001 (*tcl)
+    player: "907ce1cd",
+    variants: tcl,
+    n: [{ input: "rYKKd90cGmViBQaX", expected: "8svLYpjykqNt5" }],
     sig: [
       {
         input:
-          "\x00\x01\x02\x03\x04\x05\x06\x07\x08\x09\x0a\x0b\x0c\x0d\x0e\x0f\x10\x11\x12\x13\x14\x15\x16\x17\x18\x19\x1a\x1b\x1c\x1d\x1e\x1f\x20\x21\x22\x23\x24\x25\x26\x27\x28\x29\x2a\x2b\x2c\x2d\x2e\x2f\x30\x31\x32\x33\x34\x35\x36\x37\x38\x39\x3a\x3b\x3c\x3d\x3e\x3f\x40\x41\x42\x43\x44\x45\x46\x47\x48\x49\x4a\x4b\x4c\x4d\x4e\x4f\x50\x51\x52\x53\x54\x55\x56\x57\x58\x59\x5a\x5b\x5c\x5d\x5e\x5f\x60\x61\x62\x63\x64\x65\x66\x67\x68\x69\x6a",
+          "000102030405060708090A0B0C0D0E0F101112131415161718191A1B1C1D1E1F202122232425262728292A2B2C2D2E2F303132333435363738393A3B3C3D3E3F404142434445464748494A4B4C4D4E4F505152535455565758595A5B5C5D5E5F606162636465666768696A",
         expected:
-          "\x6a\x69\x68\x67\x66\x65\x64\x63\x62\x61\x60\x5f\x5e\x5d\x5c\x5b\x5a\x59\x58\x57\x56\x55\x54\x53\x52\x51\x50\x4f\x4e\x4d\x4c\x4b\x4a\x49\x48\x47\x46\x45\x44\x43\x42\x41\x40\x3f\x3e\x3d\x3c\x3b\x3a\x39\x38\x37\x36\x35\x34\x33\x32\x31\x30\x2f\x2e\x2d\x2c\x2b\x2a\x29\x28\x27\x26\x25\x24\x23\x22\x21\x20\x1f\x1e\x1d\x1c\x1b\x1a\x19\x18\x17\x16\x15\x14\x13\x12\x11\x10\x0f\x0e\x0d\x0c\x0b\x03\x09\x08\x07\x06\x05\x04\x0a",
+          "696867666564636261605F5E5D5C5B5A595857565554535251504F4E4D4C4B4A494847464544434241403F3E3D3C3B3A393837363534333231302F2E2D2C2B2A292827262524232221201F1E1D1C031A191817161514131211100F0E0D0C0B0A0908070605041B",
       },
     ],
   },
   {
-    // 20527
-    player: "21cd2156",
-    n: [{ input: "16EF3jx-Mr_TLuGH", expected: "OQJDc7IrlWCkfg" }],
+    // 20773
+    player: "53caf627",
+    variants: regular,
+    n: [{ input: "rYKKd90cGmViBQaX", expected: "mW_Q-CZfTbyuZ" }],
     sig: [
       {
         input:
-          "\x00\x01\x02\x03\x04\x05\x06\x07\x08\x09\x0a\x0b\x0c\x0d\x0e\x0f\x10\x11\x12\x13\x14\x15\x16\x17\x18\x19\x1a\x1b\x1c\x1d\x1e\x1f\x20\x21\x22\x23\x24\x25\x26\x27\x28\x29\x2a\x2b\x2c\x2d\x2e\x2f\x30\x31\x32\x33\x34\x35\x36\x37\x38\x39\x3a\x3b\x3c\x3d\x3e\x3f\x40\x41\x42\x43\x44\x45\x46\x47\x48\x49\x4a\x4b\x4c\x4d\x4e\x4f\x50\x51\x52\x53\x54\x55\x56\x57\x58\x59\x5a\x5b\x5c\x5d\x5e\x5f\x60\x61\x62\x63\x64\x65\x66\x67\x68\x69\x6a",
+          "000102030405060708090A0B0C0D0E0F101112131415161718191A1B1C1D1E1F202122232425262728292A2B2C2D2E2F303132333435363738393A3B3C3D3E3F404142434445464748494A4B4C4D4E4F505152535455565758595A5B5C5D5E5F606162636465666768696A",
         expected:
-          "\x03\x04\x05\x06\x07\x08\x09\x0a\x0b\x0c\x0d\x0e\x0f\x10\x11\x12\x13\x14\x15\x16\x17\x18\x19\x1a\x1b\x1c\x1d\x1e\x1f\x20\x21\x22\x23\x24\x25\x26\x27\x28\x29\x2a\x2b\x2c\x2d\x2e\x2f\x30\x31\x32\x33\x34\x35\x36\x37\x38\x39\x3a\x3b\x3c\x3d\x3e\x3f\x40\x41\x42\x43\x44\x00\x46\x47\x48\x49\x4a\x4b\x6a\x4d\x4e\x4f\x50\x51\x52\x53\x54\x55\x56\x57\x58\x59\x5a\x5b\x5c\x5d\x5e\x5f\x60\x61\x62\x63\x64\x65\x66\x67\x68\x69\x4c",
+          "0405060708090A0B0C0D0E0F101112131415161718191A1B1C1D1E1F002122232425262728292A2B2C2D2E2F303132333435363738393A3B3C3D3E3F404142434445464748494A4B4C4D4E4F505152535455566A58595A5B5C5D5E5F6061626364656667686957",
       },
     ],
   },
   {
-    // 20528 (tv & tv_es6 needed self.location.origin fix)
-    player: "76ad2fe8",
-    n: [{ input: "V8pdMGD0Sz_M0DRT", expected: "rBnTGCWGFpwByA" }],
+    // 20773001 (*tcl)
+    player: "53caf627",
+    variants: tcl,
+    n: [{ input: "rYKKd90cGmViBQaX", expected: "QIlguLyfPrrzq" }],
     sig: [
       {
         input:
-          "\x00\x01\x02\x03\x04\x05\x06\x07\x08\x09\x0a\x0b\x0c\x0d\x0e\x0f\x10\x11\x12\x13\x14\x15\x16\x17\x18\x19\x1a\x1b\x1c\x1d\x1e\x1f\x20\x21\x22\x23\x24\x25\x26\x27\x28\x29\x2a\x2b\x2c\x2d\x2e\x2f\x30\x31\x32\x33\x34\x35\x36\x37\x38\x39\x3a\x3b\x3c\x3d\x3e\x3f\x40\x41\x42\x43\x44\x45\x46\x47\x48\x49\x4a\x4b\x4c\x4d\x4e\x4f\x50\x51\x52\x53\x54\x55\x56\x57\x58\x59\x5a\x5b\x5c\x5d\x5e\x5f\x60\x61\x62\x63\x64\x65\x66\x67\x68\x69\x6a",
+          "000102030405060708090A0B0C0D0E0F101112131415161718191A1B1C1D1E1F202122232425262728292A2B2C2D2E2F303132333435363738393A3B3C3D3E3F404142434445464748494A4B4C4D4E4F505152535455565758595A5B5C5D5E5F606162636465666768696A",
         expected:
-          "\x46\x66\x65\x64\x63\x62\x61\x60\x5f\x5e\x67\x6a\x5b\x5a\x59\x58\x57\x56\x55\x54\x53\x52\x51\x50\x4f\x4e\x4d\x4c\x4b\x4a\x49\x48\x47\x2c\x45\x44\x43\x42\x41\x40\x3f\x3e\x3d\x3c\x3b\x3a\x39\x38\x13\x36\x35\x34\x33\x32\x31\x30\x2f\x2e\x2d\x5d\x2b\x2a\x29\x28\x27\x26\x25\x24\x23\x22\x21\x20\x1f\x1e\x1d\x1c\x1b\x1a\x19\x18\x17\x16\x15\x14\x0c\x12\x11\x10\x0f\x0e\x0d\x00\x0b\x0a\x09\x08\x07\x06\x05\x04\x03\x02\x01\x37",
+          "02030405060708090A0B0C0D0E0F101112131415161718191A1B1C1D1E1F202122232425262728292A2B2C2D2E2F303132333435363738393A3B3C3D3E3F404142434445464748494A4B4C4D4E4F505152535455565758595A5B5C5D5E5F6061626364656A67",
       },
     ],
   },
   {
-    // 20529 (tv & tv_es6 needed self.location.origin fix)
-    player: "631d3938",
-    n: [{ input: "KBx1qz7jMhxELa8c", expected: "ttPvh7WIptsgSw" }],
+    // 20774
+    player: "6b3d0364",
+    variants: regular,
+    n: [{ input: "rYKKd90cGmViBQaX", expected: "4bdGvS77-SAZ" }],
     sig: [
       {
         input:
-          "\x00\x01\x02\x03\x04\x05\x06\x07\x08\x09\x0a\x0b\x0c\x0d\x0e\x0f\x10\x11\x12\x13\x14\x15\x16\x17\x18\x19\x1a\x1b\x1c\x1d\x1e\x1f\x20\x21\x22\x23\x24\x25\x26\x27\x28\x29\x2a\x2b\x2c\x2d\x2e\x2f\x30\x31\x32\x33\x34\x35\x36\x37\x38\x39\x3a\x3b\x3c\x3d\x3e\x3f\x40\x41\x42\x43\x44\x45\x46\x47\x48\x49\x4a\x4b\x4c\x4d\x4e\x4f\x50\x51\x52\x53\x54\x55\x56\x57\x58\x59\x5a\x5b\x5c\x5d\x5e\x5f\x60\x61\x62\x63\x64\x65\x66",
+          "000102030405060708090A0B0C0D0E0F101112131415161718191A1B1C1D1E1F202122232425262728292A2B2C2D2E2F303132333435363738393A3B3C3D3E3F404142434445464748494A4B4C4D4E4F505152535455565758595A5B5C5D5E5F606162636465666768696A",
         expected:
-          "\x19\x01\x02\x03\x04\x05\x06\x07\x08\x09\x0a\x0b\x0c\x0d\x0e\x0f\x10\x11\x12\x13\x14\x15\x16\x17\x18\x00\x1a\x1b\x1c\x1d\x1e\x1f\x20\x21\x22\x23\x24\x25\x26\x27\x28\x29\x2a\x2b\x2c\x2d\x2e\x2f\x30\x31\x32\x33\x34\x35\x36\x37\x38\x39\x3a\x3b\x3c\x3d\x3e\x3f\x40\x41\x42\x43\x44\x45\x46\x47\x48\x49\x4a\x4b\x4c\x4d\x4e\x4f\x50\x51\x52\x53\x54\x55\x56\x57\x58\x59\x5a\x5b\x5c\x5d\x5e\x5f\x60\x61\x62\x63",
+          "6A696867666564636261605F5E5D5C5B5A595857565554535251504F4E4D4C4B4A494847464544434241403F013D3C3B3A003837363534333231302F2E2D2C2B3E292827262524232221201F1E1D1C1B1A191839161514131211100F0E0D0C0B0A09080706050403022A",
+      },
+    ],
+  },
+  {
+    // 20774001 (*tcl except `tcl` which is failing)
+    player: "6b3d0364",
+    variants: tcl.except("tcl"),
+    n: [{ input: "rYKKd90cGmViBQaX", expected: "LNjVf8daKwDLu" }],
+    sig: [
+      {
+        input:
+          "000102030405060708090A0B0C0D0E0F101112131415161718191A1B1C1D1E1F202122232425262728292A2B2C2D2E2F303132333435363738393A3B3C3D3E3F404142434445464748494A4B4C4D4E4F505152535455565758595A5B5C5D5E5F606162636465666768696A",
+        expected:
+          "6867666564636261605F5E5D5C5B5A595857565554535251504F4E4D4C4B4A494847464544434241403F3E3D3C3B3A393837363534333231302F2E2D2C2B03292827692524232221201F1E1D1C061A191817161514131211100F0E0D0C0B0A09",
+      },
+    ],
+  },
+  {
+    // 20775
+    player: "5ba500a8",
+    variants: regular,
+    n: [{ input: "rYKKd90cGmViBQaX", expected: "f-UPS3JuT" }],
+    sig: [
+      {
+        input:
+          "000102030405060708090A0B0C0D0E0F101112131415161718191A1B1C1D1E1F202122232425262728292A2B2C2D2E2F303132333435363738393A3B3C3D3E3F404142434445464748494A4B4C4D4E4F505152535455565758595A5B5C5D5E5F606162636465666768696A",
+        expected:
+          "0401060708090A0B0C0D0E0F101112131415161718191A1B1C1D1E1F202122232425262728292A2B2C2D2E2F303132333435363738393A3B053D3E3F404142434445464748494A4B4C4D4E4F505152535455565758595A5B5C5D5E5F606162636465666768696A",
+      },
+    ],
+  },
+  {
+    // 20775001 (*tcl)
+    player: "5ba500a8",
+    variants: tcl,
+    n: [{ input: "rYKKd90cGmViBQaX", expected: "W7GTTJYisaaWV" }],
+    sig: [
+      {
+        input:
+          "000102030405060708090A0B0C0D0E0F101112131415161718191A1B1C1D1E1F202122232425262728292A2B2C2D2E2F303132333435363738393A3B3C3D3E3F404142434445464748494A4B4C4D4E4F505152535455565758595A5B5C5D5E5F606162636465666768696A",
+        expected:
+          "400405060708090A0B0C0D0E0F101112131415161718191A1B1C1D1E1F202122232425262703292A2B2C2D2E2F30313233346A363738393A3B3C3D3E3F284142434445464748494A4B4C4D4E4F505152535455565758595A5B5C5D5E5F6061626364656667",
+      },
+    ],
+  },
+  {
+    // 20776
+    player: "3dc75896",
+    variants: regular,
+    n: [{ input: "rYKKd90cGmViBQaX", expected: "v_oVscQWHRIALGie" }],
+    sig: [
+      {
+        input:
+          "000102030405060708090A0B0C0D0E0F101112131415161718191A1B1C1D1E1F202122232425262728292A2B2C2D2E2F303132333435363738393A3B3C3D3E3F404142434445464748494A4B4C4D4E4F505152535455565758595A5B5C5D5E5F606162636465666768696A",
+        expected:
+          "666564636268605F5E5D5C5B5A595857565554535251504F4E4D4C4B4A494847464544434241403F3E3D3C3B3A393837003534333231302F2E2D2C2B2A6A2827262524232221201F1E1D1C1B1A191817161514131211100F0E0D0C0B0A09080706050403020136",
+      },
+    ],
+  },
+  {
+    // 20776001 (*tcl except `tv_es6_tcl` which is failing)
+    player: "3dc75896",
+    variants: tcl.except("tv_es6_tcl"),
+    n: [{ input: "rYKKd90cGmViBQaX", expected: "F-0vGfHt8DJ" }],
+    sig: [
+      {
+        input:
+          "000102030405060708090A0B0C0D0E0F101112131415161718191A1B1C1D1E1F202122232425262728292A2B2C2D2E2F303132333435363738393A3B3C3D3E3F404142434445464748494A4B4C4D4E4F505152535455565758595A5B5C5D5E5F606162636465666768696A",
+        expected:
+          "1F032505060708090A0B0C0D0E0F101112131415161718191A1B1C1D1E04202122232402262728292A2B2C2D2E2F303132333435363738003A673C3D3E3F404142434445464748494A4B4C4D4E4F505152535455565758595A5B5C5D5E5F606162636465663B",
+      },
+    ],
+  },
+  {
+    // 20777
+    player: "28c28ac0",
+    variants: regular,
+    n: [{ input: "rYKKd90cGmViBQaX", expected: "Lh0g5nDTae8J_d6" }],
+    sig: [
+      {
+        input:
+          "000102030405060708090A0B0C0D0E0F101112131415161718191A1B1C1D1E1F202122232425262728292A2B2C2D2E2F303132333435363738393A3B3C3D3E3F404142434445464748494A4B4C4D4E4F505152535455565758595A5B5C5D5E5F606162636465666768696A",
+        expected:
+          "6867666564636261605F5E5D5C5B5A595857565554535251504F4E4D4C4B4A494847464544434241403F3E3D3C3B3A393837360034333231302F2E2D2C2B2A292827262524232221201F1E1D1C1B1A191817161514131211100F0E0D0C0B0A09080706050403020135",
+      },
+    ],
+  },
+  {
+    // 20777001 (*tcl)
+    player: "28c28ac0",
+    variants: tcl,
+    n: [{ input: "rYKKd90cGmViBQaX", expected: "v3AtBn99yZFtq" }],
+    sig: [
+      {
+        input:
+          "000102030405060708090A0B0C0D0E0F101112131415161718191A1B1C1D1E1F202122232425262728292A2B2C2D2E2F303132333435363738393A3B3C3D3E3F404142434445464748494A4B4C4D4E4F505152535455565758595A5B5C5D5E5F606162636465666768696A",
+        expected:
+          "2A66656463626160675E5D695B5A595857565554535251504F4E4D4C4B4A493E47464544434241403F6A3D3C3B3A393837363534333231302F2E2D2C2B5F292827262524232221201F1E1D1C1B1A191817161514131211100F0E0D0C0B0A09080706050403",
+      },
+    ],
+  },
+  {
+    // 20779 (main, tce, tcc: a.addOnDisposeCallback is not a function)
+    player: "b485e332",
+    variants: regular,
+    n: [{ input: "rYKKd90cGmViBQaX", expected: "3zbfWwYE4asG8" }],
+    sig: [
+      {
+        input:
+          "000102030405060708090A0B0C0D0E0F101112131415161718191A1B1C1D1E1F202122232425262728292A2B2C2D2E2F303132333435363738393A3B3C3D3E3F404142434445464748494A4B4C4D4E4F505152535455565758595A5B5C5D5E5F606162636465666768696A",
+        expected:
+          "01020304050607081D0A0B0C0D0E0F101112131415161718191A1B1C3A1E1F202122232425262700292A2B2C2D2E2F30313233343536373839283B3C3D3E3F404142434445464748494A4B4C4D4E4F505152535455565758595A5B5C5D5E5F606162636465666768696A",
+      },
+    ],
+  },
+  {
+    // 20779001 (*tcl)
+    player: "b485e332",
+    variants: tcl,
+    n: [{ input: "rYKKd90cGmViBQaX", expected: "vSwisZogGk3ro4" }],
+    sig: [
+      {
+        input:
+          "000102030405060708090A0B0C0D0E0F101112131415161718191A1B1C1D1E1F202122232425262728292A2B2C2D2E2F303132333435363738393A3B3C3D3E3F404142434445464748494A4B4C4D4E4F505152535455565758595A5B5C5D5E5F606162636465666768696A",
+        expected:
+          "230E0405060703090A0B0C0D020F101112131415161718191A1B1C1D1E1F202122082425262728292A2B2C2D2E2F303132333435363738393A3B3C3D3E3F404142434445464748494A4B4C4D4E4F505152535455565758595A5B5C5D5E5F6061626364656667",
       },
     ],
   },
   {
     // 20780 (main, tce, tcc: a.addOnDisposeCallback is not a function)
     player: "92eef845",
+    variants: regular,
     n: [{ input: "rYKKd90cGmViBQaX", expected: "3tU2ya-IJqhNt" }],
     sig: [
       {
         input:
-          "\x00\x01\x02\x03\x04\x05\x06\x07\x08\x09\x0a\x0b\x0c\x0d\x0e\x0f\x10\x11\x12\x13\x14\x15\x16\x17\x18\x19\x1a\x1b\x1c\x1d\x1e\x1f\x20\x21\x22\x23\x24\x25\x26\x27\x28\x29\x2a\x2b\x2c\x2d\x2e\x2f\x30\x31\x32\x33\x34\x35\x36\x37\x38\x39\x3a\x3b\x3c\x3d\x3e\x3f\x40\x41\x42\x43\x44\x45\x46\x47\x48\x49\x4a\x4b\x4c\x4d\x4e\x4f\x50\x51\x52\x53\x54\x55\x56\x57\x58\x59\x5a\x5b\x5c\x5d\x5e\x5f\x60\x61\x62\x63\x64\x65\x66\x67\x68\x69\x6a",
+          "000102030405060708090A0B0C0D0E0F101112131415161718191A1B1C1D1E1F202122232425262728292A2B2C2D2E2F303132333435363738393A3B3C3D3E3F404142434445464748494A4B4C4D4E4F505152535455565758595A5B5C5D5E5F606162636465666768696A",
         expected:
-          "\x5d\x65\x64\x63\x62\x61\x60\x5f\x5e\x44\x5c\x5b\x5a\x59\x58\x57\x56\x55\x54\x53\x52\x51\x50\x4f\x4e\x4d\x4c\x4b\x4a\x49\x48\x47\x46\x45\x66\x43\x42\x41\x40\x3f\x3e\x3d\x3c\x3b\x3a\x39\x38\x37\x36\x35\x00\x33\x32\x31\x30\x2f\x69\x2d\x2c\x2b\x2a\x29\x28\x27\x26\x25\x24\x23\x22\x21\x20\x1f\x1e\x1d\x1c\x1b\x1a\x19\x18\x17\x16\x15\x14\x13\x12\x11\x10\x0f\x0e\x0d\x0c\x0b\x0a\x09\x08\x07\x06\x05\x04\x03\x02\x01\x34",
+          "5D6564636261605F5E445C5B5A595857565554535251504F4E4D4C4B4A494847464566434241403F3E3D3C3B3A393837363500333231302F692D2C2B2A292827262524232221201F1E1D1C1B1A191817161514131211100F0E0D0C0B0A09080706050403020134",
+      },
+    ],
+  },
+  {
+    // 20780001 (*tcl)
+    player: "92eef845",
+    variants: tcl,
+    n: [{ input: "rYKKd90cGmViBQaX", expected: "Tk5OqnIAYVzPJeT" }],
+    sig: [
+      {
+        input:
+          "000102030405060708090A0B0C0D0E0F101112131415161718191A1B1C1D1E1F202122232425262728292A2B2C2D2E2F303132333435363738393A3B3C3D3E3F404142434445464748494A4B4C4D4E4F505152535455565758595A5B5C5D5E5F606162636465666768696A",
+        expected:
+          "696867666564636261605F5E5D5C5B5A5958576A5554535251504F4E4D4C4B4A494847464544433C41403F3E3D563B3A393837363534333231302F2E2D2C2B2A292827262524232221201F1E1D1C1B1A191817161514131211100F0E0D0C0B0A09080706050403",
       },
     ],
   },
 ];
 
-export const players = new Map([
-  ["main", "player_ias.vflset/en_US/base.js"],
-  ["tcc", "player_ias_tcc.vflset/en_US/base.js"],
-  ["tce", "player_ias_tce.vflset/en_US/base.js"],
-  ["es6", "player_es6.vflset/en_US/base.js"],
-  ["tv", "tv-player-ias.vflset/tv-player-ias.js"],
-  ["tv_es6", "tv-player-es6.vflset/tv-player-es6.js"],
-  ["phone", "player-plasma-ias-phone-en_US.vflset/base.js"],
-  ["es6_tcc", "player_es6_tcc.vflset/en_US/base.js"],
-  ["es6_tce", "player_es6_tce.vflset/en_US/base.js"],
-] as const);
+type ExceptArray<T> = T[] & {
+  except(...exclusions: T[]): ExceptArray<T>;
+};
 
-export type Variant = typeof players extends Map<infer T, unknown> ? T : never;
+function withExcept<T>(v: T[]): ExceptArray<T> {
+  const proto = Object.create(Array.prototype);
+  proto.except = function <T>(this: ExceptArray<T>, ...exclusions: T[]): T[] {
+    return this.filter((v) => !exclusions.includes(v));
+  };
+  return Object.setPrototypeOf(v, proto);
+}

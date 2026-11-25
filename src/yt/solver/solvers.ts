@@ -3,7 +3,7 @@ import { type ESTree, parse } from "meriyah";
 
 import type { DeepPartial } from "../../types.ts";
 import { generateArrowFunction, matchesStructure } from "../../utils.ts";
-import { extract } from "./nsig.ts";
+import { extract, extractArray } from "./nsig.ts";
 import { setupNodes } from "./setup.ts";
 
 export function preprocessPlayer(data: string): string {
@@ -102,7 +102,8 @@ function findPrototypeHelpers(body: ESTree.Statement[]) {
     if (
       node.type !== "ExpressionStatement" ||
       node.expression.type !== "AssignmentExpression" ||
-      node.expression.right.type !== "FunctionExpression"
+      node.expression.right.type !== "FunctionExpression" ||
+      node.expression.left.type.endsWith("Pattern")
     ) {
       continue;
     }
@@ -115,7 +116,11 @@ function findPrototypeHelpers(body: ESTree.Statement[]) {
         line.expression.left.property.type === "Identifier" &&
         line.expression.left.property.name === "prototype"
       ) {
-        result.push(makePrototypeHelpersIdentifier(node.expression.left));
+        result.push(
+          makePrototypeHelpersIdentifier(
+            node.expression.left as ESTree.Expression,
+          ),
+        );
         break;
       }
     }
@@ -126,7 +131,7 @@ function findPrototypeHelpers(body: ESTree.Statement[]) {
 function makePrototypeHelpersIdentifier(
   member: ESTree.Expression | ESTree.PrivateIdentifier,
 ): DeepPartial<any> {
-  if (member.type === "MemberExpression") {
+  if (member.type === "MemberExpression" && member.object.type !== "Super") {
     const object = makePrototypeHelpersIdentifier(member.object);
     const property = makePrototypeHelpersIdentifier(member.property);
     if (!object || !property) {
@@ -154,8 +159,9 @@ export function getSolutions(
     n: [] as ESTree.ArrowFunctionExpression[],
     sig: [] as ESTree.ArrowFunctionExpression[],
   };
+  const pool = extractArray(statements);
   for (const statement of statements) {
-    const result = extract(statement);
+    const result = extract(statement, pool, statements);
     if (result) {
       found.n.push(
         makeSolver(result, {
