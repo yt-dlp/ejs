@@ -65,7 +65,7 @@ export const tests: {
   {
     // 20524
     player: "e7573094",
-    variants: except("embed_tcl", "tcl"),
+    variants: except("house_es6", "embed_tcl", "tcl"),
     n: [{ input: "IlLiA21ny7gqA2m4p37", expected: "3KuQ3235dojTSjo4" }],
     sig: [
       {
@@ -79,6 +79,7 @@ export const tests: {
   {
     // 20525
     player: "9fcf08e8",
+    variants: except("house_es6"),
     n: [{ input: "4JRSxxN0E_fLVnxmd", expected: "xhAoMP8xPcR5wg" }],
     sig: [
       {
@@ -92,6 +93,7 @@ export const tests: {
   {
     // 20527
     player: "21cd2156",
+    variants: except("house_es6"),
     n: [{ input: "16EF3jx-Mr_TLuGH", expected: "OQJDc7IrlWCkfg" }],
     sig: [
       {
@@ -105,6 +107,7 @@ export const tests: {
   {
     // 20528 (tv & tv_es6 needed self.location.origin fix)
     player: "76ad2fe8",
+    variants: except("house_es6"),
     n: [{ input: "V8pdMGD0Sz_M0DRT", expected: "rBnTGCWGFpwByA" }],
     sig: [
       {
@@ -118,7 +121,7 @@ export const tests: {
   {
     // 20529 (tv & tv_es6 needed self.location.origin fix)
     player: "631d3938",
-    variants: except("embed_tcl"),
+    variants: except("house_es6", "embed_tcl"),
     n: [{ input: "KBx1qz7jMhxELa8c", expected: "ttPvh7WIptsgSw" }],
     sig: [
       {
