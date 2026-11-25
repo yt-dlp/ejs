@@ -543,8 +543,8 @@ jobs:
       - name: Install Node
         uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1  # v7.1.0
         with:
-          # minimum supported version
-          node-version: "22.0.0"
+          # minimum supported major version
+          node-version: "22.x"
 
       - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0  # v7.1.0
         with:
@@ -600,8 +600,8 @@ jobs:
       - name: Install Node
         uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1  # v7.1.0
         with:
-          # minimum supported version
-          node-version: "22.0.0"
+          # minimum supported major version
+          node-version: "22.x"
 
       - name: Install Node requirements
         run: |
