@@ -23,7 +23,7 @@ jobs:
 
       - uses: denoland/setup-deno@22d081ff2d3a40755e97629de92e3bcbfa7cf2ed  # v2.0.5
         with:
-          deno-version: 3fbb1daddbc9333cddf0d8c0735811717dd70f7a  # v2.6.3
+          deno-version: fe7ed012d92c642fd8e5607ac5a45d517538b5c5  # v2.9.8
           cache: false
 
       - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0  # v7.1.0
