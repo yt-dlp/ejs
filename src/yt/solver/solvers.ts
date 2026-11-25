@@ -116,7 +116,11 @@ function findPrototypeHelpers(body: ESTree.Statement[]) {
         line.expression.left.property.type === "Identifier" &&
         line.expression.left.property.name === "prototype"
       ) {
-        result.push(makePrototypeHelpersIdentifier(node.expression.left as ESTree.Expression));
+        result.push(
+          makePrototypeHelpersIdentifier(
+            node.expression.left as ESTree.Expression,
+          ),
+        );
         break;
       }
     }
