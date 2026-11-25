@@ -40,24 +40,13 @@ const playerVariants = [
   ["embed_es6_tcl", "player_embed_es6_tcl.vflset/en_US/base.js"],
 ] as const;
 
-export type Variant = (typeof playerVariants)[number][0];
+export type Variant = (typeof playerVariants)[number][0] & {};
 
 export const players = new Map(playerVariants);
 
-function except(
-  inputVariantArray: Variant[],
-  ...excludedVariants: Variant[]
-): Variant[] {
-  return inputVariantArray.filter((v) => !excludedVariants.includes(v));
-}
-
-function exceptTclVariants(): Variant[] {
-  return playerVariants.map((v) => v[0]).filter((v) => !v.endsWith("tcl"));
-}
-
-function onlyTclVariants(): Variant[] {
-  return playerVariants.map((v) => v[0]).filter((v) => v.endsWith("tcl"));
-}
+const all = withExcept<Variant>(playerVariants.map((x) => x[0]));
+const regular = withExcept(all.filter((v) => !v.endsWith("tcl")));
+const tcl = withExcept(all.filter((v) => v.endsWith("tcl")));
 
 export const tests: {
   player: string;
@@ -68,7 +57,7 @@ export const tests: {
   {
     // 20770
     player: "f9c6b6bd",
-    variants: exceptTclVariants(),
+    variants: regular,
     n: [{ input: "rYKKd90cGmViBQaX", expected: "FGCrdHZnN1fPu" }],
     sig: [
       {
@@ -82,7 +71,7 @@ export const tests: {
   {
     // 20770001 (*tcl)
     player: "f9c6b6bd",
-    variants: onlyTclVariants(),
+    variants: tcl,
     n: [{ input: "rYKKd90cGmViBQaX", expected: "n9FE0-b7eQQa" }],
     sig: [
       {
@@ -96,7 +85,7 @@ export const tests: {
   {
     // 20772
     player: "907ce1cd",
-    variants: exceptTclVariants(),
+    variants: regular,
     n: [{ input: "rYKKd90cGmViBQaX", expected: "9KH_qoCyDcUT2aK" }],
     sig: [
       {
@@ -110,7 +99,7 @@ export const tests: {
   {
     // 20772001 (*tcl)
     player: "907ce1cd",
-    variants: onlyTclVariants(),
+    variants: tcl,
     n: [{ input: "rYKKd90cGmViBQaX", expected: "8svLYpjykqNt5" }],
     sig: [
       {
@@ -124,7 +113,7 @@ export const tests: {
   {
     // 20773
     player: "53caf627",
-    variants: exceptTclVariants(),
+    variants: regular,
     n: [{ input: "rYKKd90cGmViBQaX", expected: "mW_Q-CZfTbyuZ" }],
     sig: [
       {
@@ -138,7 +127,7 @@ export const tests: {
   {
     // 20773001 (*tcl)
     player: "53caf627",
-    variants: onlyTclVariants(),
+    variants: tcl,
     n: [{ input: "rYKKd90cGmViBQaX", expected: "QIlguLyfPrrzq" }],
     sig: [
       {
@@ -152,7 +141,7 @@ export const tests: {
   {
     // 20774
     player: "6b3d0364",
-    variants: exceptTclVariants(),
+    variants: regular,
     n: [{ input: "rYKKd90cGmViBQaX", expected: "4bdGvS77-SAZ" }],
     sig: [
       {
@@ -166,7 +155,7 @@ export const tests: {
   {
     // 20774001 (*tcl except `tcl` which is failing)
     player: "6b3d0364",
-    variants: except(onlyTclVariants(), "tcl"),
+    variants: tcl.except("tcl"),
     n: [{ input: "rYKKd90cGmViBQaX", expected: "LNjVf8daKwDLu" }],
     sig: [
       {
@@ -180,7 +169,7 @@ export const tests: {
   {
     // 20775
     player: "5ba500a8",
-    variants: exceptTclVariants(),
+    variants: regular,
     n: [{ input: "rYKKd90cGmViBQaX", expected: "f-UPS3JuT" }],
     sig: [
       {
@@ -194,7 +183,7 @@ export const tests: {
   {
     // 20775001 (*tcl)
     player: "5ba500a8",
-    variants: onlyTclVariants(),
+    variants: tcl,
     n: [{ input: "rYKKd90cGmViBQaX", expected: "W7GTTJYisaaWV" }],
     sig: [
       {
@@ -208,7 +197,7 @@ export const tests: {
   {
     // 20776
     player: "3dc75896",
-    variants: exceptTclVariants(),
+    variants: regular,
     n: [{ input: "rYKKd90cGmViBQaX", expected: "v_oVscQWHRIALGie" }],
     sig: [
       {
@@ -222,7 +211,7 @@ export const tests: {
   {
     // 20776001 (*tcl except `tv_es6_tcl` which is failing)
     player: "3dc75896",
-    variants: except(onlyTclVariants(), "tv_es6_tcl"),
+    variants: tcl.except("tv_es6_tcl"),
     n: [{ input: "rYKKd90cGmViBQaX", expected: "F-0vGfHt8DJ" }],
     sig: [
       {
@@ -236,7 +225,7 @@ export const tests: {
   {
     // 20777
     player: "28c28ac0",
-    variants: exceptTclVariants(),
+    variants: regular,
     n: [{ input: "rYKKd90cGmViBQaX", expected: "Lh0g5nDTae8J_d6" }],
     sig: [
       {
@@ -250,7 +239,7 @@ export const tests: {
   {
     // 20777001 (*tcl)
     player: "28c28ac0",
-    variants: onlyTclVariants(),
+    variants: tcl,
     n: [{ input: "rYKKd90cGmViBQaX", expected: "v3AtBn99yZFtq" }],
     sig: [
       {
@@ -264,7 +253,7 @@ export const tests: {
   {
     // 20779 (main, tce, tcc: a.addOnDisposeCallback is not a function)
     player: "b485e332",
-    variants: exceptTclVariants(),
+    variants: regular,
     n: [{ input: "rYKKd90cGmViBQaX", expected: "3zbfWwYE4asG8" }],
     sig: [
       {
@@ -278,7 +267,7 @@ export const tests: {
   {
     // 20779001 (*tcl)
     player: "b485e332",
-    variants: onlyTclVariants(),
+    variants: tcl,
     n: [{ input: "rYKKd90cGmViBQaX", expected: "vSwisZogGk3ro4" }],
     sig: [
       {
@@ -292,7 +281,7 @@ export const tests: {
   {
     // 20780 (main, tce, tcc: a.addOnDisposeCallback is not a function)
     player: "92eef845",
-    variants: exceptTclVariants(),
+    variants: regular,
     n: [{ input: "rYKKd90cGmViBQaX", expected: "3tU2ya-IJqhNt" }],
     sig: [
       {
@@ -306,7 +295,7 @@ export const tests: {
   {
     // 20780001 (*tcl)
     player: "92eef845",
-    variants: onlyTclVariants(),
+    variants: tcl,
     n: [{ input: "rYKKd90cGmViBQaX", expected: "Tk5OqnIAYVzPJeT" }],
     sig: [
       {
@@ -318,3 +307,15 @@ export const tests: {
     ],
   },
 ];
+
+type ExceptArray<T> = T[] & {
+  except(...exclusions: T[]): ExceptArray<T>;
+};
+
+function withExcept<T>(v: T[]): ExceptArray<T> {
+  const proto = Object.create(Array.prototype);
+  proto.except = function <T>(this: ExceptArray<T>, ...exclusions: T[]): T[] {
+    return this.filter((v) => !exclusions.includes(v));
+  };
+  return Object.setPrototypeOf(v, proto);
+}
