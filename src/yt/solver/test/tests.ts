@@ -44,7 +44,10 @@ export type Variant = (typeof playerVariants)[number][0];
 
 export const players = new Map(playerVariants);
 
-function except(inputVariantArray: Variant[], ...excludedVariants: Variant[]): Variant[] {
+function except(
+  inputVariantArray: Variant[],
+  ...excludedVariants: Variant[],
+): Variant[] {
   return inputVariantArray.filter((v) => !excludedVariants.includes(v));
 }
 
