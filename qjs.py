@@ -42,10 +42,7 @@ for test in tests:
     challenge_requests = [
         {
             "type": challenge_type,
-            "challenges": {
-                "player_url": player,
-                "challenges": [test[challenge_type][0]["input"]],
-            },
+            "challenges": [test[challenge_type][0]["input"]],
         }
         for challenge_type in ("n", "sig")
     ]
