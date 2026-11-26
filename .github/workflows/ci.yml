@@ -685,7 +685,7 @@ jobs:
           name: tests-json
 
       - name: Run QuickJS tests
-        run: python test_qjs.py
+        run: python qjs.py
 
   all_passed:
     # Required check; do not change name
