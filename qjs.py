@@ -35,8 +35,6 @@ lib_js_path = pathlib.Path("./dist/yt.solver.lib.min.js")
 
 if not tests_path.is_file():
     print(f"{tests_path} not found! generate it with deno/node")
-    # e.g.:
-    # $ deno eval 'import { tests } from "./src/yt/solver/test/tests.ts"; console.log(JSON.stringify(tests));' > tests.json
     sys.exit(1)
 
 for js in (core_js_path, lib_js_path):
