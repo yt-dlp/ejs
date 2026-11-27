@@ -31,20 +31,31 @@ with tests_path.open("rb") as f:
 passed = []
 failed = {}
 
+
+def hex_to_sig(value):
+    return bytes.fromhex(value).decode()
+
+
+def sig_to_hex(value):
+    return value.encode().hex().upper()
+
+
 for test in tests:
     player = test["player"]
 
     expected = {
-        test[challenge_type][0]["input"]: test[challenge_type][0]["expected"]
-        for challenge_type in ("n", "sig")
+        transform(test[challenge_type][0]["input"]): transform(
+            test[challenge_type][0]["expected"]
+        )
+        for challenge_type, transform in (("n", str), ("sig", hex_to_sig))
     }
 
     challenge_requests = [
         {
             "type": challenge_type,
-            "challenges": [test[challenge_type][0]["input"]],
+            "challenges": [transform(test[challenge_type][0]["input"])],
         }
-        for challenge_type in ("n", "sig")
+        for challenge_type, transform in (("n", str), ("sig", hex_to_sig))
     ]
 
     # quickjs is quite slow so only test the yt-dlp default (or first) variant from each test
@@ -99,7 +110,11 @@ for test in tests:
                 raise FailedTest(response["error"])
             for challenge, result in response["data"].items():
                 if result != expected[challenge]:
-                    raise FailedTest(f"wrong result: {result}")
+                    if result and len(result) > 30:
+                        wrong_result = sig_to_hex(result)
+                    else:
+                        wrong_result = result
+                    raise FailedTest(f"wrong result: {wrong_result}")
 
         print(f"{identifier}{padding} . . . PASS")
         passed.append(identifier)
