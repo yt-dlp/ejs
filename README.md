@@ -10,7 +10,12 @@ Install ejs into the same environment as yt-dlp:
 pip install -U yt-dlp-ejs
 ```
 
-## Runtime requirements
+## Python Requirement
+
+For usage/development of ejs' yt-dlp integration or for quickjs testing,
+Python `>=3.11` is required.
+
+## Runtime Requirements
 
 This project supports the following runtimes/engines:
 
@@ -46,7 +51,7 @@ Developers should have the following tools installed:
 | quickjs _(optional)_      | `>=2025-4-26`                     |
 | quickjs-ng _(optional)_   | `>=0.12.0`                        |
 
-quickjs/quickjs-ng is only needed for yt-dlp integration tests,
+quickjs/quickjs-ng is only needed for quickjs integration tests,
 which can usually be handled by CI.
 
 ### Build
@@ -105,7 +110,15 @@ bun test
 node --test
 ```
 
-## Upgrading packages
+You can also optionally run quickjs integration tests:
+
+```bash
+deno task bundle
+deno eval 'import { tests } from "./src/yt/solver/test/tests.ts"; console.log(JSON.stringify(tests));' > tests.json
+python qjs.py
+```
+
+## Upgrading Packages
 
 When upgrading packages in package.json, all lockfiles must be updated simultaneously.
 To do this, run the following commands:

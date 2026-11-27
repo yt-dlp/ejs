@@ -4,3 +4,5 @@
 /node_modules
 /.idea
 /.venv
+/qjs-test.js
+/tests.json
