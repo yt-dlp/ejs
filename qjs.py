@@ -1,35 +1,23 @@
+"""QuickJS integration test script"""
+
 import json
 import pathlib
+import shutil
 import subprocess
 import sys
+
+QJS = shutil.which("qjs")
+
+if not QJS:
+    print("qjs not found in PATH")
+    sys.exit(1)
+
+# TODO @everyone: Keep this in sync with yt-dlp (yt_dlp/extractor/youtube/_video.py)
+DEFAULT_VARIANTS = ["tv", "tv_tcl"]
 
 
 class FailedTest(Exception):
     pass
-
-
-tests_path = pathlib.Path("./tests.json")
-script_path = pathlib.Path("./qjs-test.js")
-core_js_path = pathlib.Path("./dist/yt.solver.core.min.js")
-lib_js_path = pathlib.Path("./dist/yt.solver.lib.min.js")
-
-if not tests_path.is_file():
-    print(f"{tests_path} not found! generate it with deno/node")
-    sys.exit(1)
-
-for js in (core_js_path, lib_js_path):
-    if not js.is_file():
-        print(f"{js} not found! ejs needs to be bundled")
-        sys.exit(1)
-
-core_js = core_js_path.read_text()
-lib_js = lib_js_path.read_text()
-
-with tests_path.open("rb") as f:
-    tests = json.load(f)
-
-passed = []
-failed = {}
 
 
 def hex_to_sig(value):
@@ -39,6 +27,31 @@ def hex_to_sig(value):
 def sig_to_hex(value):
     return value.encode().hex().upper()
 
+
+tests_path = pathlib.Path("./tests.json")
+script_path = pathlib.Path("./qjs-test.js")
+core_js_path = pathlib.Path("./dist/yt.solver.core.min.js")
+lib_js_path = pathlib.Path("./dist/yt.solver.lib.min.js")
+
+if not tests_path.is_file():
+    print(f"{tests_path} not found! generate it with deno/node")
+    # e.g.:
+    # $ deno eval 'import { tests } from "./src/yt/solver/test/tests.ts"; console.log(JSON.stringify(tests));' > tests.json
+    sys.exit(1)
+
+for js in (core_js_path, lib_js_path):
+    if not js.is_file():
+        print(f"{js} not found! ejs needs to be bundled")
+        sys.exit(1)
+
+lib_js_code = lib_js_path.read_text()
+core_js_code = core_js_path.read_text()
+
+with tests_path.open("rb") as f:
+    tests = json.load(f)
+
+passed = []
+failed = {}
 
 for test in tests:
     player = test["player"]
@@ -58,23 +71,22 @@ for test in tests:
         for challenge_type, transform in (("n", str), ("sig", hex_to_sig))
     ]
 
+    variants = test.get("variants", DEFAULT_VARIANTS)
     # quickjs is quite slow so only test the yt-dlp default (or first) variant from each test
-    variants = test["variants"]
-    variant = (
-        "tv" if "tv" in variants else "tv_tcl" if "tv_tcl" in variants else variants[0]
-    )
+    variant = next((v for v in variants if v in DEFAULT_VARIANTS), variants[0])
     identifier = f"{player}-{variant}"
-    padding = " " * (23 - len(identifier))
+    padding = "." * (30 - len(identifier))
 
     data = {
         "type": "player",
         "player": pathlib.Path(
             f"./src/yt/solver/test/players/{identifier}"
         ).read_text(),
+        "output_preprocessed": False,
         "requests": challenge_requests,
     }
     script_path.write_text(f"""\
-        {lib_js}
+        {lib_js_code}
         function require(name) {{
           const result = (lib?.lib ?? lib)[name];
           if (!result) {{
@@ -83,7 +95,7 @@ for test in tests:
           return result;
         }}
         function structuredClone(x) {{ return JSON.parse(JSON.stringify(x)); }}
-        {core_js}
+        {core_js_code}
         console.log(JSON.stringify(jsc.default({json.dumps(data)})));
         """)
 
@@ -91,7 +103,9 @@ for test in tests:
         try:
             output = json.loads(
                 subprocess.check_output(
-                    ["qjs", "--script", str(script_path)], text=True
+                    [QJS, "--script", str(script_path)],
+                    text=True,
+                    stderr=subprocess.PIPE,
                 )
             )
         except (json.JSONDecodeError, subprocess.CalledProcessError) as error:
@@ -116,11 +130,11 @@ for test in tests:
                         wrong_result = result
                     raise FailedTest(f"wrong result: {wrong_result}")
 
-        print(f"{identifier}{padding} . . . PASS")
+        print(f"{identifier} {padding} PASS")
         passed.append(identifier)
 
     except FailedTest as failure:
-        print(f"{identifier}{padding} . . . FAIL")
+        print(f"{identifier} {padding} FAIL")
         failed[identifier] = str(failure)
 
 print(f"tested: {len(passed) + len(failed)}")
