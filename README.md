@@ -118,7 +118,7 @@ deno eval 'import { tests } from "./src/yt/solver/test/tests.ts"; console.log(JS
 python qjs.py
 ```
 
-## Upgrading packages
+## Upgrading Packages
 
 When upgrading packages in package.json, all lockfiles must be updated simultaneously.
 To do this, run the following commands:
