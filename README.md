@@ -10,12 +10,12 @@ Install ejs into the same environment as yt-dlp:
 pip install -U yt-dlp-ejs
 ```
 
-## Python requirement
+## Python Requirement
 
 For usage/development of ejs' yt-dlp integration or for quickjs testing,
 Python `>=3.11` is required.
 
-## Runtime requirements
+## Runtime Requirements
 
 This project supports the following runtimes/engines:
 
@@ -110,10 +110,10 @@ bun test
 node --test
 ```
 
-After installing the project's dependencies and downloading the player JS files,
-you can optionally run quickjs integration tests:
+You can also optionally run quickjs integration tests:
 
 ```bash
+deno task bundle
 deno eval 'import { tests } from "./src/yt/solver/test/tests.ts"; console.log(JSON.stringify(tests));' > tests.json
 python qjs.py
 ```
